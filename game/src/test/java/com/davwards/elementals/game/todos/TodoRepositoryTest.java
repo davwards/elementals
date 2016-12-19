@@ -1,5 +1,6 @@
 package com.davwards.elementals.game.todos;
 
+import com.davwards.elementals.game.players.PlayerId;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -12,10 +13,22 @@ import static org.hamcrest.core.IsNot.not;
 public abstract class TodoRepositoryTest {
     protected abstract TodoRepository repository();
 
+    private PlayerId playerId = new PlayerId("player-id");
+
     @Test
     public void saveAndFetch() throws Exception {
-        UnsavedTodo unsavedTodo1 = new UnsavedTodo("Title #1", Todo.Status.INCOMPLETE, LocalDateTime.of(2016, 11, 5, 12, 35, 56));
-        UnsavedTodo unsavedTodo2 = new UnsavedTodo("Title #2", Todo.Status.COMPLETE, LocalDateTime.of(2016, 12, 21, 12, 35, 56));
+        UnsavedTodo unsavedTodo1 = new UnsavedTodo(
+                playerId,
+                "Title #1",
+                Todo.Status.INCOMPLETE,
+                LocalDateTime.of(2016, 11, 5, 12, 35, 56)
+        );
+        UnsavedTodo unsavedTodo2 = new UnsavedTodo(
+                playerId,
+                "Title #2",
+                Todo.Status.COMPLETE,
+                LocalDateTime.of(2016, 12, 21, 12, 35, 56)
+        );
         SavedTodo savedTodo1 = repository().save(unsavedTodo1);
         SavedTodo savedTodo2 = repository().save(unsavedTodo2);
 
@@ -32,7 +45,7 @@ public abstract class TodoRepositoryTest {
 
     @Test
     public void fetchingReturnsCopiesOfTheEntityFromStorage() throws Exception {
-        UnsavedTodo unsavedTodo = new UnsavedTodo("Original title", Todo.Status.INCOMPLETE);
+        UnsavedTodo unsavedTodo = new UnsavedTodo(playerId, "Original title", Todo.Status.INCOMPLETE);
         SavedTodo savedTodo = repository().save(unsavedTodo);
 
         savedTodo.setTitle("CORRUPTED");
@@ -49,7 +62,7 @@ public abstract class TodoRepositoryTest {
 
     @Test
     public void update() throws Exception {
-        UnsavedTodo unsavedTodo = new UnsavedTodo("Original title", Todo.Status.INCOMPLETE);
+        UnsavedTodo unsavedTodo = new UnsavedTodo(playerId, "Original title", Todo.Status.INCOMPLETE);
         SavedTodo savedTodo = repository().save(unsavedTodo);
 
         savedTodo.setTitle("Some other title");
@@ -66,16 +79,16 @@ public abstract class TodoRepositoryTest {
 
     @Test
     public void all() throws Exception {
-        assertThat(repository().all().size(), equalTo(0));
+        assertThat(repository().allTodos().size(), equalTo(0));
 
-        UnsavedTodo unsavedTodo1 = new UnsavedTodo("Title #1", Todo.Status.INCOMPLETE);
+        UnsavedTodo unsavedTodo1 = new UnsavedTodo(playerId, "Title #1", Todo.Status.INCOMPLETE);
         SavedTodo savedTodo1 = repository().save(unsavedTodo1);
-        assertThat(repository().all().size(), equalTo(1));
-        assertThat(repository().all(), hasItem(savedTodo1));
+        assertThat(repository().allTodos().size(), equalTo(1));
+        assertThat(repository().allTodos(), hasItem(savedTodo1));
 
-        UnsavedTodo unsavedTodo2 = new UnsavedTodo("Title #2", Todo.Status.INCOMPLETE);
+        UnsavedTodo unsavedTodo2 = new UnsavedTodo(playerId, "Title #2", Todo.Status.INCOMPLETE);
         SavedTodo savedTodo2 = repository().save(unsavedTodo2);
-        assertThat(repository().all().size(), equalTo(2));
-        assertThat(repository().all(), hasItem(savedTodo2));
+        assertThat(repository().allTodos().size(), equalTo(2));
+        assertThat(repository().allTodos(), hasItem(savedTodo2));
     }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TodoRepository {
-    List<SavedTodo> all();
+    List<SavedTodo> allTodos();
 
     SavedTodo save(UnsavedTodo unsavedTodo);
 

@@ -6,7 +6,7 @@ public class InMemoryTodoRepository implements TodoRepository {
     private Map<TodoId, SavedTodo> contents = new HashMap<>();
 
     @Override
-    public List<SavedTodo> all() {
+    public List<SavedTodo> allTodos() {
         return new ArrayList<>(contents.values());
     }
 
@@ -16,6 +16,7 @@ public class InMemoryTodoRepository implements TodoRepository {
 
         SavedTodo savedTodo = new SavedTodo(
                 id,
+                unsavedTodo.getPlayerId(),
                 unsavedTodo.getTitle(),
                 unsavedTodo.getUrgency(),
                 unsavedTodo.getStatus(),

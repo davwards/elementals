@@ -1,5 +1,7 @@
 package com.davwards.elementals.game.todos;
 
+import com.davwards.elementals.game.players.PlayerId;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -8,19 +10,23 @@ public class Todo {
     protected Status status;
     protected Urgency urgency = Urgency.DEFAULT;
     private Optional<LocalDateTime> deadline = Optional.empty();
+    private PlayerId playerId;
 
-    public Todo(String title, Status status) {
+    public Todo(PlayerId playerId, String title, Status status) {
+        this.playerId = playerId;
         this.title = title;
         this.status = status;
     }
 
-    public Todo(String title, Status status, LocalDateTime deadline) {
+    public Todo(PlayerId playerId, String title, Status status, LocalDateTime deadline) {
+        this.playerId = playerId;
         this.title = title;
         this.status = status;
         this.deadline = Optional.of(deadline);
     }
 
-    public Todo(String title, Status status, Urgency urgency, Optional<LocalDateTime> deadline) {
+    public Todo(PlayerId playerId, String title, Status status, Urgency urgency, Optional<LocalDateTime> deadline) {
+        this.playerId = playerId;
         this.title = title;
         this.status = status;
         this.deadline = deadline;
@@ -79,6 +85,10 @@ public class Todo {
 
     public boolean isIncomplete() {
         return this.getStatus().equals(Status.INCOMPLETE);
+    }
+
+    public PlayerId getPlayerId() {
+        return playerId;
     }
 
     public enum Status {COMPLETE, INCOMPLETE}

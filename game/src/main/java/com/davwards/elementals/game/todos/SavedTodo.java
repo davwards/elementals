@@ -1,18 +1,21 @@
 package com.davwards.elementals.game.todos;
 
+import com.davwards.elementals.game.players.PlayerId;
+
 import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class SavedTodo extends Todo {
-    private TodoId id;
+    private final TodoId id;
 
     public SavedTodo(TodoId id,
+                     PlayerId playerId,
                      String title,
                      Urgency urgency,
                      Status status,
                      Optional<LocalDateTime> deadline) {
 
-        super(title, status, urgency, deadline);
+        super(playerId, title, status, urgency, deadline);
         this.id = id;
     }
 
@@ -23,6 +26,7 @@ public class SavedTodo extends Todo {
     public static SavedTodo clone(SavedTodo savedTodo) {
         return new SavedTodo(
                 savedTodo.getId(),
+                savedTodo.getPlayerId(),
                 savedTodo.getTitle(),
                 savedTodo.getUrgency(),
                 savedTodo.getStatus(),

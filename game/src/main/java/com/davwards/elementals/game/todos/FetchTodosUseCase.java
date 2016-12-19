@@ -1,6 +1,5 @@
 package com.davwards.elementals.game.todos;
 
-import java.util.Collections;
 import java.util.List;
 
 public class FetchTodosUseCase {
@@ -11,6 +10,6 @@ public class FetchTodosUseCase {
     }
 
     public List<SavedTodo> perform() {
-        return todoRepository.all();
+        return todoRepository.allTodos();
     }
 }
