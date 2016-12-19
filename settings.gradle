@@ -1,1 +1,3 @@
 rootProject.name = 'elementals'
+
+include 'game'
