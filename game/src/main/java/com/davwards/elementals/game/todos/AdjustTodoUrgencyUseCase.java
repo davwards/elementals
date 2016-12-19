@@ -12,7 +12,7 @@ public class AdjustTodoUrgencyUseCase {
     public void perform(TodoId id, LocalDateTime currentTime) throws NoSuchTodoException {
         todoRepository.find(id)
                 .map(todo -> updateTodoUrgencyIfPastDue(todo, currentTime))
-                .map(todoRepository::save)
+                .map(todoRepository::update)
                 .orElseThrow(() -> new NoSuchTodoException(id));
     }
 

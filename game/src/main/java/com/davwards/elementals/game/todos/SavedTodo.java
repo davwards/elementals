@@ -1,11 +1,12 @@
 package com.davwards.elementals.game.todos;
 
+import com.davwards.elementals.game.SavedEntity;
 import com.davwards.elementals.game.players.PlayerId;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class SavedTodo extends Todo {
+public class SavedTodo extends Todo implements SavedEntity<TodoId> {
     private final TodoId id;
 
     public SavedTodo(TodoId id,

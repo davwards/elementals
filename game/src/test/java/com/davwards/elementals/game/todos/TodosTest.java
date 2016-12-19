@@ -1,7 +1,6 @@
 package com.davwards.elementals.game.todos;
 
 import com.davwards.elementals.game.players.*;
-import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -27,9 +26,9 @@ public class TodosTest {
         SavedPlayer player = playerRepository.save(new UnsavedPlayer("testplayer"));
         assertThat(playerRepository.find(player.getId()).get().getExperience(), equalTo(0));
 
-        assertThat(todoRepository.allTodos().size(), equalTo(0));
+        assertThat(todoRepository.all().size(), equalTo(0));
         SavedTodo savedTodo = createTodo.perform(player.getId(), "Work on Elementals");
-        assertThat(todoRepository.allTodos().size(), equalTo(1));
+        assertThat(todoRepository.all().size(), equalTo(1));
 
         assertThat(todoRepository.find(savedTodo.getId()).get().getTitle(), equalTo("Work on Elementals"));
         assertThat(todoRepository.find(savedTodo.getId()).get().getStatus(), equalTo(Todo.Status.INCOMPLETE));

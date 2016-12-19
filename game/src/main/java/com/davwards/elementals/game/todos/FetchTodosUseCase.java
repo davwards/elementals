@@ -10,6 +10,6 @@ public class FetchTodosUseCase {
     }
 
     public List<SavedTodo> perform() {
-        return todoRepository.allTodos();
+        return todoRepository.all();
     }
 }

@@ -16,7 +16,7 @@ public class CompleteTodoUseCase {
         SavedTodo updatedTodo = todoRepository.find(id)
                 .map(todo -> {
                     todo.setStatus(Todo.Status.COMPLETE);
-                    return todoRepository.save(todo);
+                    return todoRepository.update(todo);
                 }).orElseThrow(() -> new NoSuchTodoException(id));
 
         playerRepository.find(updatedTodo.getPlayerId()).ifPresent(player -> {
