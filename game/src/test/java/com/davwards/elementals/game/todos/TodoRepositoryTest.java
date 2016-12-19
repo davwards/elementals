@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.davwards.elementals.TestUtils.randomInt;
+import static com.davwards.elementals.TestUtils.randomString;
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,7 +24,7 @@ public abstract class TodoRepositoryTest extends CrudRepositoryTest<TodoReposito
     protected UnsavedTodo givenAnUnsavedRecord() {
         return new UnsavedTodo(
                 playerId,
-                "Todo " + UUID.randomUUID().toString().substring(0, 5),
+                "Todo " + randomString(5),
                 Todo.Status.INCOMPLETE,
                 LocalDateTime.of(
                         2016,
@@ -65,9 +67,5 @@ public abstract class TodoRepositoryTest extends CrudRepositoryTest<TodoReposito
                 hasProperty("deadline", equalTo(right.getDeadline())),
                 hasProperty("playerId", equalTo(right.getPlayerId()))
         )));
-    }
-
-    private int randomInt(int minInclusive, int maxInclusive) {
-        return ThreadLocalRandom.current().nextInt(minInclusive, maxInclusive + 1);
     }
 }
