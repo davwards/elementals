@@ -1,4 +1,4 @@
-package com.davwards.elementals.game;
+package com.davwards.elementals.game.entities;
 
 import java.util.List;
 import java.util.Optional;

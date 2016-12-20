@@ -1,7 +1,10 @@
 package com.davwards.elementals.game.players;
 
-import com.davwards.elementals.game.CrudRepository;
 import com.davwards.elementals.game.CrudRepositoryTest;
+import com.davwards.elementals.game.entities.players.PlayerId;
+import com.davwards.elementals.game.entities.players.PlayerRepository;
+import com.davwards.elementals.game.entities.players.SavedPlayer;
+import com.davwards.elementals.game.entities.players.UnsavedPlayer;
 
 import static com.davwards.elementals.TestUtils.randomString;
 import static org.hamcrest.CoreMatchers.allOf;

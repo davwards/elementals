@@ -1,7 +1,7 @@
-package com.davwards.elementals.game.todos;
+package com.davwards.elementals.game.entities.todos;
 
-import com.davwards.elementals.game.SavedEntity;
-import com.davwards.elementals.game.players.PlayerId;
+import com.davwards.elementals.game.entities.SavedEntity;
+import com.davwards.elementals.game.entities.players.PlayerId;
 
 import java.time.LocalDateTime;
 import java.util.Optional;

@@ -1,13 +1,17 @@
-package com.davwards.elementals.game.todos;
+package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.players.PlayerId;
+import com.davwards.elementals.game.entities.players.PlayerId;
+import com.davwards.elementals.game.entities.todos.SavedTodo;
+import com.davwards.elementals.game.entities.todos.Todo;
+import com.davwards.elementals.game.entities.todos.TodoRepository;
+import com.davwards.elementals.game.entities.todos.UnsavedTodo;
 
 import java.time.LocalDateTime;
 
-public class CreateTodoUseCase {
+public class CreateTodo {
     private final TodoRepository todoRepository;
 
-    public CreateTodoUseCase(TodoRepository todoRepository) {
+    public CreateTodo(TodoRepository todoRepository) {
         this.todoRepository = todoRepository;
     }
 

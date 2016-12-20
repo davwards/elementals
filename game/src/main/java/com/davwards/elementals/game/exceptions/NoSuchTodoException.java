@@ -1,4 +1,6 @@
-package com.davwards.elementals.game.todos;
+package com.davwards.elementals.game.exceptions;
+
+import com.davwards.elementals.game.entities.todos.TodoId;
 
 public class NoSuchTodoException extends Exception {
     private TodoId todoId;

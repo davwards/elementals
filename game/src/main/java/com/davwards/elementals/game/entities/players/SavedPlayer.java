@@ -1,6 +1,6 @@
-package com.davwards.elementals.game.players;
+package com.davwards.elementals.game.entities.players;
 
-import com.davwards.elementals.game.SavedEntity;
+import com.davwards.elementals.game.entities.SavedEntity;
 
 public class SavedPlayer extends Player implements SavedEntity<PlayerId> {
     private final PlayerId id;

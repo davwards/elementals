@@ -1,16 +1,20 @@
-package com.davwards.elementals.game.todos;
+package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.GameConstants;
-import com.davwards.elementals.game.players.PlayerRepository;
+import com.davwards.elementals.game.entities.todos.SavedTodo;
+import com.davwards.elementals.game.entities.todos.Todo;
+import com.davwards.elementals.game.entities.todos.TodoId;
+import com.davwards.elementals.game.entities.players.PlayerRepository;
+import com.davwards.elementals.game.entities.todos.TodoRepository;
+import com.davwards.elementals.game.exceptions.NoSuchTodoException;
 
 import java.time.LocalDateTime;
 
-public class AdjustTodoUrgencyUseCase {
+public class AdjustTodoUrgency {
     private final TodoRepository todoRepository;
     private final PlayerRepository playerRepository;
 
-    public AdjustTodoUrgencyUseCase(TodoRepository todoRepository,
-                                    PlayerRepository playerRepository) {
+    public AdjustTodoUrgency(TodoRepository todoRepository,
+                             PlayerRepository playerRepository) {
         this.todoRepository = todoRepository;
         this.playerRepository = playerRepository;
     }

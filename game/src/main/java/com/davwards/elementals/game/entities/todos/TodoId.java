@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.todos;
+package com.davwards.elementals.game.entities.todos;
 
 public class TodoId {
     private final String id;

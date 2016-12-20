@@ -1,11 +1,11 @@
 package com.davwards.elementals.game.todos;
 
 import com.davwards.elementals.game.CrudRepositoryTest;
-import com.davwards.elementals.game.players.PlayerId;
+import com.davwards.elementals.game.entities.players.PlayerId;
+import com.davwards.elementals.game.entities.todos.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static com.davwards.elementals.TestUtils.randomInt;
 import static com.davwards.elementals.TestUtils.randomString;

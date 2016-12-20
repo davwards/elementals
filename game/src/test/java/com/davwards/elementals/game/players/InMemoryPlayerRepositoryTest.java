@@ -1,5 +1,8 @@
 package com.davwards.elementals.game.players;
 
+import com.davwards.elementals.game.entities.players.PlayerRepository;
+import com.davwards.elementals.game.inmemorypersistence.InMemoryPlayerRepository;
+
 public class InMemoryPlayerRepositoryTest extends PlayerRepositoryTest {
 
     InMemoryPlayerRepository repository = new InMemoryPlayerRepository();

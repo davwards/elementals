@@ -1,6 +1,19 @@
 package com.davwards.elementals.game.todos;
 
-import com.davwards.elementals.game.players.*;
+import com.davwards.elementals.game.AdjustTodoUrgency;
+import com.davwards.elementals.game.CompleteTodo;
+import com.davwards.elementals.game.CreateTodo;
+import com.davwards.elementals.game.FetchTodos;
+import com.davwards.elementals.game.entities.players.PlayerRepository;
+import com.davwards.elementals.game.entities.players.SavedPlayer;
+import com.davwards.elementals.game.entities.players.UnsavedPlayer;
+import com.davwards.elementals.game.entities.todos.SavedTodo;
+import com.davwards.elementals.game.entities.todos.Todo;
+import com.davwards.elementals.game.entities.todos.TodoId;
+import com.davwards.elementals.game.entities.todos.TodoRepository;
+import com.davwards.elementals.game.exceptions.NoSuchTodoException;
+import com.davwards.elementals.game.inmemorypersistence.InMemoryPlayerRepository;
+import com.davwards.elementals.game.inmemorypersistence.InMemoryTodoRepository;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -17,10 +30,10 @@ public class TodosTest {
 
     private final TodoRepository todoRepository = new InMemoryTodoRepository();
     private final PlayerRepository playerRepository = new InMemoryPlayerRepository();
-    private final CreateTodoUseCase createTodo = new CreateTodoUseCase(todoRepository);
-    private final CompleteTodoUseCase completeTodo = new CompleteTodoUseCase(todoRepository, playerRepository);
-    private final AdjustTodoUrgencyUseCase adjustTodoUrgency = new AdjustTodoUrgencyUseCase(todoRepository, playerRepository);
-    private final FetchTodosUseCase fetchTodos = new FetchTodosUseCase(todoRepository);
+    private final CreateTodo createTodo = new CreateTodo(todoRepository);
+    private final CompleteTodo completeTodo = new CompleteTodo(todoRepository, playerRepository);
+    private final AdjustTodoUrgency adjustTodoUrgency = new AdjustTodoUrgency(todoRepository, playerRepository);
+    private final FetchTodos fetchTodos = new FetchTodos(todoRepository);
 
     @Test
     public void creatingAndCompletingTodos() throws NoSuchTodoException {

@@ -1,4 +1,9 @@
-package com.davwards.elementals.game.players;
+package com.davwards.elementals.game.inmemorypersistence;
+
+import com.davwards.elementals.game.entities.players.PlayerId;
+import com.davwards.elementals.game.entities.players.PlayerRepository;
+import com.davwards.elementals.game.entities.players.SavedPlayer;
+import com.davwards.elementals.game.entities.players.UnsavedPlayer;
 
 import java.util.*;
 

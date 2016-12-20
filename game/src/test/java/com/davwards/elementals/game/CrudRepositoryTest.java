@@ -1,5 +1,7 @@
 package com.davwards.elementals.game;
 
+import com.davwards.elementals.game.entities.CrudRepository;
+import com.davwards.elementals.game.entities.SavedEntity;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;

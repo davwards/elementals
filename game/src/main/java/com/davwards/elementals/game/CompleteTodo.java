@@ -1,13 +1,17 @@
-package com.davwards.elementals.game.todos;
+package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.GameConstants;
-import com.davwards.elementals.game.players.PlayerRepository;
+import com.davwards.elementals.game.entities.todos.SavedTodo;
+import com.davwards.elementals.game.entities.todos.Todo;
+import com.davwards.elementals.game.entities.todos.TodoId;
+import com.davwards.elementals.game.entities.players.PlayerRepository;
+import com.davwards.elementals.game.entities.todos.TodoRepository;
+import com.davwards.elementals.game.exceptions.NoSuchTodoException;
 
-public class CompleteTodoUseCase {
+public class CompleteTodo {
     private final TodoRepository todoRepository;
     private final PlayerRepository playerRepository;
 
-    public CompleteTodoUseCase(TodoRepository todoRepository, PlayerRepository playerRepository) {
+    public CompleteTodo(TodoRepository todoRepository, PlayerRepository playerRepository) {
         this.todoRepository = todoRepository;
         this.playerRepository = playerRepository;
     }
