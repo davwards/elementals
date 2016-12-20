@@ -9,6 +9,7 @@ import java.util.List;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.IsCollectionContaining.hasItems;
 import static org.hamcrest.core.IsEqual.equalTo;
 
@@ -18,7 +19,7 @@ public class TodosTest {
     private final PlayerRepository playerRepository = new InMemoryPlayerRepository();
     private final CreateTodoUseCase createTodo = new CreateTodoUseCase(todoRepository);
     private final CompleteTodoUseCase completeTodo = new CompleteTodoUseCase(todoRepository, playerRepository);
-    private final AdjustTodoUrgencyUseCase adjustTodoUrgency = new AdjustTodoUrgencyUseCase(todoRepository);
+    private final AdjustTodoUrgencyUseCase adjustTodoUrgency = new AdjustTodoUrgencyUseCase(todoRepository, playerRepository);
     private final FetchTodosUseCase fetchTodos = new FetchTodosUseCase(todoRepository);
 
     @Test
@@ -43,6 +44,7 @@ public class TodosTest {
     @Test
     public void handlingTodosWithDueDates() throws Exception {
         SavedPlayer player = playerRepository.save(new UnsavedPlayer("testplayer"));
+        Integer originalHealth = player.getHealth();
 
         SavedTodo todoThatNeverGetsDone = createTodo.perform(
                 player.getId(),
@@ -73,7 +75,9 @@ public class TodosTest {
 
         completeTodo.perform(todoThatGetsDoneInTime.getId());
 
+        assertThat(playerRepository.find(player.getId()).get().getHealth(), equalTo(originalHealth));
         adjustTodoUrgency.perform(todoThatNeverGetsDone.getId(), LocalDateTime.of(2016, 11, 6, 0, 0, 0));
+        assertThat(playerRepository.find(player.getId()).get().getHealth(), lessThan(originalHealth));
         adjustTodoUrgency.perform(todoThatGetsDoneInTime.getId(), LocalDateTime.of(2016, 11, 6, 0, 0, 0));
 
         assertThat(todoRepository.find(todoThatNeverGetsDone.getId()).get().getUrgency(), equalTo(Todo.Urgency.PAST_DUE));

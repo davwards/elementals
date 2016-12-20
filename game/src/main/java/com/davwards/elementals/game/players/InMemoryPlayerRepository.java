@@ -11,7 +11,8 @@ public class InMemoryPlayerRepository implements PlayerRepository {
         SavedPlayer savedPlayer = new SavedPlayer(
                 id,
                 player.getName(),
-                player.getExperience()
+                player.getExperience(),
+                player.getHealth()
         );
         contents.put(id, savedPlayer);
 

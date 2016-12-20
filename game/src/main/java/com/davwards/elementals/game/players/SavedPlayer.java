@@ -5,10 +5,9 @@ import com.davwards.elementals.game.SavedEntity;
 public class SavedPlayer extends Player implements SavedEntity<PlayerId> {
     private final PlayerId id;
 
-    public SavedPlayer(PlayerId id, String name, Integer experience) {
-        super(name);
+    public SavedPlayer(PlayerId id, String name, Integer experience, Integer health) {
+        super(name, experience, health);
         this.id = id;
-        this.experience = experience;
     }
 
     public PlayerId getId() {
@@ -19,7 +18,8 @@ public class SavedPlayer extends Player implements SavedEntity<PlayerId> {
         return new SavedPlayer(
                 savedPlayer.getId(),
                 savedPlayer.getName(),
-                savedPlayer.getExperience()
+                savedPlayer.getExperience(),
+                savedPlayer.getHealth()
         );
     }
 
