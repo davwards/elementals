@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class TestUtils {
@@ -23,9 +24,21 @@ public class TestUtils {
         assertThat(getValue.get(), greaterThan(originalValue));
     }
 
+    public static <T extends Comparable> void assertThatValueDecreases(Supplier<T> getValue, Runnable event) {
+        T originalValue = getValue.get();
+        event.run();
+        assertThat(getValue.get(), lessThan(originalValue));
+    }
+
     public static <T> void assertThatValueChanges(Supplier<T> getValue, T start, T end, Runnable event) {
         assertThat(getValue.get(), equalTo(start));
         event.run();
         assertThat(getValue.get(), equalTo(end));
+    }
+
+    public static <T> void assertThatValueDoesNotChange(Supplier<T> getValue, Runnable event) {
+        T originalValue = getValue.get();
+        event.run();
+        assertThat(getValue.get(), equalTo(originalValue));
     }
 }
