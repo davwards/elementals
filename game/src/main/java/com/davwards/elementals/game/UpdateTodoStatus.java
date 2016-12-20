@@ -32,7 +32,6 @@ public class UpdateTodoStatus {
                         playerRepository.update(player);
                     });
         }
-
     }
 
     private static boolean todoIsPastDue(Todo todo, LocalDateTime currentTime) {
