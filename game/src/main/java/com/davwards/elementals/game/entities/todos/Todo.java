@@ -8,7 +8,6 @@ import java.util.Optional;
 public class Todo {
     protected String title;
     protected Status status;
-    protected Urgency urgency = Urgency.DEFAULT;
     private Optional<LocalDateTime> deadline = Optional.empty();
     private PlayerId playerId;
 
@@ -25,12 +24,11 @@ public class Todo {
         this.deadline = Optional.of(deadline);
     }
 
-    public Todo(PlayerId playerId, String title, Status status, Urgency urgency, Optional<LocalDateTime> deadline) {
+    public Todo(PlayerId playerId, String title, Status status, Optional<LocalDateTime> deadline) {
         this.playerId = playerId;
         this.title = title;
         this.status = status;
         this.deadline = deadline;
-        this.urgency = urgency;
     }
 
     public String getTitle() {
@@ -49,14 +47,6 @@ public class Todo {
         this.status = status;
     }
 
-    public Urgency getUrgency() {
-        return urgency;
-    }
-
-    public void setUrgency(Urgency urgency) {
-        this.urgency = urgency;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -64,14 +54,14 @@ public class Todo {
 
         Todo todo = (Todo) o;
 
-        return title.equals(todo.title) && status == todo.status && urgency == todo.urgency;
+        return title.equals(todo.title) && status == todo.status && deadline == todo.deadline;
     }
 
     @Override
     public int hashCode() {
         int result = title.hashCode();
         result = 31 * result + status.hashCode();
-        result = 31 * result + urgency.hashCode();
+        result = 31 * result + deadline.hashCode();
         return result;
     }
 
@@ -91,7 +81,5 @@ public class Todo {
         return playerId;
     }
 
-    public enum Status {COMPLETE, INCOMPLETE}
-
-    public enum Urgency {PAST_DUE, DEFAULT}
+    public enum Status {COMPLETE, PAST_DUE, INCOMPLETE}
 }

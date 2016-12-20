@@ -12,11 +12,10 @@ public class SavedTodo extends Todo implements SavedEntity<TodoId> {
     public SavedTodo(TodoId id,
                      PlayerId playerId,
                      String title,
-                     Urgency urgency,
                      Status status,
                      Optional<LocalDateTime> deadline) {
 
-        super(playerId, title, status, urgency, deadline);
+        super(playerId, title, status, deadline);
         this.id = id;
     }
 
@@ -29,7 +28,6 @@ public class SavedTodo extends Todo implements SavedEntity<TodoId> {
                 savedTodo.getId(),
                 savedTodo.getPlayerId(),
                 savedTodo.getTitle(),
-                savedTodo.getUrgency(),
                 savedTodo.getStatus(),
                 savedTodo.getDeadline()
         );

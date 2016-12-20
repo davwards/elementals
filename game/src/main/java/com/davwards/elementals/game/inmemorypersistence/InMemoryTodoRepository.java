@@ -23,7 +23,6 @@ public class InMemoryTodoRepository implements TodoRepository {
                 id,
                 unsavedTodo.getPlayerId(),
                 unsavedTodo.getTitle(),
-                unsavedTodo.getUrgency(),
                 unsavedTodo.getStatus(),
                 unsavedTodo.getDeadline()
         );

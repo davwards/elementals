@@ -9,12 +9,12 @@ import com.davwards.elementals.game.exceptions.NoSuchTodoException;
 
 import java.time.LocalDateTime;
 
-public class AdjustTodoUrgency {
+public class UpdateTodoStatus {
     private final TodoRepository todoRepository;
     private final PlayerRepository playerRepository;
 
-    public AdjustTodoUrgency(TodoRepository todoRepository,
-                             PlayerRepository playerRepository) {
+    public UpdateTodoStatus(TodoRepository todoRepository,
+                            PlayerRepository playerRepository) {
         this.todoRepository = todoRepository;
         this.playerRepository = playerRepository;
     }
@@ -24,7 +24,7 @@ public class AdjustTodoUrgency {
                 .orElseThrow(() -> new NoSuchTodoException(id));
 
         if(todoIsPastDue(todo, currentTime) && todo.isIncomplete()) {
-            todo.setUrgency(Todo.Urgency.PAST_DUE);
+            todo.setStatus(Todo.Status.PAST_DUE);
             todoRepository.update(todo);
             playerRepository.find(todo.getPlayerId())
                     .ifPresent(player -> {

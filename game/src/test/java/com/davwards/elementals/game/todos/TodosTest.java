@@ -1,6 +1,6 @@
 package com.davwards.elementals.game.todos;
 
-import com.davwards.elementals.game.AdjustTodoUrgency;
+import com.davwards.elementals.game.UpdateTodoStatus;
 import com.davwards.elementals.game.CompleteTodo;
 import com.davwards.elementals.game.CreateTodo;
 import com.davwards.elementals.game.FetchTodos;
@@ -32,7 +32,7 @@ public class TodosTest {
     private final PlayerRepository playerRepository = new InMemoryPlayerRepository();
     private final CreateTodo createTodo = new CreateTodo(todoRepository);
     private final CompleteTodo completeTodo = new CompleteTodo(todoRepository, playerRepository);
-    private final AdjustTodoUrgency adjustTodoUrgency = new AdjustTodoUrgency(todoRepository, playerRepository);
+    private final UpdateTodoStatus updateTodoStatus = new UpdateTodoStatus(todoRepository, playerRepository);
     private final FetchTodos fetchTodos = new FetchTodos(todoRepository);
 
     @Test
@@ -71,30 +71,31 @@ public class TodosTest {
                 LocalDateTime.of(2016, 11, 5, 23, 59, 59)
         );
 
-        assertThat(todoThatNeverGetsDone.getUrgency(), equalTo(Todo.Urgency.DEFAULT));
-        assertThat(todoThatGetsDoneInTime.getUrgency(), equalTo(Todo.Urgency.DEFAULT));
+        assertThat(todoThatNeverGetsDone.getStatus(), equalTo(Todo.Status.INCOMPLETE));
+        assertThat(todoThatGetsDoneInTime.getStatus(), equalTo(Todo.Status.INCOMPLETE));
 
-        adjustTodoUrgency.perform(todoThatNeverGetsDone.getId(), LocalDateTime.of(2016, 11, 4, 23, 59, 59));
-        adjustTodoUrgency.perform(todoThatGetsDoneInTime.getId(), LocalDateTime.of(2016, 11, 4, 23, 59, 59));
+        updateTodoStatus.perform(todoThatNeverGetsDone.getId(), LocalDateTime.of(2016, 11, 4, 23, 59, 59));
+        updateTodoStatus.perform(todoThatGetsDoneInTime.getId(), LocalDateTime.of(2016, 11, 4, 23, 59, 59));
 
-        assertThat(todoRepository.find(todoThatNeverGetsDone.getId()).get().getUrgency(), equalTo(Todo.Urgency.DEFAULT));
-        assertThat(todoRepository.find(todoThatGetsDoneInTime.getId()).get().getUrgency(), equalTo(Todo.Urgency.DEFAULT));
+        assertThat(todoRepository.find(todoThatNeverGetsDone.getId()).get().getStatus(), equalTo(Todo.Status.INCOMPLETE));
+        assertThat(todoRepository.find(todoThatGetsDoneInTime.getId()).get().getStatus(), equalTo(Todo.Status.INCOMPLETE));
 
-        adjustTodoUrgency.perform(todoThatNeverGetsDone.getId(), LocalDateTime.of(2016, 11, 5, 23, 59, 59));
-        adjustTodoUrgency.perform(todoThatGetsDoneInTime.getId(), LocalDateTime.of(2016, 11, 5, 23, 59, 59));
+        updateTodoStatus.perform(todoThatNeverGetsDone.getId(), LocalDateTime.of(2016, 11, 5, 23, 59, 59));
+        updateTodoStatus.perform(todoThatGetsDoneInTime.getId(), LocalDateTime.of(2016, 11, 5, 23, 59, 59));
 
-        assertThat(todoRepository.find(todoThatNeverGetsDone.getId()).get().getUrgency(), equalTo(Todo.Urgency.DEFAULT));
-        assertThat(todoRepository.find(todoThatGetsDoneInTime.getId()).get().getUrgency(), equalTo(Todo.Urgency.DEFAULT));
+        assertThat(todoRepository.find(todoThatNeverGetsDone.getId()).get().getStatus(), equalTo(Todo.Status.INCOMPLETE));
+        assertThat(todoRepository.find(todoThatGetsDoneInTime.getId()).get().getStatus(), equalTo(Todo.Status.INCOMPLETE));
 
         completeTodo.perform(todoThatGetsDoneInTime.getId());
 
         assertThat(playerRepository.find(player.getId()).get().getHealth(), equalTo(originalHealth));
-        adjustTodoUrgency.perform(todoThatNeverGetsDone.getId(), LocalDateTime.of(2016, 11, 6, 0, 0, 0));
+        updateTodoStatus.perform(todoThatNeverGetsDone.getId(), LocalDateTime.of(2016, 11, 6, 0, 0, 0));
         assertThat(playerRepository.find(player.getId()).get().getHealth(), lessThan(originalHealth));
-        adjustTodoUrgency.perform(todoThatGetsDoneInTime.getId(), LocalDateTime.of(2016, 11, 6, 0, 0, 0));
 
-        assertThat(todoRepository.find(todoThatNeverGetsDone.getId()).get().getUrgency(), equalTo(Todo.Urgency.PAST_DUE));
-        assertThat(todoRepository.find(todoThatGetsDoneInTime.getId()).get().getUrgency(), equalTo(Todo.Urgency.DEFAULT));
+        updateTodoStatus.perform(todoThatGetsDoneInTime.getId(), LocalDateTime.of(2016, 11, 6, 0, 0, 0));
+
+        assertThat(todoRepository.find(todoThatNeverGetsDone.getId()).get().getStatus(), equalTo(Todo.Status.PAST_DUE));
+        assertThat(todoRepository.find(todoThatGetsDoneInTime.getId()).get().getStatus(), equalTo(Todo.Status.COMPLETE));
     }
 
     @Test
@@ -123,7 +124,7 @@ public class TodosTest {
     @Test
     public void adjustingUrgencyForATodo_whenNoSuchTodoExists() throws Exception {
         try{
-            adjustTodoUrgency.perform(new TodoId("no-such-id"), LocalDateTime.now());
+            updateTodoStatus.perform(new TodoId("no-such-id"), LocalDateTime.now());
             fail("Expected a NoSuchTodoException to be thrown");
         } catch(NoSuchTodoException e) {
             assertThat(e.getTodoId(), equalTo(new TodoId("no-such-id")));
