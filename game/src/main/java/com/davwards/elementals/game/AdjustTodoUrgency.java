@@ -31,7 +31,6 @@ public class AdjustTodoUrgency {
                         player.decreaseHealth(GameConstants.EXPIRED_TODO_PENALTY);
                         playerRepository.update(player);
                     });
-            System.out.println("nothing");
         }
 
     }
