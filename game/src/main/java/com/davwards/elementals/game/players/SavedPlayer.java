@@ -1,6 +1,8 @@
 package com.davwards.elementals.game.players;
 
-public class SavedPlayer extends Player {
+import com.davwards.elementals.game.SavedEntity;
+
+public class SavedPlayer extends Player implements SavedEntity<PlayerId> {
     private final PlayerId id;
 
     public SavedPlayer(PlayerId id, String name, Integer experience) {
@@ -19,5 +21,20 @@ public class SavedPlayer extends Player {
                 savedPlayer.getName(),
                 savedPlayer.getExperience()
         );
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SavedPlayer that = (SavedPlayer) o;
+
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

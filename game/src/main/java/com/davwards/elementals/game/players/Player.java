@@ -19,4 +19,8 @@ public class Player {
     public void addExperience(Integer points) {
         this.experience += points;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

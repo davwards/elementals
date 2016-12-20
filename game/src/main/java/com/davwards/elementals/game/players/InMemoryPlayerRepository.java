@@ -1,9 +1,6 @@
 package com.davwards.elementals.game.players;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class InMemoryPlayerRepository implements PlayerRepository {
     private Map<PlayerId, SavedPlayer> contents = new HashMap<>();
@@ -28,7 +25,12 @@ public class InMemoryPlayerRepository implements PlayerRepository {
     }
 
     @Override
-    public SavedPlayer save(SavedPlayer player) {
+    public List<SavedPlayer> all() {
+        return new ArrayList<>(contents.values());
+    }
+
+    @Override
+    public SavedPlayer update(SavedPlayer player) {
         contents.put(player.getId(), SavedPlayer.clone(player));
         return SavedPlayer.clone(player);
     }

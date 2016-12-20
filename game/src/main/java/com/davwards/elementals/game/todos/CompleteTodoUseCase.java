@@ -21,7 +21,7 @@ public class CompleteTodoUseCase {
 
         playerRepository.find(updatedTodo.getPlayerId()).ifPresent(player -> {
             player.addExperience(GameConstants.TODO_COMPLETION_PRIZE);
-            playerRepository.save(player);
+            playerRepository.update(player);
         });
 
         return updatedTodo;

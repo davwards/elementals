@@ -1,11 +1,13 @@
 package com.davwards.elementals.game.players;
 
+import com.davwards.elementals.game.CrudRepository;
+
 import java.util.Optional;
 
-public interface PlayerRepository {
+public interface PlayerRepository extends CrudRepository<UnsavedPlayer, SavedPlayer, PlayerId> {
     SavedPlayer save(UnsavedPlayer player);
 
     Optional<SavedPlayer> find(PlayerId id);
 
-    SavedPlayer save(SavedPlayer player);
+    SavedPlayer update(SavedPlayer player);
 }
