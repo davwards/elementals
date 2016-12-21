@@ -41,6 +41,8 @@ public class UpdateTodoStatusTest {
             new UnsavedTodo(player.getId(), "Incomplete todo due earlier", Todo.Status.INCOMPLETE, currentTime.minusMinutes(5)));
     private SavedTodo completeTodoDueEarlier = todoRepository.save(
             new UnsavedTodo(player.getId(), "Complete todo due earlier", Todo.Status.COMPLETE, currentTime.minusMinutes(5)));
+    private SavedTodo pastDueTodoDueEarlier = todoRepository.save(
+            new UnsavedTodo(player.getId(), "Past due todo due earlier", Todo.Status.PAST_DUE, currentTime.minusMinutes(5)));
 
     @Test
     public void whenCurrentTimeIsBeforeOrOnDeadline_doesNotChangeStatus() throws Exception {
@@ -113,6 +115,11 @@ public class UpdateTodoStatusTest {
         assertThatValueDoesNotChange(
                 () -> playerRepository.find(player.getId()).get().getHealth(),
                 () -> updateTodoStatus.perform(completeTodoDueEarlier.getId(), currentTime)
+        );
+
+        assertThatValueDoesNotChange(
+                () -> playerRepository.find(player.getId()).get().getHealth(),
+                () -> updateTodoStatus.perform(pastDueTodoDueEarlier.getId(), currentTime)
         );
     }
 
