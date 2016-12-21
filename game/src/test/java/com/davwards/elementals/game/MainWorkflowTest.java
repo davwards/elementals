@@ -25,12 +25,13 @@ public class MainWorkflowTest {
     private final PlayerRepository playerRepository = new InMemoryPlayerRepository();
     private final FakeNotifier notifier = new FakeNotifier();
 
+    private final CreatePlayer createPlayer = new CreatePlayer(playerRepository);
     private final CreateTodo createTodo = new CreateTodo(todoRepository);
     private final CompleteTodo completeTodo = new CompleteTodo(todoRepository, playerRepository);
     private final UpdateTodoStatus updateTodoStatus = new UpdateTodoStatus(todoRepository, playerRepository);
     private final ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository, notifier);
 
-    private SavedPlayer player = playerRepository.save(new UnsavedPlayer("testplayer"));
+    private SavedPlayer player = createPlayer.perform("testplayer");
 
     private final LocalDateTime now = LocalDateTime.of(2015, 3, 2, 16, 42, 55);
     private final LocalDateTime tomorrow = now.plusDays(1);
@@ -38,7 +39,6 @@ public class MainWorkflowTest {
 
     @Test
     public void creatingAndCompletingTodos() {
-
         SavedTodo takeOutTrash = createTodo.perform(player.getId(), "Take out trash", tomorrow);
         SavedTodo understandRelativity = createTodo.perform(player.getId(), "Understand relativity", nextWeek);
 
