@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.todos;
+package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.CompleteTodo;
 import com.davwards.elementals.game.CreateTodo;
