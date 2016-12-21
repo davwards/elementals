@@ -1,8 +1,11 @@
 package com.davwards.elementals;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -40,5 +43,12 @@ public class TestUtils {
         T originalValue = getValue.get();
         event.run();
         assertThat(getValue.get(), equalTo(originalValue));
+    }
+
+    public static void assertThatValuesDoNotChange(Runnable event, Supplier... getters) {
+        List<Object> originalValues = Arrays.stream(getters).map(Supplier::get).collect(Collectors.toList());
+        event.run();
+        List<Object> finalValues = Arrays.stream(getters).map(Supplier::get).collect(Collectors.toList());
+        assertThat(finalValues, equalTo(originalValues));
     }
 }

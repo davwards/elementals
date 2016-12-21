@@ -40,4 +40,16 @@ public class Player {
     public void decreaseHealth(Integer points) {
         this.health -= points;
     }
+
+    public boolean isAlive() {
+        return health > 0;
+    }
+
+    public void setExperience(int experience) {
+        this.experience = experience;
+    }
+
+    public void setHealth(Integer health) {
+        this.health = health;
+    }
 }

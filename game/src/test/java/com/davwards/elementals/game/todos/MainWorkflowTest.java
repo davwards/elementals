@@ -2,6 +2,7 @@ package com.davwards.elementals.game.todos;
 
 import com.davwards.elementals.game.CompleteTodo;
 import com.davwards.elementals.game.CreateTodo;
+import com.davwards.elementals.game.ResurrectPlayer;
 import com.davwards.elementals.game.UpdateTodoStatus;
 import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.entities.players.SavedPlayer;
@@ -17,6 +18,9 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 import static com.davwards.elementals.TestUtils.*;
+import static junit.framework.TestCase.fail;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.greaterThan;
 
 public class MainWorkflowTest {
 
@@ -25,14 +29,16 @@ public class MainWorkflowTest {
     private final CreateTodo createTodo = new CreateTodo(todoRepository);
     private final CompleteTodo completeTodo = new CompleteTodo(todoRepository, playerRepository);
     private final UpdateTodoStatus updateTodoStatus = new UpdateTodoStatus(todoRepository, playerRepository);
+    private final ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository);
 
     private SavedPlayer player = playerRepository.save(new UnsavedPlayer("testplayer"));
 
+    private final LocalDateTime now = LocalDateTime.of(2015, 3, 2, 16, 42, 55);
+    private final LocalDateTime tomorrow = now.plusDays(1);
+    private final LocalDateTime nextWeek = now.plusDays(7);
+
     @Test
     public void creatingAndCompletingTodos() throws NoSuchTodoException {
-        final LocalDateTime now = LocalDateTime.of(2015, 3, 2, 16, 42, 55);
-        LocalDateTime tomorrow = now.plusDays(1);
-        LocalDateTime nextWeek = now.plusDays(7);
 
         SavedTodo takeOutTrash = createTodo.perform(player.getId(), "Take out trash", tomorrow);
         SavedTodo understandRelativity = createTodo.perform(player.getId(), "Understand relativity", nextWeek);
@@ -44,6 +50,28 @@ public class MainWorkflowTest {
         playerDoesNotTakeDamageForTodosThatArentDueOrWereCompleted(nextWeek, takeOutTrash);
 
         playerTakesDamageForTodosThatWerentDoneByDeadline(nextWeek, understandRelativity);
+
+        playerDiesAndIsResurrectedAfterTakingTooMuchDamage();
+    }
+
+    private void playerDiesAndIsResurrectedAfterTakingTooMuchDamage() {
+        int missedTodos = 0;
+        while(currentPlayerHealth() > 0) {
+            missedTodos++;
+            if(missedTodos > 100) {
+                fail("Player has missed " + missedTodos + " todos and hasn't died, something's probably wrong");
+            }
+
+            SavedTodo todo = createTodo.perform(player.getId(), "Missed todo #" + missedTodos, tomorrow);
+            updateTodoStatus.perform(todo.getId(), nextWeek);
+        }
+
+        assertThatValueDecreases(
+                this::currentPlayerExperience,
+                () -> resurrectPlayer.perform(player.getId())
+        );
+
+        assertThat(currentPlayerHealth(), greaterThan(0));
     }
 
     private void playerDoesNotTakeDamageForTodosThatArentDueOrWereCompleted(LocalDateTime currentTime, SavedTodo... todos) {
