@@ -5,7 +5,6 @@ import com.davwards.elementals.game.entities.players.SavedPlayer;
 import com.davwards.elementals.game.entities.players.UnsavedPlayer;
 import com.davwards.elementals.game.entities.todos.SavedTodo;
 import com.davwards.elementals.game.entities.todos.TodoRepository;
-import com.davwards.elementals.game.exceptions.NoSuchTodoException;
 import com.davwards.elementals.game.fakeplugins.FakeNotifier;
 import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
 import com.davwards.elementals.game.fakeplugins.InMemoryTodoRepository;
@@ -38,7 +37,7 @@ public class MainWorkflowTest {
     private final LocalDateTime nextWeek = now.plusDays(7);
 
     @Test
-    public void creatingAndCompletingTodos() throws NoSuchTodoException {
+    public void creatingAndCompletingTodos() {
 
         SavedTodo takeOutTrash = createTodo.perform(player.getId(), "Take out trash", tomorrow);
         SavedTodo understandRelativity = createTodo.perform(player.getId(), "Understand relativity", nextWeek);
