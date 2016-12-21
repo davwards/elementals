@@ -1,7 +1,7 @@
 package com.davwards.elementals.game.todos;
 
 import com.davwards.elementals.game.entities.todos.TodoRepository;
-import com.davwards.elementals.game.inmemorypersistence.InMemoryTodoRepository;
+import com.davwards.elementals.game.fakeplugins.InMemoryTodoRepository;
 
 public class InMemoryTodoRepositoryTest extends TodoRepositoryTest {
 

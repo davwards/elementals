@@ -5,8 +5,8 @@ import com.davwards.elementals.game.entities.players.SavedPlayer;
 import com.davwards.elementals.game.entities.players.UnsavedPlayer;
 import com.davwards.elementals.game.entities.todos.*;
 import com.davwards.elementals.game.exceptions.NoSuchTodoException;
-import com.davwards.elementals.game.inmemorypersistence.InMemoryPlayerRepository;
-import com.davwards.elementals.game.inmemorypersistence.InMemoryTodoRepository;
+import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
+import com.davwards.elementals.game.fakeplugins.InMemoryTodoRepository;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

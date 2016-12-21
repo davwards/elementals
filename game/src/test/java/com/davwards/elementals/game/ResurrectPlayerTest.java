@@ -7,7 +7,7 @@ import com.davwards.elementals.game.entities.players.UnsavedPlayer;
 import com.davwards.elementals.game.entities.todos.TodoId;
 import com.davwards.elementals.game.exceptions.NoSuchPlayerException;
 import com.davwards.elementals.game.exceptions.NoSuchTodoException;
-import com.davwards.elementals.game.inmemorypersistence.InMemoryPlayerRepository;
+import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
 import org.junit.Test;
 
 import static com.davwards.elementals.TestUtils.assertThatValuesDoNotChange;

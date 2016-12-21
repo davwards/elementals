@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.inmemorypersistence;
+package com.davwards.elementals.game.fakeplugins;
 
 import com.davwards.elementals.game.entities.todos.SavedTodo;
 import com.davwards.elementals.game.entities.todos.TodoId;
