@@ -4,10 +4,10 @@ import com.davwards.elementals.game.entities.players.PlayerId;
 import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.entities.players.SavedPlayer;
 import com.davwards.elementals.game.entities.players.UnsavedPlayer;
-import com.davwards.elementals.game.entities.todos.TodoId;
 import com.davwards.elementals.game.exceptions.NoSuchPlayerException;
-import com.davwards.elementals.game.exceptions.NoSuchTodoException;
+import com.davwards.elementals.game.fakeplugins.FakeNotifier;
 import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
+import com.davwards.elementals.game.notification.Notification;
 import org.junit.Test;
 
 import static com.davwards.elementals.TestUtils.assertThatValuesDoNotChange;
@@ -18,7 +18,8 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class ResurrectPlayerTest {
 
     private PlayerRepository playerRepository = new InMemoryPlayerRepository();
-    private ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository);
+    private FakeNotifier notifier = new FakeNotifier();
+    private ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository, notifier);
 
     private SavedPlayer deadPlayer = playerRepository.save(new UnsavedPlayer("dead", 100, 0));
     private SavedPlayer veryDeadPlayer = playerRepository.save(new UnsavedPlayer("very dead", 100, -10));
@@ -49,6 +50,13 @@ public class ResurrectPlayerTest {
 
         resurrectPlayer.perform(veryDeadPlayer.getId());
         assertThat(playerRepository.find(veryDeadPlayer.getId()).get().getHealth(), equalTo(GameConstants.STARTING_HEALTH));
+    }
+
+    @Test
+    public void whenPlayerIsDead_sendsNotification() throws Exception {
+        resurrectPlayer.perform(deadPlayer.getId());
+        assertThat(notifier.notificationsSent().get(0).getPlayerId(), equalTo(deadPlayer.getId()));
+        assertThat(notifier.notificationsSent().get(0).getType(), equalTo(Notification.NotificationType.PLAYER_HAS_DIED));
     }
 
     @Test

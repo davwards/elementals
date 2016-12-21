@@ -1,15 +1,12 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.CompleteTodo;
-import com.davwards.elementals.game.CreateTodo;
-import com.davwards.elementals.game.ResurrectPlayer;
-import com.davwards.elementals.game.UpdateTodoStatus;
 import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.entities.players.SavedPlayer;
 import com.davwards.elementals.game.entities.players.UnsavedPlayer;
 import com.davwards.elementals.game.entities.todos.SavedTodo;
 import com.davwards.elementals.game.entities.todos.TodoRepository;
 import com.davwards.elementals.game.exceptions.NoSuchTodoException;
+import com.davwards.elementals.game.fakeplugins.FakeNotifier;
 import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
 import com.davwards.elementals.game.fakeplugins.InMemoryTodoRepository;
 import org.junit.Test;
@@ -21,15 +18,18 @@ import static com.davwards.elementals.TestUtils.*;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.core.IsEqual.equalTo;
 
 public class MainWorkflowTest {
 
     private final TodoRepository todoRepository = new InMemoryTodoRepository();
     private final PlayerRepository playerRepository = new InMemoryPlayerRepository();
+    private final FakeNotifier notifier = new FakeNotifier();
+
     private final CreateTodo createTodo = new CreateTodo(todoRepository);
     private final CompleteTodo completeTodo = new CompleteTodo(todoRepository, playerRepository);
     private final UpdateTodoStatus updateTodoStatus = new UpdateTodoStatus(todoRepository, playerRepository);
-    private final ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository);
+    private final ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository, notifier);
 
     private SavedPlayer player = playerRepository.save(new UnsavedPlayer("testplayer"));
 
@@ -66,10 +66,14 @@ public class MainWorkflowTest {
             updateTodoStatus.perform(todo.getId(), nextWeek);
         }
 
+        assertThat(notifier.notificationsSent().size(), equalTo(0));
+
         assertThatValueDecreases(
                 this::currentPlayerExperience,
                 () -> resurrectPlayer.perform(player.getId())
         );
+
+        assertThat(notifier.notificationsSent().size(), equalTo(1));
 
         assertThat(currentPlayerHealth(), greaterThan(0));
     }
