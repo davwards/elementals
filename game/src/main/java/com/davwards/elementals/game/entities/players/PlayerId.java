@@ -4,6 +4,7 @@ public class PlayerId {
     private final String value;
 
     public PlayerId(String value) {
+        assert(value != null);
         this.value = value;
     }
 

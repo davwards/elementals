@@ -1,0 +1,8 @@
+dependencies {
+    compile project(':game')
+
+    compile 'org.springframework.boot:spring-boot-starter-web:1.4.2.RELEASE'
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test:1.4.2.RELEASE'
+    testCompile 'io.rest-assured:rest-assured:3.0.1'
+}
