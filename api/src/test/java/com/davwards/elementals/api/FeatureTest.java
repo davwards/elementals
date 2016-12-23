@@ -25,7 +25,6 @@ import static org.junit.Assert.fail;
         classes = Application.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
-@EnableScheduling
 @ActiveProfiles({"controlled-time", "fake-notifications"})
 public class FeatureTest {
 

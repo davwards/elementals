@@ -1,13 +1,23 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.4.3.RELEASE")
+    }
+}
+
 subprojects {
     apply plugin: 'java'
 
     repositories {
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
         compile 'org.slf4j:slf4j-api:1.7.5'
         testCompile 'org.hamcrest:hamcrest-all:1.3'
-        testCompile 'junit:junit:4.11'
+        testCompile 'junit:junit:4.12'
     }
 }
