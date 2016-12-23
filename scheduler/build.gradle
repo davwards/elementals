@@ -1,0 +1,4 @@
+dependencies {
+    compile project(':game')
+    compile 'org.springframework.boot:spring-boot-starter:1.4.2.RELEASE'
+}

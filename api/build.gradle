@@ -1,5 +1,6 @@
 dependencies {
     compile project(':game')
+    compile project(':scheduler')
 
     compile 'org.springframework.boot:spring-boot-starter-web:1.4.2.RELEASE'
 

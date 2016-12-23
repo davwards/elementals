@@ -2,3 +2,4 @@ rootProject.name = 'elementals'
 
 include 'game'
 include 'api'
+include 'scheduler'
