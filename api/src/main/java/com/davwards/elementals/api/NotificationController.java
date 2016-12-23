@@ -4,6 +4,7 @@ import com.davwards.elementals.game.entities.players.PlayerId;
 import com.davwards.elementals.game.notification.Notification;
 import com.davwards.elementals.game.notification.Notifier;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@Profile("fake-notifications")
 public class NotificationController implements Notifier {
 
     private List<NotificationResponse> notifications = new ArrayList<>();

@@ -7,6 +7,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.time.LocalDateTime;
@@ -25,6 +26,7 @@ import static org.junit.Assert.fail;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @EnableScheduling
+@ActiveProfiles({"controlled-time", "fake-notifications"})
 public class FeatureTest {
 
     @Value("${local.server.port}")

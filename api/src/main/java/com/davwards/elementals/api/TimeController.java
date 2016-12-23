@@ -2,6 +2,7 @@ package com.davwards.elementals.api;
 
 import com.davwards.elementals.scheduler.ManualTimeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Controller
+@Profile("controlled-time")
 public class TimeController {
 
     private final ManualTimeProvider timeProvider;
