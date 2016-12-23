@@ -29,13 +29,6 @@ import static org.junit.Assert.fail;
 @ActiveProfiles({"controlled-time", "fake-notifications"})
 public class FeatureTest {
 
-    @Value("${local.server.port}")
-    private String port;
-
-    private String baseUrl() {
-        return "http://localhost:" + port;
-    }
-
     @Test
     public void mainWorkflow() throws Exception {
         Response createPlayerResponse = given()
@@ -195,5 +188,12 @@ public class FeatureTest {
                 .put(baseUrl() + "/test/time")
                 .then()
                 .statusCode(200);
+    }
+
+    @Value("${local.server.port}")
+    private String port;
+
+    private String baseUrl() {
+        return "http://localhost:" + port;
     }
 }
