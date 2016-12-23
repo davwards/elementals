@@ -31,7 +31,7 @@ public class PlayerController {
 
         return ResponseEntity.created(
                 uriBuilder.path("/api/players/" + player.getId()).build().toUri()
-        ).body(new PlayerResponseEnvelope(
+        ).body(new PlayerResponse.Envelope(
                 new PlayerResponse(
                         player.getId().toString(),
                         player.getName()
@@ -45,21 +45,12 @@ public class PlayerController {
 
         SavedPlayer player = fetchPlayer.perform(new PlayerId(id));
 
-        return ResponseEntity.ok(new PlayerResponseEnvelope(
+        return ResponseEntity.ok(new PlayerResponse.Envelope(
                 new PlayerResponse(
                         player.getId().toString(),
                         player.getName()
                 )
         ));
-    }
-
-    private static class PlayerResponseEnvelope {
-        @JsonProperty
-        private PlayerResponse player;
-
-        PlayerResponseEnvelope(PlayerResponse playerResponse) {
-            this.player = playerResponse;
-        }
     }
 
     private static class PlayerResponse {
@@ -72,6 +63,15 @@ public class PlayerController {
         PlayerResponse(String id, String name) {
             this.id = id;
             this.name = name;
+        }
+
+        private static class Envelope {
+            @JsonProperty
+            private PlayerResponse player;
+
+            Envelope(PlayerResponse playerResponse) {
+                this.player = playerResponse;
+            }
         }
     }
 
