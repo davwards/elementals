@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.function.Function;
 
 @RestController
 public class TaskController {
@@ -57,12 +58,11 @@ public class TaskController {
 
     @RequestMapping(value = "/api/tasks/{id}/complete", method = RequestMethod.PUT)
     public ResponseEntity completeTask(@PathVariable("id") String id) {
-        try {
-            SavedTask task = completeTask.perform(new TaskId(id));
-            return ResponseEntity.ok(responseFor(task));
-        } catch (NoSuchTaskException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return completeTask.perform(
+                new TaskId(id),
+                task -> ResponseEntity.ok(responseFor(task)),
+                () -> ResponseEntity.notFound().build()
+        );
     }
 
     private TaskResponse responseFor(SavedTask task) {

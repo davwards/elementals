@@ -11,8 +11,10 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.function.Function;
 
 import static com.davwards.elementals.TestUtils.*;
+import static java.util.function.Function.identity;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -97,7 +99,7 @@ public class MainWorkflowTest {
     private void playerGainsExperienceForCompletingATask(SavedTask takeOutTrash) {
         assertThatValueIncreases(
                 this::currentPlayerExperience,
-                () -> completeTask.perform(takeOutTrash.getId())
+                () -> completeTask.perform(takeOutTrash.getId(), identity(), () -> null)
         );
     }
 

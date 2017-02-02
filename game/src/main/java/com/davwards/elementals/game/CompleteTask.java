@@ -1,11 +1,13 @@
 package com.davwards.elementals.game;
 
+import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.entities.tasks.SavedTask;
 import com.davwards.elementals.game.entities.tasks.Task;
 import com.davwards.elementals.game.entities.tasks.TaskId;
-import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.entities.tasks.TaskRepository;
-import com.davwards.elementals.game.exceptions.NoSuchTaskException;
+
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class CompleteTask {
     private final TaskRepository taskRepository;
@@ -16,18 +18,21 @@ public class CompleteTask {
         this.playerRepository = playerRepository;
     }
 
-    public SavedTask perform(TaskId id) throws NoSuchTaskException {
-        SavedTask updatedTask = taskRepository.find(id)
-                .map(task -> {
-                    task.setStatus(Task.Status.COMPLETE);
-                    return taskRepository.update(task);
-                }).orElseThrow(() -> new NoSuchTaskException(id));
+    public <T> T perform(TaskId id,
+                         Function<SavedTask, T> taskSuccessfullyCompleted,
+                         Supplier<T> noSuchTask) {
 
-        playerRepository.find(updatedTask.getPlayerId()).ifPresent(player -> {
+        return taskRepository.find(id)
+                .map(task -> taskSuccessfullyCompleted.apply(updateTaskStatusAndAwardExperienceToPlayer(task)))
+                .orElseGet(noSuchTask);
+    }
+
+    private SavedTask updateTaskStatusAndAwardExperienceToPlayer(SavedTask task) {
+        task.setStatus(Task.Status.COMPLETE);
+        playerRepository.find(task.getPlayerId()).ifPresent(player -> {
             player.addExperience(GameConstants.TASK_COMPLETION_PRIZE);
             playerRepository.update(player);
         });
-
-        return updatedTask;
+        return taskRepository.update(task);
     }
 }
