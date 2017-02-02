@@ -7,7 +7,6 @@ import com.davwards.elementals.game.entities.players.PlayerId;
 import com.davwards.elementals.game.entities.tasks.SavedTask;
 import com.davwards.elementals.game.entities.tasks.Task;
 import com.davwards.elementals.game.entities.tasks.TaskId;
-import com.davwards.elementals.game.exceptions.NoSuchTaskException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +14,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.function.Function;
 
 @RestController
 public class TaskController {
