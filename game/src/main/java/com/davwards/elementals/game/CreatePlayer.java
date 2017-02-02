@@ -4,6 +4,8 @@ import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.entities.players.SavedPlayer;
 import com.davwards.elementals.game.entities.players.UnsavedPlayer;
 
+import java.util.function.Function;
+
 public class CreatePlayer {
     private final PlayerRepository playerRepository;
 
@@ -11,7 +13,11 @@ public class CreatePlayer {
         this.playerRepository = playerRepository;
     }
 
-    public SavedPlayer perform(String playerName) {
-        return playerRepository.save(new UnsavedPlayer(playerName));
+    public <T> T perform(String playerName,
+                         Function<SavedPlayer, T> playerSaved) {
+
+        return playerSaved.apply(
+                playerRepository.save(new UnsavedPlayer(playerName))
+        );
     }
 }

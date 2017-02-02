@@ -27,11 +27,14 @@ public class PlayerController {
     public ResponseEntity createPlayer(UriComponentsBuilder uriBuilder,
                                        @RequestBody CreatePlayerRequest createPlayerRequest) {
 
-        SavedPlayer player = createPlayer.perform(createPlayerRequest.getName());
-
-        return ResponseEntity.created(
-                uriBuilder.path("/api/players/" + player.getId()).build().toUri()
-        ).body(playerResponseFor(player));
+        return createPlayer.perform(
+                createPlayerRequest.getName(),
+                player -> ResponseEntity
+                        .created(uriBuilder
+                                .path("/api/players/" + player.getId())
+                                .build()
+                                .toUri())
+                        .body(playerResponseFor(player)));
     }
 
     @RequestMapping(value = "/api/players/{id}", method = RequestMethod.GET)

@@ -32,7 +32,7 @@ public class MainWorkflowTest {
     private final UpdateTaskStatus updateTaskStatus = new UpdateTaskStatus(taskRepository, playerRepository);
     private final ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository, notifier);
 
-    private SavedPlayer player = createPlayer.perform("testplayer");
+    private SavedPlayer player = createPlayer.perform("testplayer", identity());
 
     private final LocalDateTime now = LocalDateTime.of(2015, 3, 2, 16, 42, 55);
     private final LocalDateTime tomorrow = now.plusDays(1);
