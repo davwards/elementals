@@ -41,9 +41,10 @@ public class PlayerController {
     public ResponseEntity fetchPlayer(UriComponentsBuilder uriBuilder,
                                       @PathVariable("id") String id) {
 
-        SavedPlayer player = fetchPlayer.perform(new PlayerId(id));
-
-        return ResponseEntity.ok(playerResponseFor(player));
+        return fetchPlayer.perform(
+                new PlayerId(id),
+                player -> ResponseEntity.ok(playerResponseFor(player)),
+                () -> ResponseEntity.notFound().build());
     }
 
     private PlayerResponse playerResponseFor(SavedPlayer player) {

@@ -5,6 +5,9 @@ import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.entities.players.SavedPlayer;
 import com.davwards.elementals.game.exceptions.NoSuchPlayerException;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 public class FetchPlayer {
     private final PlayerRepository playerRepository;
 
@@ -12,7 +15,13 @@ public class FetchPlayer {
         this.playerRepository = playerRepository;
     }
 
-    public SavedPlayer perform(PlayerId id) {
-        return playerRepository.find(id).orElseThrow(() -> new NoSuchPlayerException(id));
+    public <T> T perform(PlayerId id,
+                         Function<SavedPlayer, T> foundPlayer,
+                         Supplier<T> noSuchPlayer) {
+
+        return playerRepository
+                .find(id)
+                .map(foundPlayer)
+                .orElseGet(noSuchPlayer);
     }
 }
