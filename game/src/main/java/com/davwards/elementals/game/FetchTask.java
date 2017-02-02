@@ -3,7 +3,9 @@ package com.davwards.elementals.game;
 import com.davwards.elementals.game.entities.tasks.SavedTask;
 import com.davwards.elementals.game.entities.tasks.TaskId;
 import com.davwards.elementals.game.entities.tasks.TaskRepository;
-import com.davwards.elementals.game.exceptions.NoSuchTaskException;
+
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class FetchTask {
     private final TaskRepository taskRepository;
@@ -12,7 +14,10 @@ public class FetchTask {
         this.taskRepository = taskRepository;
     }
 
-    public SavedTask perform(TaskId id) {
-        return taskRepository.find(id).orElseThrow(() -> new NoSuchTaskException(id));
+    public <T> T perform(TaskId id, Function<SavedTask, T> fetchedTask, Supplier<T> noSuchTask) {
+        return taskRepository
+                .find(id)
+                .map(fetchedTask)
+                .orElseGet(noSuchTask);
     }
 }

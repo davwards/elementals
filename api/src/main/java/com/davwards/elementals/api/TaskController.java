@@ -48,12 +48,11 @@ public class TaskController {
 
     @RequestMapping(value = "api/tasks/{id}", method = RequestMethod.GET)
     public ResponseEntity getTask(@PathVariable("id") String id) {
-        try {
-            SavedTask task = fetchTask.perform(new TaskId(id));
-            return ResponseEntity.ok(responseFor(task));
-        } catch (NoSuchTaskException e) {
-            return ResponseEntity.notFound().build();
-        }
+        return fetchTask.perform(
+                new TaskId(id),
+                task -> ResponseEntity.ok(responseFor(task)),
+                () -> ResponseEntity.notFound().build()
+        );
     }
 
     @RequestMapping(value = "/api/tasks/{id}/complete", method = RequestMethod.PUT)
