@@ -41,16 +41,16 @@ public class FeatureTest {
         createPlayerResponse
                 .then()
                 .statusCode(201)
-                .body("player.name", equalTo("TestPlayer"))
-                .body("player.id", notNullValue())
-                .body("player.health", notNullValue())
-                .body("player.experience", equalTo(0));
+                .body("name", equalTo("TestPlayer"))
+                .body("id", notNullValue())
+                .body("health", notNullValue())
+                .body("experience", equalTo(0));
 
         String playerUrl = createPlayerResponse
                 .then().extract().header("Location");
 
         String playerId = createPlayerResponse
-                .then().extract().body().jsonPath().getString("player.id");
+                .then().extract().body().jsonPath().getString("id");
 
         given()
                 .contentType(ContentType.JSON)
@@ -58,10 +58,10 @@ public class FeatureTest {
                 .get(playerUrl)
                 .then()
                 .statusCode(200)
-                .body("player.name", equalTo("TestPlayer"))
-                .body("player.id", notNullValue())
-                .body("player.health", notNullValue())
-                .body("player.experience", equalTo(0));
+                .body("name", equalTo("TestPlayer"))
+                .body("id", notNullValue())
+                .body("health", notNullValue())
+                .body("experience", equalTo(0));
 
         LocalDateTime now = currentTime();
         LocalDateTime nextWeek = now.plusDays(7);
@@ -76,10 +76,10 @@ public class FeatureTest {
                 .post(baseUrl() + "/api/players/" + playerId + "/todos")
                 .then()
                 .statusCode(201)
-                .body("todo.title", equalTo("Todo that gets completed"))
-                .body("todo.playerId", equalTo(playerId))
-                .body("todo.deadline", equalTo(nextWeek.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .body("todo.status", equalTo("incomplete"))
+                .body("title", equalTo("Todo that gets completed"))
+                .body("playerId", equalTo(playerId))
+                .body("deadline", equalTo(nextWeek.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .body("status", equalTo("incomplete"))
                 .extract()
                 .header("Location");
 
@@ -89,10 +89,10 @@ public class FeatureTest {
                 .get(todoUrl)
                 .then()
                 .statusCode(200)
-                .body("todo.title", equalTo("Todo that gets completed"))
-                .body("todo.playerId", equalTo(playerId))
-                .body("todo.deadline", equalTo(nextWeek.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .body("todo.status", equalTo("incomplete"));
+                .body("title", equalTo("Todo that gets completed"))
+                .body("playerId", equalTo(playerId))
+                .body("deadline", equalTo(nextWeek.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .body("status", equalTo("incomplete"));
 
         given()
                 .contentType(ContentType.JSON)
@@ -100,10 +100,10 @@ public class FeatureTest {
                 .put(todoUrl + "/complete")
                 .then()
                 .statusCode(200)
-                .body("todo.title", equalTo("Todo that gets completed"))
-                .body("todo.playerId", equalTo(playerId))
-                .body("todo.deadline", equalTo(nextWeek.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
-                .body("todo.status", equalTo("complete"));
+                .body("title", equalTo("Todo that gets completed"))
+                .body("playerId", equalTo(playerId))
+                .body("deadline", equalTo(nextWeek.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+                .body("status", equalTo("complete"));
 
         String todoThatDoesNotGetCompletedUrl = given()
                 .contentType(ContentType.JSON)
@@ -118,7 +118,7 @@ public class FeatureTest {
                 .extract()
                 .header("Location");
 
-        Integer originalHealth = createPlayerResponse.then().extract().body().jsonPath().getInt("player.health");
+        Integer originalHealth = createPlayerResponse.then().extract().body().jsonPath().getInt("health");
 
         setCurrentTimeTo(nextWeek.plusDays(1));
 
@@ -131,7 +131,7 @@ public class FeatureTest {
                             .then()
                             .statusCode(200)
                             .extract().body().jsonPath()
-                            .getString("todo.status");
+                            .getString("status");
 
                     return "pastDue".equals(todoStatus);
                 },
@@ -147,7 +147,7 @@ public class FeatureTest {
                             .then()
                             .statusCode(200)
                             .extract().body().jsonPath()
-                            .getInt("player.health");
+                            .getInt("health");
 
                     return currentHealth < originalHealth;
                 },

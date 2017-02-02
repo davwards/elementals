@@ -31,7 +31,7 @@ public class PlayerController {
 
         return ResponseEntity.created(
                 uriBuilder.path("/api/players/" + player.getId()).build().toUri()
-        ).body(wrappedPlayerResponseFor(player));
+        ).body(playerResponseFor(player));
     }
 
     @RequestMapping(value = "/api/players/{id}", method = RequestMethod.GET)
@@ -40,17 +40,15 @@ public class PlayerController {
 
         SavedPlayer player = fetchPlayer.perform(new PlayerId(id));
 
-        return ResponseEntity.ok(wrappedPlayerResponseFor(player));
+        return ResponseEntity.ok(playerResponseFor(player));
     }
 
-    private PlayerResponse.Envelope wrappedPlayerResponseFor(SavedPlayer player) {
-        return new PlayerResponse.Envelope(
-                new PlayerResponse(
-                        player.getId().toString(),
-                        player.getName(),
-                        player.getHealth(),
-                        player.getExperience()
-                )
+    private PlayerResponse playerResponseFor(SavedPlayer player) {
+        return new PlayerResponse(
+                player.getId().toString(),
+                player.getName(),
+                player.getHealth(),
+                player.getExperience()
         );
     }
 

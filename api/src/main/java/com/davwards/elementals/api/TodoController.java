@@ -42,15 +42,15 @@ public class TodoController {
 
         return ResponseEntity.created(
                 uriBuilder.path("/api/todos/" + todo.getId()).build().toUri()
-        ).body(wrappedTodoResponseFor(todo));
+        ).body(todoResponseFor(todo));
     }
 
     @RequestMapping(value = "api/todos/{id}", method = RequestMethod.GET)
     public ResponseEntity getTodo(@PathVariable("id") String id) {
         try {
             SavedTodo todo = fetchTodo.perform(new TodoId(id));
-            return ResponseEntity.ok(wrappedTodoResponseFor(todo));
-        } catch(NoSuchTodoException e) {
+            return ResponseEntity.ok(todoResponseFor(todo));
+        } catch (NoSuchTodoException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -59,27 +59,25 @@ public class TodoController {
     public ResponseEntity completeTodo(@PathVariable("id") String id) {
         try {
             SavedTodo todo = completeTodo.perform(new TodoId(id));
-            return ResponseEntity.ok(wrappedTodoResponseFor(todo));
-        } catch(NoSuchTodoException e) {
+            return ResponseEntity.ok(todoResponseFor(todo));
+        } catch (NoSuchTodoException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
-    private TodoResponse.Envelope wrappedTodoResponseFor(SavedTodo todo) {
-        return new TodoResponse.Envelope(
-                new TodoResponse(
-                        todo.getTitle(),
-                        todo.getDeadline()
-                                .map(deadline -> deadline.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                                .orElse(null),
-                        todo.getPlayerId().toString(),
-                        statusValue(todo.getStatus())
-                )
+    private TodoResponse todoResponseFor(SavedTodo todo) {
+        return new TodoResponse(
+                todo.getTitle(),
+                todo.getDeadline()
+                        .map(deadline -> deadline.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                        .orElse(null),
+                todo.getPlayerId().toString(),
+                statusValue(todo.getStatus())
         );
     }
 
     private String statusValue(Todo.Status status) {
-        switch(status) {
+        switch (status) {
             case COMPLETE:
                 return "complete";
             case INCOMPLETE:
