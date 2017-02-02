@@ -2,12 +2,11 @@ package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.entities.players.SavedPlayer;
-import com.davwards.elementals.game.entities.players.UnsavedPlayer;
-import com.davwards.elementals.game.entities.todos.SavedTodo;
-import com.davwards.elementals.game.entities.todos.TodoRepository;
+import com.davwards.elementals.game.entities.tasks.SavedTask;
+import com.davwards.elementals.game.entities.tasks.TaskRepository;
 import com.davwards.elementals.game.fakeplugins.FakeNotifier;
 import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
-import com.davwards.elementals.game.fakeplugins.InMemoryTodoRepository;
+import com.davwards.elementals.game.fakeplugins.InMemoryTaskRepository;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -21,14 +20,14 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 public class MainWorkflowTest {
 
-    private final TodoRepository todoRepository = new InMemoryTodoRepository();
+    private final TaskRepository taskRepository = new InMemoryTaskRepository();
     private final PlayerRepository playerRepository = new InMemoryPlayerRepository();
     private final FakeNotifier notifier = new FakeNotifier();
 
     private final CreatePlayer createPlayer = new CreatePlayer(playerRepository);
-    private final CreateTodo createTodo = new CreateTodo(todoRepository);
-    private final CompleteTodo completeTodo = new CompleteTodo(todoRepository, playerRepository);
-    private final UpdateTodoStatus updateTodoStatus = new UpdateTodoStatus(todoRepository, playerRepository);
+    private final CreateTask createTask = new CreateTask(taskRepository);
+    private final CompleteTask completeTask = new CompleteTask(taskRepository, playerRepository);
+    private final UpdateTaskStatus updateTaskStatus = new UpdateTaskStatus(taskRepository, playerRepository);
     private final ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository, notifier);
 
     private SavedPlayer player = createPlayer.perform("testplayer");
@@ -38,31 +37,31 @@ public class MainWorkflowTest {
     private final LocalDateTime nextWeek = now.plusDays(7);
 
     @Test
-    public void creatingAndCompletingTodos() {
-        SavedTodo takeOutTrash = createTodo.perform(player.getId(), "Take out trash", tomorrow);
-        SavedTodo understandRelativity = createTodo.perform(player.getId(), "Understand relativity", nextWeek);
+    public void creatingAndCompletingTasks() {
+        SavedTask takeOutTrash = createTask.perform(player.getId(), "Take out trash", tomorrow);
+        SavedTask understandRelativity = createTask.perform(player.getId(), "Understand relativity", nextWeek);
 
-        playerGainsExperienceForCompletingATodo(takeOutTrash);
+        playerGainsExperienceForCompletingATask(takeOutTrash);
 
-        playerDoesNotTakeDamageForTodosThatArentDueOrWereCompleted(tomorrow, takeOutTrash, understandRelativity);
+        playerDoesNotTakeDamageForTasksThatArentDueOrWereCompleted(tomorrow, takeOutTrash, understandRelativity);
 
-        playerDoesNotTakeDamageForTodosThatArentDueOrWereCompleted(nextWeek, takeOutTrash);
+        playerDoesNotTakeDamageForTasksThatArentDueOrWereCompleted(nextWeek, takeOutTrash);
 
-        playerTakesDamageForTodosThatWerentDoneByDeadline(nextWeek, understandRelativity);
+        playerTakesDamageForTasksThatWerentDoneByDeadline(nextWeek, understandRelativity);
 
         playerDiesAndIsResurrectedAfterTakingTooMuchDamage();
     }
 
     private void playerDiesAndIsResurrectedAfterTakingTooMuchDamage() {
-        int missedTodos = 0;
+        int missedTasks = 0;
         while(currentPlayerHealth() > 0) {
-            missedTodos++;
-            if(missedTodos > 100) {
-                fail("Player has missed " + missedTodos + " todos and hasn't died, something's probably wrong");
+            missedTasks++;
+            if(missedTasks > 100) {
+                fail("Player has missed " + missedTasks + " tasks and hasn't died, something's probably wrong");
             }
 
-            SavedTodo todo = createTodo.perform(player.getId(), "Missed todo #" + missedTodos, tomorrow);
-            updateTodoStatus.perform(todo.getId(), nextWeek);
+            SavedTask task = createTask.perform(player.getId(), "Missed task #" + missedTasks, tomorrow);
+            updateTaskStatus.perform(task.getId(), nextWeek);
         }
 
         assertThat(notifier.notificationsSent().size(), equalTo(0));
@@ -77,28 +76,28 @@ public class MainWorkflowTest {
         assertThat(currentPlayerHealth(), greaterThan(0));
     }
 
-    private void playerDoesNotTakeDamageForTodosThatArentDueOrWereCompleted(LocalDateTime currentTime, SavedTodo... todos) {
-        Arrays.stream(todos).forEach(todo ->
+    private void playerDoesNotTakeDamageForTasksThatArentDueOrWereCompleted(LocalDateTime currentTime, SavedTask... tasks) {
+        Arrays.stream(tasks).forEach(task ->
             assertThatValueDoesNotChange(
                     this::currentPlayerHealth,
-                    () -> updateTodoStatus.perform(todo.getId(), currentTime.plusMinutes(2))
+                    () -> updateTaskStatus.perform(task.getId(), currentTime.plusMinutes(2))
             )
         );
     }
 
-    private void playerTakesDamageForTodosThatWerentDoneByDeadline(LocalDateTime currentTime, SavedTodo... todos) {
-        Arrays.stream(todos).forEach(todo ->
+    private void playerTakesDamageForTasksThatWerentDoneByDeadline(LocalDateTime currentTime, SavedTask... tasks) {
+        Arrays.stream(tasks).forEach(task ->
                 assertThatValueDecreases(
                         this::currentPlayerHealth,
-                        () -> updateTodoStatus.perform(todo.getId(), currentTime.plusMinutes(2))
+                        () -> updateTaskStatus.perform(task.getId(), currentTime.plusMinutes(2))
                 )
         );
     }
 
-    private void playerGainsExperienceForCompletingATodo(SavedTodo takeOutTrash) {
+    private void playerGainsExperienceForCompletingATask(SavedTask takeOutTrash) {
         assertThatValueIncreases(
                 this::currentPlayerExperience,
-                () -> completeTodo.perform(takeOutTrash.getId())
+                () -> completeTask.perform(takeOutTrash.getId())
         );
     }
 

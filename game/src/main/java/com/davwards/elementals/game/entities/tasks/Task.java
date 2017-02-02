@@ -1,30 +1,30 @@
-package com.davwards.elementals.game.entities.todos;
+package com.davwards.elementals.game.entities.tasks;
 
 import com.davwards.elementals.game.entities.players.PlayerId;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class Todo {
+public class Task {
     protected String title;
     protected Status status;
     private Optional<LocalDateTime> deadline = Optional.empty();
     private PlayerId playerId;
 
-    public Todo(PlayerId playerId, String title, Status status) {
+    public Task(PlayerId playerId, String title, Status status) {
         this.playerId = playerId;
         this.title = title;
         this.status = status;
     }
 
-    public Todo(PlayerId playerId, String title, Status status, LocalDateTime deadline) {
+    public Task(PlayerId playerId, String title, Status status, LocalDateTime deadline) {
         this.playerId = playerId;
         this.title = title;
         this.status = status;
         this.deadline = Optional.of(deadline);
     }
 
-    public Todo(PlayerId playerId, String title, Status status, Optional<LocalDateTime> deadline) {
+    public Task(PlayerId playerId, String title, Status status, Optional<LocalDateTime> deadline) {
         this.playerId = playerId;
         this.title = title;
         this.status = status;
@@ -50,11 +50,11 @@ public class Todo {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Todo)) return false;
+        if (!(o instanceof Task)) return false;
 
-        Todo todo = (Todo) o;
+        Task task = (Task) o;
 
-        return title.equals(todo.title) && status == todo.status && deadline == todo.deadline;
+        return title.equals(task.title) && status == task.status && deadline == task.deadline;
     }
 
     @Override

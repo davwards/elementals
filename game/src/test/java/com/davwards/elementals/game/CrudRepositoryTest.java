@@ -23,13 +23,13 @@ public abstract class CrudRepositoryTest<R extends CrudRepository<U, S, I>, I, U
         U unsavedRecord1 = givenAnUnsavedRecord();
         U unsavedRecord2 = givenAnUnsavedRecord();
 
-        S savedTodo1 = repository().save(unsavedRecord1);
-        S savedTodo2 = repository().save(unsavedRecord2);
+        S savedTask1 = repository().save(unsavedRecord1);
+        S savedTask2 = repository().save(unsavedRecord2);
 
-        assertThat(savedTodo1.getId(), not(equalTo(savedTodo2.getId())));
+        assertThat(savedTask1.getId(), not(equalTo(savedTask2.getId())));
 
-        assertIdentical(unsavedRecord1, repository().find(savedTodo1.getId()).get());
-        assertIdentical(unsavedRecord2, repository().find(savedTodo2.getId()).get());
+        assertIdentical(unsavedRecord1, repository().find(savedTask1.getId()).get());
+        assertIdentical(unsavedRecord2, repository().find(savedTask2.getId()).get());
     }
 
     @Test

@@ -2,7 +2,7 @@ package com.davwards.elementals.api;
 
 import com.davwards.elementals.game.*;
 import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
-import com.davwards.elementals.game.fakeplugins.InMemoryTodoRepository;
+import com.davwards.elementals.game.fakeplugins.InMemoryTaskRepository;
 import com.davwards.elementals.scheduler.ManualTimeProvider;
 import com.davwards.elementals.scheduler.Scheduler;
 import com.davwards.elementals.scheduler.TimeProvider;
@@ -21,16 +21,16 @@ import java.time.LocalDateTime;
 @Import({
         CreatePlayer.class,
         FetchPlayer.class,
-        CreateTodo.class,
-        FetchTodo.class,
-        CompleteTodo.class,
-        UpdateTodoStatus.class,
+        CreateTask.class,
+        FetchTask.class,
+        CompleteTask.class,
+        UpdateTaskStatus.class,
         ResurrectPlayer.class,
 
         Scheduler.class,
 
         InMemoryPlayerRepository.class,
-        InMemoryTodoRepository.class,
+        InMemoryTaskRepository.class,
 
         ManualTimeProvider.class
 })

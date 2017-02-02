@@ -66,17 +66,17 @@ public class FeatureTest {
         LocalDateTime now = currentTime();
         LocalDateTime nextWeek = now.plusDays(7);
 
-        String todoUrl = given()
+        String taskUrl = given()
                 .contentType(ContentType.JSON)
                 .body("{\n" +
-                        "  \"title\": \"Todo that gets completed\",\n" +
+                        "  \"title\": \"Task that gets completed\",\n" +
                         "  \"deadline\": \"" + nextWeek.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "\"\n" +
                         "}")
                 .when()
-                .post(baseUrl() + "/api/players/" + playerId + "/todos")
+                .post(baseUrl() + "/api/players/" + playerId + "/tasks")
                 .then()
                 .statusCode(201)
-                .body("title", equalTo("Todo that gets completed"))
+                .body("title", equalTo("Task that gets completed"))
                 .body("playerId", equalTo(playerId))
                 .body("deadline", equalTo(nextWeek.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
                 .body("status", equalTo("incomplete"))
@@ -86,10 +86,10 @@ public class FeatureTest {
         given()
                 .contentType(ContentType.JSON)
                 .when()
-                .get(todoUrl)
+                .get(taskUrl)
                 .then()
                 .statusCode(200)
-                .body("title", equalTo("Todo that gets completed"))
+                .body("title", equalTo("Task that gets completed"))
                 .body("playerId", equalTo(playerId))
                 .body("deadline", equalTo(nextWeek.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
                 .body("status", equalTo("incomplete"));
@@ -97,22 +97,22 @@ public class FeatureTest {
         given()
                 .contentType(ContentType.JSON)
                 .when()
-                .put(todoUrl + "/complete")
+                .put(taskUrl + "/complete")
                 .then()
                 .statusCode(200)
-                .body("title", equalTo("Todo that gets completed"))
+                .body("title", equalTo("Task that gets completed"))
                 .body("playerId", equalTo(playerId))
                 .body("deadline", equalTo(nextWeek.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
                 .body("status", equalTo("complete"));
 
-        String todoThatDoesNotGetCompletedUrl = given()
+        String taskThatDoesNotGetCompletedUrl = given()
                 .contentType(ContentType.JSON)
                 .body("{\n" +
-                        "  \"title\": \"Todo that does not get completed\",\n" +
+                        "  \"title\": \"Task that does not get completed\",\n" +
                         "  \"deadline\": \"" + nextWeek.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME) + "\"\n" +
                         "}")
                 .when()
-                .post(baseUrl() + "/api/players/" + playerId + "/todos")
+                .post(baseUrl() + "/api/players/" + playerId + "/tasks")
                 .then()
                 .statusCode(201)
                 .extract()
@@ -124,18 +124,18 @@ public class FeatureTest {
 
         assertThatEventually(
                 () -> {
-                    String todoStatus = given()
+                    String taskStatus = given()
                             .contentType(ContentType.JSON)
                             .when()
-                            .get(todoThatDoesNotGetCompletedUrl)
+                            .get(taskThatDoesNotGetCompletedUrl)
                             .then()
                             .statusCode(200)
                             .extract().body().jsonPath()
                             .getString("status");
 
-                    return "pastDue".equals(todoStatus);
+                    return "pastDue".equals(taskStatus);
                 },
-                10, "Gave up waiting for status of incomplete todo to update"
+                10, "Gave up waiting for status of incomplete task to update"
         );
 
         assertThatEventually(
@@ -151,7 +151,7 @@ public class FeatureTest {
 
                     return currentHealth < originalHealth;
                 },
-                10, "Gave up waiting for player to be damaged by incomplete todo"
+                10, "Gave up waiting for player to be damaged by incomplete task"
         );
     }
 

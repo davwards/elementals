@@ -1,33 +1,33 @@
 package com.davwards.elementals.scheduler;
 
 import com.davwards.elementals.game.ResurrectPlayer;
-import com.davwards.elementals.game.UpdateTodoStatus;
+import com.davwards.elementals.game.UpdateTaskStatus;
 import com.davwards.elementals.game.entities.players.PlayerRepository;
-import com.davwards.elementals.game.entities.todos.TodoRepository;
+import com.davwards.elementals.game.entities.tasks.TaskRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 
 public class Scheduler {
     private final TimeProvider timeProvider;
-    private final UpdateTodoStatus updateTodoStatus;
+    private final UpdateTaskStatus updateTaskStatus;
     private final ResurrectPlayer resurrectPlayer;
     private final PlayerRepository playerRepository;
-    private final TodoRepository todoRepository;
+    private final TaskRepository taskRepository;
 
     public Scheduler(TimeProvider timeProvider,
-                     UpdateTodoStatus updateTodoStatus,
+                     UpdateTaskStatus updateTaskStatus,
                      ResurrectPlayer resurrectPlayer,
                      PlayerRepository playerRepository,
-                     TodoRepository todoRepository) {
+                     TaskRepository taskRepository) {
         this.timeProvider = timeProvider;
-        this.updateTodoStatus = updateTodoStatus;
+        this.updateTaskStatus = updateTaskStatus;
         this.resurrectPlayer = resurrectPlayer;
         this.playerRepository = playerRepository;
-        this.todoRepository = todoRepository;
+        this.taskRepository = taskRepository;
     }
 
     @Scheduled(fixedDelay = 1000)
-    public void updateTodos() {
-        todoRepository.all().forEach(todo -> updateTodoStatus.perform(todo.getId(), timeProvider.currentTime()));
+    public void updateTasks() {
+        taskRepository.all().forEach(task -> updateTaskStatus.perform(task.getId(), timeProvider.currentTime()));
     }
 
     @Scheduled(fixedDelay = 1000)

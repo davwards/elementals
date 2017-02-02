@@ -1,9 +1,9 @@
-package com.davwards.elementals.game.entities.todos;
+package com.davwards.elementals.game.entities.tasks;
 
-public class TodoId {
+public class TaskId {
     private final String id;
 
-    public TodoId(String id) {
+    public TaskId(String id) {
         this.id = id;
     }
 
@@ -12,9 +12,9 @@ public class TodoId {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        TodoId todoId = (TodoId) o;
+        TaskId taskId = (TaskId) o;
 
-        return id.equals(todoId.id);
+        return id.equals(taskId.id);
 
     }
 

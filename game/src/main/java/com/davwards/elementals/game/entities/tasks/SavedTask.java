@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.entities.todos;
+package com.davwards.elementals.game.entities.tasks;
 
 import com.davwards.elementals.game.entities.SavedEntity;
 import com.davwards.elementals.game.entities.players.PlayerId;
@@ -6,10 +6,10 @@ import com.davwards.elementals.game.entities.players.PlayerId;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-public class SavedTodo extends Todo implements SavedEntity<TodoId> {
-    private final TodoId id;
+public class SavedTask extends Task implements SavedEntity<TaskId> {
+    private final TaskId id;
 
-    public SavedTodo(TodoId id,
+    public SavedTask(TaskId id,
                      PlayerId playerId,
                      String title,
                      Status status,
@@ -19,17 +19,17 @@ public class SavedTodo extends Todo implements SavedEntity<TodoId> {
         this.id = id;
     }
 
-    public TodoId getId() {
+    public TaskId getId() {
         return id;
     }
 
-    public static SavedTodo clone(SavedTodo savedTodo) {
-        return new SavedTodo(
-                savedTodo.getId(),
-                savedTodo.getPlayerId(),
-                savedTodo.getTitle(),
-                savedTodo.getStatus(),
-                savedTodo.getDeadline()
+    public static SavedTask clone(SavedTask savedTask) {
+        return new SavedTask(
+                savedTask.getId(),
+                savedTask.getPlayerId(),
+                savedTask.getTitle(),
+                savedTask.getStatus(),
+                savedTask.getDeadline()
         );
     }
 
@@ -38,9 +38,9 @@ public class SavedTodo extends Todo implements SavedEntity<TodoId> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SavedTodo savedTodo = (SavedTodo) o;
+        SavedTask savedTask = (SavedTask) o;
 
-        return id.equals(savedTodo.id);
+        return id.equals(savedTask.id);
     }
 
     @Override
