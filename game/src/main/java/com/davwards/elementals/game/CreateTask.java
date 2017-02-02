@@ -7,6 +7,7 @@ import com.davwards.elementals.game.entities.tasks.TaskRepository;
 import com.davwards.elementals.game.entities.tasks.UnsavedTask;
 
 import java.time.LocalDateTime;
+import java.util.function.Function;
 
 public class CreateTask {
     private final TaskRepository taskRepository;
@@ -15,13 +16,35 @@ public class CreateTask {
         this.taskRepository = taskRepository;
     }
 
-    public SavedTask perform(PlayerId playerId, String title) {
-        UnsavedTask unsavedTask = new UnsavedTask(playerId, title, Task.Status.INCOMPLETE);
-        return taskRepository.save(unsavedTask);
+    public <T> T perform(PlayerId playerId,
+                         String title,
+                         Function<SavedTask, T> createdTask) {
+
+        return createdTask.apply(
+                taskRepository.save(
+                        new UnsavedTask(
+                                playerId,
+                                title,
+                                Task.Status.INCOMPLETE
+                        )
+                )
+        );
     }
 
-    public SavedTask perform(PlayerId playerId, String title, LocalDateTime deadline) {
-        UnsavedTask unsavedTask = new UnsavedTask(playerId, title, Task.Status.INCOMPLETE, deadline);
-        return taskRepository.save(unsavedTask);
+    public <T> T perform(PlayerId playerId,
+                         String title,
+                         LocalDateTime deadline,
+                         Function<SavedTask, T> createdTask) {
+
+        return createdTask.apply(
+                taskRepository.save(
+                        new UnsavedTask(
+                                playerId,
+                                title,
+                                Task.Status.INCOMPLETE,
+                                deadline
+                        )
+                )
+        );
     }
 }

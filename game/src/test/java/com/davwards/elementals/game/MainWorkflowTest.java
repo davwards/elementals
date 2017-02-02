@@ -40,8 +40,8 @@ public class MainWorkflowTest {
 
     @Test
     public void creatingAndCompletingTasks() {
-        SavedTask takeOutTrash = createTask.perform(player.getId(), "Take out trash", tomorrow);
-        SavedTask understandRelativity = createTask.perform(player.getId(), "Understand relativity", nextWeek);
+        SavedTask takeOutTrash = createTask.perform(player.getId(), "Take out trash", tomorrow, identity());
+        SavedTask understandRelativity = createTask.perform(player.getId(), "Understand relativity", nextWeek, identity());
 
         playerGainsExperienceForCompletingATask(takeOutTrash);
 
@@ -62,7 +62,7 @@ public class MainWorkflowTest {
                 fail("Player has missed " + missedTasks + " tasks and hasn't died, something's probably wrong");
             }
 
-            SavedTask task = createTask.perform(player.getId(), "Missed task #" + missedTasks, tomorrow);
+            SavedTask task = createTask.perform(player.getId(), "Missed task #" + missedTasks, tomorrow, identity());
             updateTaskStatus.perform(task.getId(), nextWeek);
         }
 

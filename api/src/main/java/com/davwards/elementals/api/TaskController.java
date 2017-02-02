@@ -33,15 +33,16 @@ public class TaskController {
                                               @PathVariable("playerId") String playerId,
                                               @RequestBody CreateTaskRequest createTaskRequest) {
 
-        SavedTask task = createTask.perform(
+        return createTask.perform(
                 new PlayerId(playerId),
                 createTaskRequest.getTitle(),
-                LocalDateTime.parse(createTaskRequest.getDeadline())
+                LocalDateTime.parse(createTaskRequest.getDeadline()),
+                task -> ResponseEntity
+                        .created(uriBuilder.path("/api/tasks/" + task.getId())
+                                .build()
+                                .toUri())
+                        .body(responseFor(task))
         );
-
-        return ResponseEntity.created(
-                uriBuilder.path("/api/tasks/" + task.getId()).build().toUri()
-        ).body(responseFor(task));
     }
 
     @RequestMapping(value = "api/tasks/{id}", method = RequestMethod.GET)
