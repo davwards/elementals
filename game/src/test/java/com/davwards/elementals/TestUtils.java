@@ -21,14 +21,14 @@ public class TestUtils {
         return ThreadLocalRandom.current().nextInt(minInclusive, maxInclusive + 1);
     }
 
-    public static <T extends Comparable> void assertThatValueIncreases(Supplier<T> getValue, Runnable event) {
-        T originalValue = getValue.get();
+    public static void assertThatValueIncreases(Supplier<Integer> getValue, Runnable event) {
+        Integer originalValue = getValue.get();
         event.run();
         assertThat(getValue.get(), greaterThan(originalValue));
     }
 
-    public static <T extends Comparable> void assertThatValueDecreases(Supplier<T> getValue, Runnable event) {
-        T originalValue = getValue.get();
+    public static void assertThatValueDecreases(Supplier<Integer> getValue, Runnable event) {
+        Integer originalValue = getValue.get();
         event.run();
         assertThat(getValue.get(), lessThan(originalValue));
     }
