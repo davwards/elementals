@@ -56,9 +56,9 @@ public class MainWorkflowTest {
 
     private void playerDiesAndIsResurrectedAfterTakingTooMuchDamage() {
         int missedTasks = 0;
-        while(currentPlayerHealth() > 0) {
+        while (currentPlayerHealth() > 0) {
             missedTasks++;
-            if(missedTasks > 100) {
+            if (missedTasks > 100) {
                 fail("Player has missed " + missedTasks + " tasks and hasn't died, something's probably wrong");
             }
 
@@ -68,10 +68,8 @@ public class MainWorkflowTest {
 
         assertThat(notifier.notificationsSent().size(), equalTo(0));
 
-        assertThatValueDecreases(
-                this::currentPlayerExperience,
-                () -> resurrectPlayer.perform(player.getId())
-        );
+        assertThatInteger(this::currentPlayerExperience)
+                .decreasesWhen(() -> resurrectPlayer.perform(player.getId()));
 
         assertThat(notifier.notificationsSent().size(), equalTo(1));
 
@@ -80,27 +78,33 @@ public class MainWorkflowTest {
 
     private void playerDoesNotTakeDamageForTasksThatArentDueOrWereCompleted(LocalDateTime currentTime, SavedTask... tasks) {
         Arrays.stream(tasks).forEach(task ->
-            assertThatValueDoesNotChange(
-                    this::currentPlayerHealth,
-                    () -> updateTaskStatus.perform(task.getId(), currentTime.plusMinutes(2))
-            )
-        );
-    }
-
-    private void playerTakesDamageForTasksThatWerentDoneByDeadline(LocalDateTime currentTime, SavedTask... tasks) {
-        Arrays.stream(tasks).forEach(task ->
-                assertThatValueDecreases(
-                        this::currentPlayerHealth,
+                assertThatValue(this::currentPlayerHealth).doesNotChangeWhen(
                         () -> updateTaskStatus.perform(task.getId(), currentTime.plusMinutes(2))
                 )
         );
     }
 
-    private void playerGainsExperienceForCompletingATask(SavedTask takeOutTrash) {
-        assertThatValueIncreases(
-                this::currentPlayerExperience,
-                () -> completeTask.perform(takeOutTrash.getId(), identity(), () -> null)
+    private void playerTakesDamageForTasksThatWerentDoneByDeadline(LocalDateTime currentTime, SavedTask... tasks) {
+        Arrays.stream(tasks).forEach(task ->
+                assertThatInteger(this::currentPlayerHealth)
+                        .decreasesWhen(
+                                () -> updateTaskStatus.perform(
+                                        task.getId(),
+                                        currentTime.plusMinutes(2)
+                                )
+                        )
         );
+    }
+
+    private void playerGainsExperienceForCompletingATask(SavedTask takeOutTrash) {
+        assertThatInteger(this::currentPlayerExperience)
+                .increasesWhen(
+                        () -> completeTask.perform(
+                                takeOutTrash.getId(),
+                                identity(),
+                                () -> null
+                        )
+                );
     }
 
     private Integer currentPlayerHealth() {

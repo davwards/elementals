@@ -10,7 +10,7 @@ import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
 import com.davwards.elementals.game.notification.Notification;
 import org.junit.Test;
 
-import static com.davwards.elementals.TestUtils.assertThatValuesDoNotChange;
+import static com.davwards.elementals.TestUtils.assertThatValues;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -27,10 +27,11 @@ public class ResurrectPlayerTest {
 
     @Test
     public void whenPlayerIsAlive_doesNothing() throws Exception {
-        assertThatValuesDoNotChange(
-                () -> resurrectPlayer.perform(alivePlayer.getId()),
+        assertThatValues(
                 () -> playerRepository.find(alivePlayer.getId()).get().getExperience(),
                 () -> playerRepository.find(alivePlayer.getId()).get().getHealth()
+        ).doNotChangeWhen(
+                () -> resurrectPlayer.perform(alivePlayer.getId())
         );
     }
 

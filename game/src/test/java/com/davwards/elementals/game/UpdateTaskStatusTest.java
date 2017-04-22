@@ -10,10 +10,11 @@ import com.davwards.elementals.game.fakeplugins.InMemoryTaskRepository;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.function.Supplier;
 
-import static com.davwards.elementals.TestUtils.assertThatValueChanges;
-import static com.davwards.elementals.TestUtils.assertThatValueDecreases;
-import static com.davwards.elementals.TestUtils.assertThatValueDoesNotChange;
+import static com.davwards.elementals.TestUtils.assertThatInteger;
+import static com.davwards.elementals.TestUtils.assertThatValue;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -46,90 +47,76 @@ public class UpdateTaskStatusTest {
 
     @Test
     public void whenCurrentTimeIsBeforeOrOnDeadline_doesNotChangeStatus() throws Exception {
-        assertThatValueDoesNotChange(
-                () -> taskRepository.find(incompleteTaskDueLater.getId()).get().getStatus(),
-                () -> updateTaskStatus.perform(incompleteTaskDueLater.getId(), currentTime)
-        );
-
-        assertThatValueDoesNotChange(
-                () -> taskRepository.find(completeTaskDueLater.getId()).get().getStatus(),
-                () -> updateTaskStatus.perform(completeTaskDueLater.getId(), currentTime)
-        );
-
-        assertThatValueDoesNotChange(
-                () -> taskRepository.find(incompleteTaskDueNow.getId()).get().getStatus(),
-                () -> updateTaskStatus.perform(incompleteTaskDueNow.getId(), currentTime)
-        );
-
-        assertThatValueDoesNotChange(
-                () -> taskRepository.find(completeTaskDueNow.getId()).get().getStatus(),
-                () -> updateTaskStatus.perform(completeTaskDueNow.getId(), currentTime)
+        Arrays.asList(
+                incompleteTaskDueLater,
+                completeTaskDueLater,
+                incompleteTaskDueNow,
+                incompleteTaskDueNow
+        ).forEach(task ->
+                assertThatValue(statusOf(task))
+                        .doesNotChangeWhen(useCaseRunsOn(task))
         );
     }
 
     @Test
     public void whenCurrentTimeIsAfterDeadline_changesIncompleteTasksToPastDue() throws Exception {
-        assertThatValueChanges(
-                () -> taskRepository.find(incompleteTaskDueEarlier.getId()).get().getStatus(),
-                Task.Status.INCOMPLETE,
-                Task.Status.PAST_DUE,
-                () -> updateTaskStatus.perform(incompleteTaskDueEarlier.getId(), currentTime)
+        assertThatValue(
+                statusOf(incompleteTaskDueEarlier)
+        ).changesFrom(Task.Status.INCOMPLETE, Task.Status.PAST_DUE).when(
+                useCaseRunsOn(incompleteTaskDueEarlier)
         );
 
-        assertThatValueDoesNotChange(
-                () -> taskRepository.find(completeTaskDueEarlier.getId()).get().getStatus(),
-                () -> updateTaskStatus.perform(completeTaskDueEarlier.getId(), currentTime)
-        );
+        assertThatValue(statusOf(completeTaskDueEarlier))
+                .doesNotChangeWhen(useCaseRunsOn(completeTaskDueEarlier));
     }
 
     @Test
     public void whenCurrentTimeIsBeforeOrOnDeadline_doesNotDamagePlayer() throws Exception {
-        assertThatValueDoesNotChange(
-                () -> playerRepository.find(player.getId()).get().getHealth(),
-                () -> updateTaskStatus.perform(incompleteTaskDueLater.getId(), currentTime)
-        );
-
-        assertThatValueDoesNotChange(
-                () -> playerRepository.find(player.getId()).get().getHealth(),
-                () -> updateTaskStatus.perform(completeTaskDueLater.getId(), currentTime)
-        );
-
-        assertThatValueDoesNotChange(
-                () -> playerRepository.find(player.getId()).get().getHealth(),
-                () -> updateTaskStatus.perform(incompleteTaskDueNow.getId(), currentTime)
-        );
-
-        assertThatValueDoesNotChange(
-                () -> playerRepository.find(player.getId()).get().getHealth(),
-                () -> updateTaskStatus.perform(completeTaskDueNow.getId(), currentTime)
+        Arrays.asList(
+                incompleteTaskDueLater,
+                completeTaskDueLater,
+                incompleteTaskDueNow,
+                incompleteTaskDueNow
+        ).forEach(task ->
+                assertThatValue(healthOf(player))
+                        .doesNotChangeWhen(useCaseRunsOn(completeTaskDueNow))
         );
     }
 
     @Test
     public void whenCurrentTimeIsAfterDeadline_damagesPlayerForIncompleteTasks() throws Exception {
-        assertThatValueDecreases(
-                () -> playerRepository.find(player.getId()).get().getHealth(),
-                () -> updateTaskStatus.perform(incompleteTaskDueEarlier.getId(), currentTime)
-        );
+        assertThatInteger(healthOf(player))
+                .decreasesWhen(useCaseRunsOn(incompleteTaskDueEarlier));
 
-        assertThatValueDoesNotChange(
-                () -> playerRepository.find(player.getId()).get().getHealth(),
-                () -> updateTaskStatus.perform(completeTaskDueEarlier.getId(), currentTime)
-        );
+        assertThatValue(healthOf(player))
+                .doesNotChangeWhen(useCaseRunsOn(completeTaskDueEarlier));
 
-        assertThatValueDoesNotChange(
-                () -> playerRepository.find(player.getId()).get().getHealth(),
-                () -> updateTaskStatus.perform(pastDueTaskDueEarlier.getId(), currentTime)
-        );
+        assertThatValue(healthOf(player))
+                .doesNotChangeWhen(useCaseRunsOn(pastDueTaskDueEarlier));
     }
 
     @Test
     public void whenTaskDoesNotExist_throwsException() {
-        try{
+        try {
             updateTaskStatus.perform(new TaskId("no-such-id"), currentTime);
             fail("Expected a NoSuchTaskException to be thrown");
-        } catch(NoSuchTaskException e) {
+        } catch (NoSuchTaskException e) {
             assertThat(e.getTaskId(), equalTo(new TaskId("no-such-id")));
         }
+    }
+
+    private Runnable useCaseRunsOn(SavedTask taskOfInterest) {
+        return () -> updateTaskStatus.perform(
+                taskOfInterest.getId(),
+                currentTime
+        );
+    }
+
+    private Supplier<Task.Status> statusOf(SavedTask taskOfInterest) {
+        return () -> taskRepository.find(taskOfInterest.getId()).get().getStatus();
+    }
+
+    private Supplier<Integer> healthOf(SavedPlayer playerOfInterest) {
+        return () -> playerRepository.find(playerOfInterest.getId()).get().getHealth();
     }
 }
