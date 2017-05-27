@@ -1,5 +1,6 @@
 package com.davwards.elementals.game;
 
+import com.davwards.elementals.game.entities.players.ImmutableSavedPlayer;
 import com.davwards.elementals.game.entities.tasks.*;
 import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.exceptions.NoSuchTaskException;
@@ -29,8 +30,10 @@ public class UpdateTaskStatus {
 
             playerRepository.find(task.playerId())
                     .ifPresent(player -> {
-                        player.decreaseHealth(GameConstants.EXPIRED_TASK_PENALTY);
-                        playerRepository.update(player);
+                        playerRepository.update(ImmutableSavedPlayer
+                                .copyOf(player)
+                                .withHealth(player.health() - GameConstants.EXPIRED_TASK_PENALTY)
+                        );
                     });
         }
     }

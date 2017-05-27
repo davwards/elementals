@@ -2,8 +2,8 @@ package com.davwards.elementals.api;
 
 import com.davwards.elementals.game.CreatePlayer;
 import com.davwards.elementals.game.FetchPlayer;
-import com.davwards.elementals.game.entities.players.PlayerId;
 import com.davwards.elementals.game.entities.players.SavedPlayer;
+import com.davwards.elementals.game.entities.players.PlayerId;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -50,9 +50,9 @@ public class PlayerController {
     private PlayerResponse playerResponseFor(SavedPlayer player) {
         return new PlayerResponse(
                 player.getId().toString(),
-                player.getName(),
-                player.getHealth(),
-                player.getExperience()
+                player.name(),
+                player.health(),
+                player.experience()
         );
     }
 

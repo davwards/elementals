@@ -1,5 +1,9 @@
 package com.davwards.elementals;
 
+import com.davwards.elementals.game.entities.players.ImmutableSavedPlayer;
+import com.davwards.elementals.game.entities.players.ImmutableUnsavedPlayer;
+import com.davwards.elementals.game.entities.players.PlayerId;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +23,23 @@ public class TestUtils {
 
     public static int randomInt(int minInclusive, int maxInclusive) {
         return ThreadLocalRandom.current().nextInt(minInclusive, maxInclusive + 1);
+    }
+
+    public static ImmutableSavedPlayer randomSavedPlayer() {
+        return ImmutableSavedPlayer.builder()
+                .id(new PlayerId(randomString(10)))
+                .name("Test Player " + randomString(10))
+                .experience(randomInt(0, 100))
+                .health(randomInt(1,100))
+                .build();
+    }
+
+    public static ImmutableUnsavedPlayer randomUnsavedPlayer() {
+        return ImmutableUnsavedPlayer.builder()
+                .name("Test Player " + randomString(10))
+                .experience(randomInt(0, 100))
+                .health(randomInt(1,100))
+                .build();
     }
 
     public static <T> ValueAssertion<T> assertThatValue(Supplier<T> supplier) {

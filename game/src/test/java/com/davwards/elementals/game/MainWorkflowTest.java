@@ -1,7 +1,7 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.entities.players.SavedPlayer;
+import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.entities.tasks.SavedTask;
 import com.davwards.elementals.game.fakeplugins.FakeNotifier;
 import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
@@ -108,10 +108,10 @@ public class MainWorkflowTest {
     }
 
     private Integer currentPlayerHealth() {
-        return playerRepository.find(player.getId()).orElse(null).getHealth();
+        return playerRepository.find(player.getId()).orElse(null).health();
     }
 
     private Integer currentPlayerExperience() {
-        return playerRepository.find(player.getId()).orElse(null).getExperience();
+        return playerRepository.find(player.getId()).orElse(null).experience();
     }
 }

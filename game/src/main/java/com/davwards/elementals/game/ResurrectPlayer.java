@@ -1,8 +1,6 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.entities.players.PlayerId;
-import com.davwards.elementals.game.entities.players.PlayerRepository;
-import com.davwards.elementals.game.entities.players.SavedPlayer;
+import com.davwards.elementals.game.entities.players.*;
 import com.davwards.elementals.game.exceptions.NoSuchPlayerException;
 import com.davwards.elementals.game.notification.Notifier;
 
@@ -22,9 +20,9 @@ public class ResurrectPlayer {
                 .orElseThrow(() -> new NoSuchPlayerException(id));
 
         if(!player.isAlive()) {
-            player.setExperience(0);
-            player.setHealth(GameConstants.STARTING_HEALTH);
-            playerRepository.update(player);
+            playerRepository.update(ImmutableSavedPlayer.copyOf(player)
+                    .withHealth(GameConstants.STARTING_HEALTH)
+                    .withExperience(0));
             notifier.sendNotification(id, PLAYER_HAS_DIED);
         }
     }

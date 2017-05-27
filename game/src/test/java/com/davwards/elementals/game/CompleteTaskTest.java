@@ -1,8 +1,6 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.entities.players.PlayerRepository;
-import com.davwards.elementals.game.entities.players.SavedPlayer;
-import com.davwards.elementals.game.entities.players.UnsavedPlayer;
+import com.davwards.elementals.game.entities.players.*;
 import com.davwards.elementals.game.entities.tasks.*;
 import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
 import com.davwards.elementals.game.fakeplugins.InMemoryTaskRepository;
@@ -10,6 +8,7 @@ import org.junit.Test;
 
 import static com.davwards.elementals.TestUtils.assertThatInteger;
 import static com.davwards.elementals.TestUtils.assertThatValue;
+import static com.davwards.elementals.TestUtils.randomUnsavedPlayer;
 import static java.util.function.Function.identity;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -20,7 +19,7 @@ public class CompleteTaskTest {
     private InMemoryTaskRepository taskRepository = new InMemoryTaskRepository();
     private CompleteTask completeTask = new CompleteTask(taskRepository, playerRepository);
 
-    private SavedPlayer existingPlayer = playerRepository.save(new UnsavedPlayer("test-player"));
+    private SavedPlayer existingPlayer = playerRepository.save(randomUnsavedPlayer());
 
     @Test
     public void whenTaskExists_marksTaskComplete() {
@@ -70,7 +69,7 @@ public class CompleteTaskTest {
         assertThatInteger(() ->
                 playerRepository
                         .find(existingPlayer.getId()).get()
-                        .getExperience()
+                        .experience()
         ).increasesWhen(() ->
                 completeTask.perform(
                         task.getId(),

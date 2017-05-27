@@ -1,9 +1,6 @@
 package com.davwards.elementals.game.fakeplugins;
 
-import com.davwards.elementals.game.entities.players.PlayerId;
-import com.davwards.elementals.game.entities.players.PlayerRepository;
-import com.davwards.elementals.game.entities.players.SavedPlayer;
-import com.davwards.elementals.game.entities.players.UnsavedPlayer;
+import com.davwards.elementals.game.entities.players.*;
 
 import java.util.*;
 
@@ -13,21 +10,21 @@ public class InMemoryPlayerRepository implements PlayerRepository {
     @Override
     public SavedPlayer save(UnsavedPlayer player) {
         PlayerId id = new PlayerId(UUID.randomUUID().toString());
-        SavedPlayer savedPlayer = new SavedPlayer(
-                id,
-                player.getName(),
-                player.getExperience(),
-                player.getHealth()
-        );
+        SavedPlayer savedPlayer = ImmutableSavedPlayer.builder()
+                .id(id)
+                .name(player.name())
+                .experience(player.experience())
+                .health(player.health())
+                .build();
+
         contents.put(id, savedPlayer);
 
-        return SavedPlayer.clone(savedPlayer);
+        return savedPlayer;
     }
 
     @Override
     public Optional<SavedPlayer> find(PlayerId id) {
-        return Optional.ofNullable(contents.get(id))
-                .map(SavedPlayer::clone);
+        return Optional.ofNullable(contents.get(id));
     }
 
     @Override
@@ -37,7 +34,7 @@ public class InMemoryPlayerRepository implements PlayerRepository {
 
     @Override
     public SavedPlayer update(SavedPlayer player) {
-        contents.put(player.getId(), SavedPlayer.clone(player));
-        return SavedPlayer.clone(player);
+        contents.put(player.getId(), player);
+        return player;
     }
 }

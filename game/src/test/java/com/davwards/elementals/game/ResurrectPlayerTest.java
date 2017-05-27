@@ -1,9 +1,6 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.entities.players.PlayerId;
-import com.davwards.elementals.game.entities.players.PlayerRepository;
-import com.davwards.elementals.game.entities.players.SavedPlayer;
-import com.davwards.elementals.game.entities.players.UnsavedPlayer;
+import com.davwards.elementals.game.entities.players.*;
 import com.davwards.elementals.game.exceptions.NoSuchPlayerException;
 import com.davwards.elementals.game.fakeplugins.FakeNotifier;
 import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
@@ -21,15 +18,29 @@ public class ResurrectPlayerTest {
     private FakeNotifier notifier = new FakeNotifier();
     private ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository, notifier);
 
-    private SavedPlayer deadPlayer = playerRepository.save(new UnsavedPlayer("dead", 100, 0));
-    private SavedPlayer veryDeadPlayer = playerRepository.save(new UnsavedPlayer("very dead", 100, -10));
-    private SavedPlayer alivePlayer = playerRepository.save(new UnsavedPlayer("alive", 100, 10));
+    private SavedPlayer deadPlayer = playerRepository.save(ImmutableUnsavedPlayer.builder()
+            .name("dead")
+            .experience(100)
+            .health(0)
+            .build());
+
+    private SavedPlayer veryDeadPlayer = playerRepository.save(ImmutableUnsavedPlayer.builder()
+            .name("very dead")
+            .experience(100)
+            .health(-10)
+            .build());
+
+    private SavedPlayer alivePlayer = playerRepository.save(ImmutableUnsavedPlayer.builder()
+            .name("alive")
+            .experience(100)
+            .health(10)
+            .build());
 
     @Test
     public void whenPlayerIsAlive_doesNothing() throws Exception {
         assertThatValues(
-                () -> playerRepository.find(alivePlayer.getId()).get().getExperience(),
-                () -> playerRepository.find(alivePlayer.getId()).get().getHealth()
+                () -> playerRepository.find(alivePlayer.getId()).get().experience(),
+                () -> playerRepository.find(alivePlayer.getId()).get().health()
         ).doNotChangeWhen(
                 () -> resurrectPlayer.perform(alivePlayer.getId())
         );
@@ -38,19 +49,19 @@ public class ResurrectPlayerTest {
     @Test
     public void whenPlayerIsDead_clearsExperience() throws Exception {
         resurrectPlayer.perform(deadPlayer.getId());
-        assertThat(playerRepository.find(deadPlayer.getId()).get().getExperience(), equalTo(0));
+        assertThat(playerRepository.find(deadPlayer.getId()).get().experience(), equalTo(0));
 
         resurrectPlayer.perform(veryDeadPlayer.getId());
-        assertThat(playerRepository.find(veryDeadPlayer.getId()).get().getExperience(), equalTo(0));
+        assertThat(playerRepository.find(veryDeadPlayer.getId()).get().experience(), equalTo(0));
     }
 
     @Test
     public void whenPlayerIsDead_restoresHealth() throws Exception {
         resurrectPlayer.perform(deadPlayer.getId());
-        assertThat(playerRepository.find(deadPlayer.getId()).get().getHealth(), equalTo(GameConstants.STARTING_HEALTH));
+        assertThat(playerRepository.find(deadPlayer.getId()).get().health(), equalTo(GameConstants.STARTING_HEALTH));
 
         resurrectPlayer.perform(veryDeadPlayer.getId());
-        assertThat(playerRepository.find(veryDeadPlayer.getId()).get().getHealth(), equalTo(GameConstants.STARTING_HEALTH));
+        assertThat(playerRepository.find(veryDeadPlayer.getId()).get().health(), equalTo(GameConstants.STARTING_HEALTH));
     }
 
     @Test
@@ -62,10 +73,10 @@ public class ResurrectPlayerTest {
 
     @Test
     public void whenPlayerDoesNotExist_throwsException() {
-        try{
+        try {
             resurrectPlayer.perform(new PlayerId("no-such-id"));
             fail("Expected a NoSuchPlayerException to be thrown");
-        } catch(NoSuchPlayerException e) {
+        } catch (NoSuchPlayerException e) {
             assertThat(e.getPlayerId(), equalTo(new PlayerId("no-such-id")));
         }
     }

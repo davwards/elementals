@@ -1,8 +1,6 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.entities.players.PlayerRepository;
-import com.davwards.elementals.game.entities.players.SavedPlayer;
-import com.davwards.elementals.game.entities.players.UnsavedPlayer;
+import com.davwards.elementals.game.entities.players.*;
 import com.davwards.elementals.game.entities.tasks.*;
 import com.davwards.elementals.game.exceptions.NoSuchTaskException;
 import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
@@ -16,6 +14,7 @@ import java.util.function.Supplier;
 
 import static com.davwards.elementals.TestUtils.assertThatInteger;
 import static com.davwards.elementals.TestUtils.assertThatValue;
+import static com.davwards.elementals.TestUtils.randomUnsavedPlayer;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -26,7 +25,8 @@ public class UpdateTaskStatusTest {
     private PlayerRepository playerRepository = new InMemoryPlayerRepository();
     private UpdateTaskStatus updateTaskStatus = new UpdateTaskStatus(taskRepository, playerRepository);
 
-    private SavedPlayer player = playerRepository.save(new UnsavedPlayer("test-player"));
+    private SavedPlayer player = playerRepository.save(randomUnsavedPlayer());
+
     private LocalDateTime currentTime = LocalDateTime.of(2016, 11, 5, 14, 35, 59);
 
     private SavedTask incompleteTaskDueLater = taskRepository.save(
@@ -157,6 +157,6 @@ public class UpdateTaskStatusTest {
     }
 
     private Supplier<Integer> healthOf(SavedPlayer playerOfInterest) {
-        return () -> playerRepository.find(playerOfInterest.getId()).get().getHealth();
+        return () -> playerRepository.find(playerOfInterest.getId()).get().health();
     }
 }

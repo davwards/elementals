@@ -9,7 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
-public abstract class BetterTaskRepositoryTest extends
+public abstract class TaskRepositoryTest extends
         CrudRepositoryTest<TaskRepository, TaskId, UnsavedTask, SavedTask> {
     protected abstract TaskRepository repository();
 
