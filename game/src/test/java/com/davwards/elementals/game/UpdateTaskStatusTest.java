@@ -7,6 +7,7 @@ import com.davwards.elementals.game.entities.tasks.*;
 import com.davwards.elementals.game.exceptions.NoSuchTaskException;
 import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
 import com.davwards.elementals.game.fakeplugins.InMemoryTaskRepository;
+import com.davwards.elementals.game.tasks.TaskRepository;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -29,21 +30,60 @@ public class UpdateTaskStatusTest {
     private LocalDateTime currentTime = LocalDateTime.of(2016, 11, 5, 14, 35, 59);
 
     private SavedTask incompleteTaskDueLater = taskRepository.save(
-            new UnsavedTask(player.getId(), "Incomplete task due later", Task.Status.INCOMPLETE, currentTime.plusMinutes(5)));
+            ImmutableUnsavedTask.builder()
+                    .playerId(player.getId())
+                    .title("Incomplete task due later")
+                    .status(Task.Status.INCOMPLETE)
+                    .deadline(currentTime.plusMinutes(5))
+                    .build());
+
     private SavedTask completeTaskDueLater = taskRepository.save(
-            new UnsavedTask(player.getId(), "Complete task due later", Task.Status.COMPLETE, currentTime.plusMinutes(5)));
+            ImmutableUnsavedTask.builder()
+                    .playerId(player.getId())
+                    .title("Complete task due later")
+                    .status(Task.Status.COMPLETE)
+                    .deadline(currentTime.plusMinutes(5))
+                    .build());
 
     private SavedTask incompleteTaskDueNow = taskRepository.save(
-            new UnsavedTask(player.getId(), "Incomplete task due now", Task.Status.INCOMPLETE, currentTime));
+            ImmutableUnsavedTask.builder()
+                    .playerId(player.getId())
+                    .title("Incomplete task due now")
+                    .status(Task.Status.INCOMPLETE)
+                    .deadline(currentTime)
+                    .build());
+
     private SavedTask completeTaskDueNow = taskRepository.save(
-            new UnsavedTask(player.getId(), "Complete task due now", Task.Status.COMPLETE, currentTime));
+            ImmutableUnsavedTask.builder()
+                    .playerId(player.getId())
+                    .title("Complete task due now")
+                    .status(Task.Status.COMPLETE)
+                    .deadline(currentTime)
+                    .build());
 
     private SavedTask incompleteTaskDueEarlier = taskRepository.save(
-            new UnsavedTask(player.getId(), "Incomplete task due earlier", Task.Status.INCOMPLETE, currentTime.minusMinutes(5)));
+            ImmutableUnsavedTask.builder()
+                    .playerId(player.getId())
+                    .title("Incomplete task due earlier")
+                    .status(Task.Status.INCOMPLETE)
+                    .deadline(currentTime.minusMinutes(5))
+                    .build());
+
     private SavedTask completeTaskDueEarlier = taskRepository.save(
-            new UnsavedTask(player.getId(), "Complete task due earlier", Task.Status.COMPLETE, currentTime.minusMinutes(5)));
+            ImmutableUnsavedTask.builder()
+                    .playerId(player.getId())
+                    .title("Complete task due earlier")
+                    .status(Task.Status.COMPLETE)
+                    .deadline(currentTime.minusMinutes(5))
+                    .build());
+
     private SavedTask pastDueTaskDueEarlier = taskRepository.save(
-            new UnsavedTask(player.getId(), "Past due task due earlier", Task.Status.PAST_DUE, currentTime.minusMinutes(5)));
+            ImmutableUnsavedTask.builder()
+                    .playerId(player.getId())
+                    .title("Past due task due earlier")
+                    .status(Task.Status.PAST_DUE)
+                    .deadline(currentTime.minusMinutes(5))
+                    .build());
 
     @Test
     public void whenCurrentTimeIsBeforeOrOnDeadline_doesNotChangeStatus() throws Exception {
@@ -113,7 +153,7 @@ public class UpdateTaskStatusTest {
     }
 
     private Supplier<Task.Status> statusOf(SavedTask taskOfInterest) {
-        return () -> taskRepository.find(taskOfInterest.getId()).get().getStatus();
+        return () -> taskRepository.find(taskOfInterest.getId()).get().status();
     }
 
     private Supplier<Integer> healthOf(SavedPlayer playerOfInterest) {

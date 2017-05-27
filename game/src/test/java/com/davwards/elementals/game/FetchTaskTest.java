@@ -2,8 +2,8 @@ package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.entities.players.PlayerId;
 import com.davwards.elementals.game.entities.tasks.*;
-import com.davwards.elementals.game.exceptions.NoSuchTaskException;
 import com.davwards.elementals.game.fakeplugins.InMemoryTaskRepository;
+import com.davwards.elementals.game.tasks.TaskRepository;
 import org.junit.Test;
 
 import java.util.function.Function;
@@ -19,14 +19,11 @@ public class FetchTaskTest {
 
     @Test
     public void whenTaskExists_returnsResultOfSuccessMapper() throws Exception {
-        SavedTask task =
-                taskRepository.save(
-                        new UnsavedTask(
-                                new PlayerId("some-player"),
-                                "the title",
-                                Task.Status.INCOMPLETE
-                        )
-                );
+        SavedTask task = taskRepository.save(ImmutableUnsavedTask.builder()
+                .playerId(new PlayerId("some-player"))
+                .title("the title")
+                .status(Task.Status.INCOMPLETE)
+                .build());
 
         assertThat(
                 fetchTask.perform(

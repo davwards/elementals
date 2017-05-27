@@ -1,9 +1,8 @@
 package com.davwards.elementals.game.tasks;
 
-import com.davwards.elementals.game.entities.tasks.TaskRepository;
 import com.davwards.elementals.game.fakeplugins.InMemoryTaskRepository;
 
-public class InMemoryTaskRepositoryTest extends TaskRepositoryTest {
+public class InMemoryTaskRepositoryTest extends BetterTaskRepositoryTest {
 
     private InMemoryTaskRepository inMemoryTaskRepository = new InMemoryTaskRepository();
 

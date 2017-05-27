@@ -20,9 +20,9 @@ public abstract class RecurringTaskRepositoryTest extends
     }
 
     @Override
-    protected void whenASavedRecordIsModified(SavedRecurringTask original) {
+    protected SavedRecurringTask whenASavedRecordIsModified(SavedRecurringTask original) {
         original.setTitle("Some new title " + randomString(5));
-        System.out.println("");
+        return original;
     }
 
     @Override

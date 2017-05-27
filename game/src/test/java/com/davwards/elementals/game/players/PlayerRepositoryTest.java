@@ -20,9 +20,10 @@ public abstract class PlayerRepositoryTest extends CrudRepositoryTest<PlayerRepo
     }
 
     @Override
-    protected void whenASavedRecordIsModified(SavedPlayer original) {
+    protected SavedPlayer whenASavedRecordIsModified(SavedPlayer original) {
         original.setName("Modified Player " + randomString(5));
         original.decreaseHealth(1);
+        return original;
     }
 
     @Override

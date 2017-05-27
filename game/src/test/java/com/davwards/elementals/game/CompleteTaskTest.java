@@ -17,7 +17,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class CompleteTaskTest {
 
     private PlayerRepository playerRepository = new InMemoryPlayerRepository();
-    private TaskRepository taskRepository = new InMemoryTaskRepository();
+    private InMemoryTaskRepository taskRepository = new InMemoryTaskRepository();
     private CompleteTask completeTask = new CompleteTask(taskRepository, playerRepository);
 
     private SavedPlayer existingPlayer = playerRepository.save(new UnsavedPlayer("test-player"));
@@ -25,20 +25,26 @@ public class CompleteTaskTest {
     @Test
     public void whenTaskExists_marksTaskComplete() {
         SavedTask task = taskRepository.save(
-                new UnsavedTask(existingPlayer.getId(), "test task", Task.Status.INCOMPLETE)
+                ImmutableUnsavedTask.builder()
+                        .playerId(existingPlayer.getId())
+                        .title("test task")
+                        .status(Task.Status.INCOMPLETE)
+                        .build()
         );
 
-        assertThatValue(
-                () -> taskRepository.find(task.getId()).get().isComplete()
-        ).changesFrom(false, true).when(
-                () -> completeTask.perform(task.getId(), identity(), () -> null)
-        );
+        assertThatValue(() -> taskRepository.find(task.getId()).get().isComplete())
+                .changesFrom(false, true)
+                .when(() -> completeTask.perform(task.getId(), identity(), () -> null));
     }
 
     @Test
     public void whenTaskExists_returnsResultOfSuccessMapper() {
         SavedTask task = taskRepository.save(
-                new UnsavedTask(existingPlayer.getId(), "test task", Task.Status.INCOMPLETE)
+                ImmutableUnsavedTask.builder()
+                        .playerId(existingPlayer.getId())
+                        .title("test task")
+                        .status(Task.Status.INCOMPLETE)
+                        .build()
         );
 
         SavedTask updatedTask = completeTask.perform(
@@ -54,13 +60,23 @@ public class CompleteTaskTest {
     @Test
     public void whenTaskExists_awardsPlayerExperience() {
         SavedTask task = taskRepository.save(
-                new UnsavedTask(existingPlayer.getId(), "test task", Task.Status.INCOMPLETE)
+                ImmutableUnsavedTask.builder()
+                        .playerId(existingPlayer.getId())
+                        .title("test task")
+                        .status(Task.Status.INCOMPLETE)
+                        .build()
         );
 
-        assertThatInteger(
-                () -> playerRepository.find(existingPlayer.getId()).get().getExperience()
-        ).increasesWhen(
-                () -> completeTask.perform(task.getId(), identity(), () -> null)
+        assertThatInteger(() ->
+                playerRepository
+                        .find(existingPlayer.getId()).get()
+                        .getExperience()
+        ).increasesWhen(() ->
+                completeTask.perform(
+                        task.getId(),
+                        identity(),
+                        () -> null
+                )
         );
     }
 

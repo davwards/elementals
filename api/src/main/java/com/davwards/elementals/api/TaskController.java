@@ -4,9 +4,7 @@ import com.davwards.elementals.game.CompleteTask;
 import com.davwards.elementals.game.CreateTask;
 import com.davwards.elementals.game.FetchTask;
 import com.davwards.elementals.game.entities.players.PlayerId;
-import com.davwards.elementals.game.entities.tasks.SavedTask;
-import com.davwards.elementals.game.entities.tasks.Task;
-import com.davwards.elementals.game.entities.tasks.TaskId;
+import com.davwards.elementals.game.entities.tasks.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -65,12 +63,12 @@ public class TaskController {
 
     private TaskResponse responseFor(SavedTask task) {
         return new TaskResponse(
-                task.getTitle(),
-                task.getDeadline()
+                task.title(),
+                task.deadline()
                         .map(deadline -> deadline.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
                         .orElse(null),
-                task.getPlayerId().toString(),
-                statusValue(task.getStatus())
+                task.playerId().toString(),
+                statusValue(task.status())
         );
     }
 

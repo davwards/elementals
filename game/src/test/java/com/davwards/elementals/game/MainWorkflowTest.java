@@ -3,17 +3,17 @@ package com.davwards.elementals.game;
 import com.davwards.elementals.game.entities.players.PlayerRepository;
 import com.davwards.elementals.game.entities.players.SavedPlayer;
 import com.davwards.elementals.game.entities.tasks.SavedTask;
-import com.davwards.elementals.game.entities.tasks.TaskRepository;
 import com.davwards.elementals.game.fakeplugins.FakeNotifier;
 import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
 import com.davwards.elementals.game.fakeplugins.InMemoryTaskRepository;
+import com.davwards.elementals.game.tasks.TaskRepository;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.function.Function;
 
-import static com.davwards.elementals.TestUtils.*;
+import static com.davwards.elementals.TestUtils.assertThatInteger;
+import static com.davwards.elementals.TestUtils.assertThatValue;
 import static java.util.function.Function.identity;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;

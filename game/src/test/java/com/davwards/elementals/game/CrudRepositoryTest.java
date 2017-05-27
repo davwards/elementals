@@ -13,7 +13,7 @@ public abstract class CrudRepositoryTest<R extends CrudRepository<U, S, I>, I, U
 
     protected abstract R repository();
     protected abstract U givenAnUnsavedRecord();
-    protected abstract void whenASavedRecordIsModified(S original);
+    protected abstract S whenASavedRecordIsModified(S original);
     protected abstract void assertIdentical(U original, S saved);
     protected abstract void assertIdentical(S original, S saved);
     protected abstract void assertNotIdentical(S left, S right);
@@ -38,16 +38,16 @@ public abstract class CrudRepositoryTest<R extends CrudRepository<U, S, I>, I, U
         S savedRecord = repository().save(unsavedRecord);
 
         assertIdentical(savedRecord, repository().find(savedRecord.getId()).get());
-        whenASavedRecordIsModified(savedRecord);
+        S modifiedRecord = whenASavedRecordIsModified(savedRecord);
         // changes not saved
-        assertNotIdentical(savedRecord, repository().find(savedRecord.getId()).get());
+        assertNotIdentical(modifiedRecord, repository().find(savedRecord.getId()).get());
 
-        repository().update(savedRecord);
+        repository().update(modifiedRecord);
 
-        assertIdentical(savedRecord, repository().find(savedRecord.getId()).get());
-        whenASavedRecordIsModified(savedRecord);
+        assertIdentical(modifiedRecord, repository().find(savedRecord.getId()).get());
+        S twiceModifiedRecord = whenASavedRecordIsModified(modifiedRecord);
         // changes not saved
-        assertNotIdentical(repository().find(savedRecord.getId()).get(), savedRecord);
+        assertNotIdentical(repository().find(twiceModifiedRecord.getId()).get(), twiceModifiedRecord);
     }
 
     @Test

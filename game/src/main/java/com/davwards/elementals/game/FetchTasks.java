@@ -1,7 +1,7 @@
 package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.entities.tasks.SavedTask;
-import com.davwards.elementals.game.entities.tasks.TaskRepository;
+import com.davwards.elementals.game.tasks.TaskRepository;
 
 import java.util.List;
 import java.util.function.Function;

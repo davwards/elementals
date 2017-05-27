@@ -2,7 +2,7 @@ package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.entities.tasks.SavedTask;
 import com.davwards.elementals.game.entities.tasks.TaskId;
-import com.davwards.elementals.game.entities.tasks.TaskRepository;
+import com.davwards.elementals.game.tasks.TaskRepository;
 
 import java.util.function.Function;
 import java.util.function.Supplier;
