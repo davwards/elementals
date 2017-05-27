@@ -28,6 +28,19 @@ public class TaskController {
         this.completeTask = completeTask;
     }
 
+    private static class CreateTaskRequest {
+        private String title;
+        private String deadline;
+
+        public String getDeadline() {
+            return deadline;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+    }
+
     @RequestMapping(value = "/api/players/{playerId}/tasks", method = RequestMethod.POST)
     public ResponseEntity createTaskForPlayer(UriComponentsBuilder uriBuilder,
                                               @PathVariable("playerId") String playerId,
@@ -58,9 +71,39 @@ public class TaskController {
     public ResponseEntity completeTask(@PathVariable("id") String id) {
         return completeTask.perform(
                 new TaskId(id),
-                task -> ResponseEntity.ok(responseFor(task)),
-                () -> ResponseEntity.notFound().build()
+                new CompleteTask.Outcome<ResponseEntity>() {
+                    @Override
+                    public ResponseEntity taskSuccessfullyCompleted(SavedTask completedTask) {
+                        return ResponseEntity.ok(responseFor(completedTask));
+                    }
+
+                    @Override
+                    public ResponseEntity noSuchTask() {
+                        return ResponseEntity.notFound().build();
+                    }
+                }
         );
+    }
+
+    private static class TaskResponse {
+        @JsonProperty
+        private final String title;
+
+        @JsonProperty
+        private final String deadline;
+
+        @JsonProperty
+        private final String playerId;
+
+        @JsonProperty
+        private final String status;
+
+        private TaskResponse(String title, String deadline, String playerId, String status) {
+            this.title = title;
+            this.deadline = deadline;
+            this.playerId = playerId;
+            this.status = status;
+        }
     }
 
     private TaskResponse responseFor(SavedTask task) {
@@ -84,40 +127,6 @@ public class TaskController {
                 return "pastDue";
             default:
                 throw new RuntimeException("Could not translate unknown Status value: " + status);
-        }
-    }
-
-    private static class CreateTaskRequest {
-        private String title;
-        private String deadline;
-
-        public String getDeadline() {
-            return deadline;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-    }
-
-    private static class TaskResponse {
-        @JsonProperty
-        private final String title;
-
-        @JsonProperty
-        private final String deadline;
-
-        @JsonProperty
-        private final String playerId;
-
-        @JsonProperty
-        private final String status;
-
-        private TaskResponse(String title, String deadline, String playerId, String status) {
-            this.title = title;
-            this.deadline = deadline;
-            this.playerId = playerId;
-            this.status = status;
         }
     }
 }

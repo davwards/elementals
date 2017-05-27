@@ -32,6 +32,18 @@ public class MainWorkflowTest {
     private final CompleteTask completeTask = new CompleteTask(taskRepository, playerRepository);
     private final UpdateTaskStatus updateTaskStatus = new UpdateTaskStatus(taskRepository, playerRepository);
     private final ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository, notifier);
+    private final CompleteTask.Outcome<Void> noopCompleteTaskResult = new CompleteTask.Outcome<Void>() {
+        @Override
+        public Void taskSuccessfullyCompleted(SavedTask completedTask) {
+            return null;
+        }
+
+        @Override
+        public Void noSuchTask() {
+            return null;
+        }
+    };
+    private final CreateTask.Outcome<SavedTask> getCreatedTask = createdTask -> createdTask;
 
     private SavedPlayer player = createPlayer.perform("testplayer", identity());
 
@@ -41,8 +53,10 @@ public class MainWorkflowTest {
 
     @Test
     public void creatingAndCompletingTasks() {
-        SavedTask takeOutTrash = createTask.perform(player.getId(), "Take out trash", tomorrow, identity());
-        SavedTask understandRelativity = createTask.perform(player.getId(), "Understand relativity", nextWeek, identity());
+        SavedTask takeOutTrash = createTask
+                .perform(player.getId(), "Take out trash", tomorrow, getCreatedTask);
+        SavedTask understandRelativity = createTask
+                .perform(player.getId(), "Understand relativity", nextWeek, getCreatedTask);
 
         playerGainsExperienceForCompletingATask(takeOutTrash);
 
@@ -63,7 +77,8 @@ public class MainWorkflowTest {
                 fail("Player has missed " + missedTasks + " tasks and hasn't died, something's probably wrong");
             }
 
-            SavedTask task = createTask.perform(player.getId(), "Missed task #" + missedTasks, tomorrow, identity());
+            SavedTask task = createTask
+                    .perform(player.getId(), "Missed task #" + missedTasks, tomorrow, getCreatedTask);
             updateTaskStatus.perform(task.getId(), nextWeek);
         }
 
@@ -102,8 +117,7 @@ public class MainWorkflowTest {
                 .increasesWhen(
                         () -> completeTask.perform(
                                 takeOutTrash.getId(),
-                                identity(),
-                                () -> null
+                                noopCompleteTaskResult
                         )
                 );
     }

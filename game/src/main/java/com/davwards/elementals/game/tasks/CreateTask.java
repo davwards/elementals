@@ -13,23 +13,27 @@ public class CreateTask {
         this.taskRepository = taskRepository;
     }
 
+    public interface Outcome<T> {
+        T successfullyCreatedTask(SavedTask createdTask);
+    }
+
     public <T> T perform(PlayerId playerId,
                          String title,
-                         Function<SavedTask, T> createdTask) {
+                         Outcome<T> handle) {
 
-        return perform(playerId, title, Optional.empty(), createdTask);
+        return perform(playerId, title, Optional.empty(), handle);
     }
 
     public <T> T perform(PlayerId playerId,
                          String title,
                          LocalDateTime deadline,
-                         Function<SavedTask, T> createdTask) {
+                         Outcome<T> handle) {
 
-        return perform(playerId, title, Optional.of(deadline), createdTask);
+        return perform(playerId, title, Optional.of(deadline), handle);
     }
 
-    private <T> T perform(PlayerId playerId, String title, Optional<LocalDateTime> deadline, Function<SavedTask, T> createdTask) {
-        return createdTask.apply(
+    private <T> T perform(PlayerId playerId, String title, Optional<LocalDateTime> deadline, Outcome<T> handle) {
+        return handle.successfullyCreatedTask(
                 taskRepository.save(ImmutableUnsavedTask.builder()
                         .playerId(playerId)
                         .title(title)
