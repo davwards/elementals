@@ -1,6 +1,6 @@
 package com.davwards.elementals.game.notification;
 
-import com.davwards.elementals.game.entities.players.PlayerId;
+import com.davwards.elementals.game.players.PlayerId;
 
 public class Notification {
     private final PlayerId playerId;

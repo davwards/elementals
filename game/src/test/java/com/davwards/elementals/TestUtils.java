@@ -1,8 +1,8 @@
 package com.davwards.elementals;
 
-import com.davwards.elementals.game.entities.players.ImmutableSavedPlayer;
-import com.davwards.elementals.game.entities.players.ImmutableUnsavedPlayer;
-import com.davwards.elementals.game.entities.players.PlayerId;
+import com.davwards.elementals.game.players.ImmutableSavedPlayer;
+import com.davwards.elementals.game.players.ImmutableUnsavedPlayer;
+import com.davwards.elementals.game.players.PlayerId;
 
 import java.util.Arrays;
 import java.util.List;

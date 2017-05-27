@@ -1,7 +1,6 @@
-package com.davwards.elementals.game.fakeplugins;
+package com.davwards.elementals.game.fakes;
 
-import com.davwards.elementals.game.entities.tasks.*;
-import com.davwards.elementals.game.tasks.TaskRepository;
+import com.davwards.elementals.game.tasks.*;
 
 import java.util.*;
 import java.util.stream.Collectors;

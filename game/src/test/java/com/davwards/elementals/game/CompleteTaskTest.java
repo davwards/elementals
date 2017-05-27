@@ -1,14 +1,13 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.entities.players.*;
-import com.davwards.elementals.game.entities.tasks.*;
-import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
-import com.davwards.elementals.game.fakeplugins.InMemoryTaskRepository;
+import com.davwards.elementals.game.players.PlayerRepository;
+import com.davwards.elementals.game.players.SavedPlayer;
+import com.davwards.elementals.game.fakes.InMemoryPlayerRepository;
+import com.davwards.elementals.game.fakes.InMemoryTaskRepository;
+import com.davwards.elementals.game.tasks.*;
 import org.junit.Test;
 
-import static com.davwards.elementals.TestUtils.assertThatInteger;
-import static com.davwards.elementals.TestUtils.assertThatValue;
-import static com.davwards.elementals.TestUtils.randomUnsavedPlayer;
+import static com.davwards.elementals.TestUtils.*;
 import static java.util.function.Function.identity;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;

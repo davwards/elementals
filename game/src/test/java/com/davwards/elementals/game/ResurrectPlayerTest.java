@@ -1,10 +1,11 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.entities.players.*;
+
 import com.davwards.elementals.game.exceptions.NoSuchPlayerException;
-import com.davwards.elementals.game.fakeplugins.FakeNotifier;
-import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
+import com.davwards.elementals.game.fakes.FakeNotifier;
+import com.davwards.elementals.game.fakes.InMemoryPlayerRepository;
 import com.davwards.elementals.game.notification.Notification;
+import com.davwards.elementals.game.players.*;
 import org.junit.Test;
 
 import static com.davwards.elementals.TestUtils.assertThatValues;

@@ -1,6 +1,6 @@
-package com.davwards.elementals.game.fakeplugins;
+package com.davwards.elementals.game.fakes;
 
-import com.davwards.elementals.game.entities.players.*;
+import com.davwards.elementals.game.players.*;
 
 import java.util.*;
 

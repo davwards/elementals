@@ -1,8 +1,8 @@
 package com.davwards.elementals.scheduler;
 
-import com.davwards.elementals.game.ResurrectPlayer;
-import com.davwards.elementals.game.UpdateTaskStatus;
-import com.davwards.elementals.game.entities.players.PlayerRepository;
+import com.davwards.elementals.game.players.ResurrectPlayer;
+import com.davwards.elementals.game.tasks.UpdateTaskStatus;
+import com.davwards.elementals.game.players.PlayerRepository;
 import com.davwards.elementals.game.tasks.TaskRepository;
 import org.springframework.scheduling.annotation.Scheduled;
 

@@ -1,8 +1,7 @@
 package com.davwards.elementals.game.tasks;
 
 import com.davwards.elementals.game.CrudRepositoryTest;
-import com.davwards.elementals.game.entities.players.PlayerId;
-import com.davwards.elementals.game.entities.tasks.*;
+import com.davwards.elementals.game.players.PlayerId;
 
 import static com.davwards.elementals.TestUtils.randomString;
 import static org.hamcrest.MatcherAssert.assertThat;

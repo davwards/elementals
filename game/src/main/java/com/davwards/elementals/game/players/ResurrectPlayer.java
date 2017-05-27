@@ -1,8 +1,12 @@
-package com.davwards.elementals.game;
+package com.davwards.elementals.game.players;
 
-import com.davwards.elementals.game.entities.players.*;
+import com.davwards.elementals.game.GameConstants;
 import com.davwards.elementals.game.exceptions.NoSuchPlayerException;
 import com.davwards.elementals.game.notification.Notifier;
+import com.davwards.elementals.game.players.ImmutableSavedPlayer;
+import com.davwards.elementals.game.players.PlayerId;
+import com.davwards.elementals.game.players.PlayerRepository;
+import com.davwards.elementals.game.players.SavedPlayer;
 
 import static com.davwards.elementals.game.notification.Notification.NotificationType.PLAYER_HAS_DIED;
 

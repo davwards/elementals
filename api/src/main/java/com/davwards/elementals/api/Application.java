@@ -1,8 +1,14 @@
 package com.davwards.elementals.api;
 
-import com.davwards.elementals.game.*;
-import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
-import com.davwards.elementals.game.fakeplugins.InMemoryTaskRepository;
+import com.davwards.elementals.game.fakes.InMemoryPlayerRepository;
+import com.davwards.elementals.game.fakes.InMemoryTaskRepository;
+import com.davwards.elementals.game.players.CreatePlayer;
+import com.davwards.elementals.game.players.FetchPlayer;
+import com.davwards.elementals.game.players.ResurrectPlayer;
+import com.davwards.elementals.game.tasks.CompleteTask;
+import com.davwards.elementals.game.tasks.CreateTask;
+import com.davwards.elementals.game.tasks.FetchTask;
+import com.davwards.elementals.game.tasks.UpdateTaskStatus;
 import com.davwards.elementals.scheduler.ManualTimeProvider;
 import com.davwards.elementals.scheduler.Scheduler;
 import com.davwards.elementals.scheduler.TimeProvider;

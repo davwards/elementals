@@ -1,14 +1,11 @@
 package com.davwards.elementals.game.players;
 
 import com.davwards.elementals.game.CrudRepositoryTest;
-import com.davwards.elementals.game.entities.players.*;
 
 import static com.davwards.elementals.TestUtils.randomString;
-import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.Matchers.hasProperty;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public abstract class PlayerRepositoryTest extends CrudRepositoryTest<PlayerRepository, PlayerId, UnsavedPlayer, SavedPlayer> {
     @Override

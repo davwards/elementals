@@ -1,8 +1,8 @@
-package com.davwards.elementals.game;
+package com.davwards.elementals.game.players;
 
-import com.davwards.elementals.game.entities.players.SavedPlayer;
-import com.davwards.elementals.game.entities.players.PlayerId;
-import com.davwards.elementals.game.entities.players.PlayerRepository;
+import com.davwards.elementals.game.players.SavedPlayer;
+import com.davwards.elementals.game.players.PlayerId;
+import com.davwards.elementals.game.players.PlayerRepository;
 
 import java.util.function.Function;
 import java.util.function.Supplier;

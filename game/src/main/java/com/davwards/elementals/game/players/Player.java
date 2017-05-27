@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.entities.players;
+package com.davwards.elementals.game.players;
 
 public interface Player {
     String name();

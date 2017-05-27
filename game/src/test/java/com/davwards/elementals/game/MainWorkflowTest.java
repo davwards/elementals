@@ -1,12 +1,13 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.entities.players.SavedPlayer;
-import com.davwards.elementals.game.entities.players.PlayerRepository;
-import com.davwards.elementals.game.entities.tasks.SavedTask;
-import com.davwards.elementals.game.fakeplugins.FakeNotifier;
-import com.davwards.elementals.game.fakeplugins.InMemoryPlayerRepository;
-import com.davwards.elementals.game.fakeplugins.InMemoryTaskRepository;
-import com.davwards.elementals.game.tasks.TaskRepository;
+import com.davwards.elementals.game.players.CreatePlayer;
+import com.davwards.elementals.game.players.ResurrectPlayer;
+import com.davwards.elementals.game.players.SavedPlayer;
+import com.davwards.elementals.game.players.PlayerRepository;
+import com.davwards.elementals.game.tasks.*;
+import com.davwards.elementals.game.fakes.FakeNotifier;
+import com.davwards.elementals.game.fakes.InMemoryPlayerRepository;
+import com.davwards.elementals.game.fakes.InMemoryTaskRepository;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

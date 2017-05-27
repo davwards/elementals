@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.entities.players;
+package com.davwards.elementals.game.players;
 
 import org.immutables.value.Value;
 

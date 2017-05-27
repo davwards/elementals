@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.entities.tasks;
+package com.davwards.elementals.game.tasks;
 
 public class TaskId {
     private final String id;

@@ -1,6 +1,6 @@
-package com.davwards.elementals.game.entities.tasks;
+package com.davwards.elementals.game.tasks;
 
-import com.davwards.elementals.game.entities.players.PlayerId;
+import com.davwards.elementals.game.players.PlayerId;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
