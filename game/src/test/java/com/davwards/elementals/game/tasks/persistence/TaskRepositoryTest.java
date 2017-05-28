@@ -1,10 +1,11 @@
 package com.davwards.elementals.game.tasks.persistence;
 
 import com.davwards.elementals.game.entities.CrudRepositoryTest;
-import com.davwards.elementals.game.players.PlayerId;
-import com.davwards.elementals.game.tasks.*;
+import com.davwards.elementals.game.tasks.models.ImmutableUnsavedTask;
+import com.davwards.elementals.game.tasks.models.SavedTask;
+import com.davwards.elementals.game.tasks.models.TaskId;
+import com.davwards.elementals.game.tasks.models.UnsavedTask;
 
-import static com.davwards.elementals.TestUtils.randomString;
 import static com.davwards.elementals.TestUtils.randomUnsavedTask;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

@@ -1,10 +1,9 @@
 package com.davwards.elementals;
 
-import com.davwards.elementals.game.players.ImmutableSavedPlayer;
-import com.davwards.elementals.game.players.ImmutableUnsavedPlayer;
-import com.davwards.elementals.game.players.PlayerId;
-import com.davwards.elementals.game.tasks.ImmutableUnsavedTask;
-import com.davwards.elementals.game.tasks.Task;
+import com.davwards.elementals.game.players.models.ImmutableUnsavedPlayer;
+import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.game.tasks.models.ImmutableUnsavedTask;
+import com.davwards.elementals.game.tasks.models.Task;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.players;
+package com.davwards.elementals.game.players.models;
 
 public interface Player {
     String name();
@@ -7,7 +7,7 @@ public interface Player {
 
     Integer health();
 
-    default public boolean isAlive() {
+    default boolean isAlive() {
         return this.health() > 0;
     }
 }

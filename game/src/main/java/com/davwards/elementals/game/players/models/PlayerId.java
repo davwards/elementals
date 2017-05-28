@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.players;
+package com.davwards.elementals.game.players.models;
 
 public class PlayerId {
     private final String value;

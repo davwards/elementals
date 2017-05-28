@@ -1,6 +1,6 @@
 package com.davwards.elementals.api;
 
-import com.davwards.elementals.game.players.PlayerId;
+import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.notification.Notification;
 import com.davwards.elementals.game.notification.Notifier;
 import com.fasterxml.jackson.annotation.JsonProperty;

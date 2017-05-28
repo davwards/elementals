@@ -2,9 +2,10 @@ package com.davwards.elementals.game.players;
 
 import com.davwards.elementals.game.GameConstants;
 import com.davwards.elementals.game.notification.fakes.FakeNotifier;
+import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.game.notification.Notification;
-import com.davwards.elementals.game.players.*;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
 import org.junit.Test;
 

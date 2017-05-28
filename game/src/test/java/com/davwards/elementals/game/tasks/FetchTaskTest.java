@@ -1,11 +1,14 @@
 package com.davwards.elementals.game.tasks;
 
-import com.davwards.elementals.game.players.PlayerId;
+import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.game.tasks.models.SavedTask;
+import com.davwards.elementals.game.tasks.models.Task;
+import com.davwards.elementals.game.tasks.models.TaskId;
 import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
-import com.davwards.elementals.game.tasks.*;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 import org.junit.Test;
 
+import static com.davwards.elementals.TestUtils.randomUnsavedTask;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.fail;
@@ -17,11 +20,10 @@ public class FetchTaskTest {
 
     @Test
     public void whenTaskExists_returnsResultOfSuccessMapper() throws Exception {
-        SavedTask task = taskRepository.save(ImmutableUnsavedTask.builder()
-                .playerId(new PlayerId("some-player"))
-                .title("the title")
-                .status(Task.Status.INCOMPLETE)
-                .build());
+        SavedTask task = taskRepository.save(randomUnsavedTask()
+                .withPlayerId(new PlayerId("some-player"))
+                .withTitle("the title")
+                .withStatus(Task.Status.INCOMPLETE));
 
         assertThat(
                 fetchTask.perform(

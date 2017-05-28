@@ -2,11 +2,12 @@ package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.notification.fakes.FakeNotifier;
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
 import com.davwards.elementals.game.players.CreatePlayer;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
 import com.davwards.elementals.game.players.ResurrectPlayer;
-import com.davwards.elementals.game.players.SavedPlayer;
+import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.tasks.*;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 import org.junit.Test;

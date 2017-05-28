@@ -1,7 +1,9 @@
 package com.davwards.elementals.game.players.persistence;
 
-import com.davwards.elementals.game.players.*;
-import com.davwards.elementals.game.players.persistence.PlayerRepository;
+import com.davwards.elementals.game.players.models.ImmutableSavedPlayer;
+import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.game.players.models.SavedPlayer;
+import com.davwards.elementals.game.players.models.UnsavedPlayer;
 
 import java.util.*;
 

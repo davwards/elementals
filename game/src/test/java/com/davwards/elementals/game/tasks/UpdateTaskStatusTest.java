@@ -1,10 +1,12 @@
 package com.davwards.elementals.game.tasks;
 
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.game.tasks.models.SavedTask;
+import com.davwards.elementals.game.tasks.models.Task;
+import com.davwards.elementals.game.tasks.models.TaskId;
 import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
-import com.davwards.elementals.game.players.SavedPlayer;
-import com.davwards.elementals.game.tasks.*;
+import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 import org.junit.Test;
 
@@ -27,60 +29,60 @@ public class UpdateTaskStatusTest {
     private LocalDateTime currentTime = LocalDateTime.of(2016, 11, 5, 14, 35, 59);
 
     private SavedTask incompleteTaskDueLater = taskRepository.save(
-            ImmutableUnsavedTask.builder()
-                    .playerId(player.getId())
-                    .title("Incomplete task due later")
-                    .status(Task.Status.INCOMPLETE)
-                    .deadline(currentTime.plusMinutes(5))
-                    .build());
+            randomUnsavedTask()
+                    .withPlayerId(player.getId())
+                    .withTitle("Incomplete task due later")
+                    .withStatus(Task.Status.INCOMPLETE)
+                    .withDeadline(currentTime.plusMinutes(5))
+    );
 
     private SavedTask completeTaskDueLater = taskRepository.save(
-            ImmutableUnsavedTask.builder()
-                    .playerId(player.getId())
-                    .title("Complete task due later")
-                    .status(Task.Status.COMPLETE)
-                    .deadline(currentTime.plusMinutes(5))
-                    .build());
+            randomUnsavedTask()
+                    .withPlayerId(player.getId())
+                    .withTitle("Complete task due later")
+                    .withStatus(Task.Status.COMPLETE)
+                    .withDeadline(currentTime.plusMinutes(5))
+    );
 
     private SavedTask incompleteTaskDueNow = taskRepository.save(
-            ImmutableUnsavedTask.builder()
-                    .playerId(player.getId())
-                    .title("Incomplete task due now")
-                    .status(Task.Status.INCOMPLETE)
-                    .deadline(currentTime)
-                    .build());
+            randomUnsavedTask()
+                    .withPlayerId(player.getId())
+                    .withTitle("Incomplete task due now")
+                    .withStatus(Task.Status.INCOMPLETE)
+                    .withDeadline(currentTime)
+    );
 
     private SavedTask completeTaskDueNow = taskRepository.save(
-            ImmutableUnsavedTask.builder()
-                    .playerId(player.getId())
-                    .title("Complete task due now")
-                    .status(Task.Status.COMPLETE)
-                    .deadline(currentTime)
-                    .build());
+            randomUnsavedTask()
+                    .withPlayerId(player.getId())
+                    .withTitle("Complete task due now")
+                    .withStatus(Task.Status.COMPLETE)
+                    .withDeadline(currentTime)
+    );
 
     private SavedTask incompleteTaskDueEarlier = taskRepository.save(
-            ImmutableUnsavedTask.builder()
-                    .playerId(player.getId())
-                    .title("Incomplete task due earlier")
-                    .status(Task.Status.INCOMPLETE)
-                    .deadline(currentTime.minusMinutes(5))
-                    .build());
+            randomUnsavedTask()
+                    .withPlayerId(player.getId())
+                    .withTitle("Incomplete task due earlier")
+                    .withStatus(Task.Status.INCOMPLETE)
+                    .withDeadline(currentTime.minusMinutes(5))
+    );
 
     private SavedTask completeTaskDueEarlier = taskRepository.save(
-            ImmutableUnsavedTask.builder()
-                    .playerId(player.getId())
-                    .title("Complete task due earlier")
-                    .status(Task.Status.COMPLETE)
-                    .deadline(currentTime.minusMinutes(5))
-                    .build());
+            randomUnsavedTask()
+                    .withPlayerId(player.getId())
+                    .withTitle("Complete task due earlier")
+                    .withStatus(Task.Status.COMPLETE)
+                    .withDeadline(currentTime.minusMinutes(5))
+    );
 
     private SavedTask pastDueTaskDueEarlier = taskRepository.save(
-            ImmutableUnsavedTask.builder()
-                    .playerId(player.getId())
-                    .title("Past due task due earlier")
-                    .status(Task.Status.PAST_DUE)
-                    .deadline(currentTime.minusMinutes(5))
-                    .build());
+            randomUnsavedTask()
+                    .withPlayerId(player.getId())
+                    .withTitle("Past due task due earlier")
+                    .withStatus(Task.Status.PAST_DUE)
+                    .withDeadline(currentTime.minusMinutes(5))
+    );
 
     @Test
     public void whenCurrentTimeIsBeforeOrOnDeadline_doesNotChangeStatus() throws Exception {

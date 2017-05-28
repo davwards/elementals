@@ -1,5 +1,7 @@
 package com.davwards.elementals.game.tasks;
 
+import com.davwards.elementals.game.tasks.models.SavedTask;
+import com.davwards.elementals.game.tasks.models.TaskId;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
 public class FetchTask {

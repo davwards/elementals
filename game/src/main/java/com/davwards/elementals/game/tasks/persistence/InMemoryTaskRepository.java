@@ -1,6 +1,9 @@
 package com.davwards.elementals.game.tasks.persistence;
 
-import com.davwards.elementals.game.tasks.*;
+import com.davwards.elementals.game.tasks.models.ImmutableSavedTask;
+import com.davwards.elementals.game.tasks.models.SavedTask;
+import com.davwards.elementals.game.tasks.models.TaskId;
+import com.davwards.elementals.game.tasks.models.UnsavedTask;
 
 import java.util.*;
 import java.util.stream.Collectors;

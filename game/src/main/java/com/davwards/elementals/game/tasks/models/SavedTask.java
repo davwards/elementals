@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.tasks;
+package com.davwards.elementals.game.tasks.models;
 
 import com.davwards.elementals.game.entities.SavedEntity;
 import org.immutables.value.Value;

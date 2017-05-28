@@ -1,6 +1,9 @@
 package com.davwards.elementals.game.tasks;
 
-import com.davwards.elementals.game.players.PlayerId;
+import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.game.tasks.models.ImmutableUnsavedTask;
+import com.davwards.elementals.game.tasks.models.SavedTask;
+import com.davwards.elementals.game.tasks.models.Task;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
 import java.time.LocalDateTime;
