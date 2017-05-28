@@ -5,6 +5,7 @@ import com.davwards.elementals.game.players.PlayerId;
 import com.davwards.elementals.game.tasks.*;
 
 import static com.davwards.elementals.TestUtils.randomString;
+import static com.davwards.elementals.TestUtils.randomUnsavedTask;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
@@ -15,19 +16,12 @@ public abstract class TaskRepositoryTest extends
 
     @Override
     protected UnsavedTask givenAnUnsavedRecord() {
-        return ImmutableUnsavedTask.builder()
-                .playerId(new PlayerId(randomString(10)))
-                .title("Test Task " + randomString(10))
-                .status(Task.Status.INCOMPLETE)
-                .build();
+        return randomUnsavedTask();
     }
 
     @Override
     protected SavedTask whenASavedRecordIsModified(SavedTask original) {
-        return ImmutableSavedTask.builder()
-                .from(original)
-                .title("Updated " + original.title())
-                .build();
+        return SavedTask.copy(original).withTitle("Updated " + original.title());
     }
 
     @Override

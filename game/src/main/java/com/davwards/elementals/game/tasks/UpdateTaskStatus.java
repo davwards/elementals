@@ -1,7 +1,7 @@
 package com.davwards.elementals.game.tasks;
 
 import com.davwards.elementals.game.GameConstants;
-import com.davwards.elementals.game.players.ImmutableSavedPlayer;
+import com.davwards.elementals.game.players.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
@@ -43,19 +43,21 @@ public class UpdateTaskStatus {
                 .orElse(false);
     }
 
-    private ImmutableSavedTask updatePlayerAndTask(SavedTask task) {
-        ImmutableSavedTask updatedTask = ImmutableSavedTask.copyOf(task)
-                .withStatus(Task.Status.PAST_DUE);
+    private SavedTask updatePlayerAndTask(SavedTask task) {
+        playerRepository
+                .find(task.playerId())
+                .ifPresent(this::damagePlayer);
 
-        taskRepository.update(updatedTask);
+        return taskRepository.update(
+                SavedTask.copy(task).withStatus(Task.Status.PAST_DUE)
+        );
+    }
 
-        playerRepository.find(task.playerId())
-                .ifPresent(player -> playerRepository
-                        .update(ImmutableSavedPlayer
-                                .copyOf(player)
-                                .withHealth(player.health() - GameConstants.EXPIRED_TASK_PENALTY)
-                        )
-                );
-        return updatedTask;
+    private SavedPlayer damagePlayer(SavedPlayer player) {
+        return playerRepository.update(
+                SavedPlayer.copy(player).withHealth(
+                        player.health() - GameConstants.EXPIRED_TASK_PENALTY
+                )
+        );
     }
 }

@@ -3,6 +3,8 @@ package com.davwards.elementals;
 import com.davwards.elementals.game.players.ImmutableSavedPlayer;
 import com.davwards.elementals.game.players.ImmutableUnsavedPlayer;
 import com.davwards.elementals.game.players.PlayerId;
+import com.davwards.elementals.game.tasks.ImmutableUnsavedTask;
+import com.davwards.elementals.game.tasks.Task;
 
 import java.util.Arrays;
 import java.util.List;
@@ -25,20 +27,19 @@ public class TestUtils {
         return ThreadLocalRandom.current().nextInt(minInclusive, maxInclusive + 1);
     }
 
-    public static ImmutableSavedPlayer randomSavedPlayer() {
-        return ImmutableSavedPlayer.builder()
-                .id(new PlayerId(randomString(10)))
+    public static ImmutableUnsavedPlayer randomUnsavedPlayer() {
+        return ImmutableUnsavedPlayer.builder()
                 .name("Test Player " + randomString(10))
                 .experience(randomInt(0, 100))
                 .health(randomInt(1,100))
                 .build();
     }
 
-    public static ImmutableUnsavedPlayer randomUnsavedPlayer() {
-        return ImmutableUnsavedPlayer.builder()
-                .name("Test Player " + randomString(10))
-                .experience(randomInt(0, 100))
-                .health(randomInt(1,100))
+    public static ImmutableUnsavedTask randomUnsavedTask() {
+        return ImmutableUnsavedTask.builder()
+                .title("Test Task " + randomString(10))
+                .playerId(new PlayerId(randomString(10)))
+                .status(Task.Status.INCOMPLETE)
                 .build();
     }
 

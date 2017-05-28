@@ -22,12 +22,12 @@ public class ResurrectPlayer {
     }
 
     private SavedPlayer updateDeadPlayer(PlayerId id, SavedPlayer player) {
-        SavedPlayer updatedPlayer = ImmutableSavedPlayer.copyOf(player)
-                .withHealth(GameConstants.STARTING_HEALTH)
-                .withExperience(0);
-        playerRepository.update(updatedPlayer);
         notifier.sendNotification(id, PLAYER_HAS_DIED);
-        return updatedPlayer;
+        return playerRepository.update(
+                SavedPlayer.copy(player)
+                        .withHealth(GameConstants.STARTING_HEALTH)
+                        .withExperience(0)
+        );
     }
 
     private final PlayerRepository playerRepository;

@@ -4,6 +4,7 @@ import com.davwards.elementals.game.entities.CrudRepositoryTest;
 import com.davwards.elementals.game.players.*;
 
 import static com.davwards.elementals.TestUtils.randomString;
+import static com.davwards.elementals.TestUtils.randomUnsavedPlayer;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
@@ -11,17 +12,12 @@ import static org.junit.Assert.assertThat;
 public abstract class PlayerRepositoryTest extends CrudRepositoryTest<PlayerRepository, PlayerId, UnsavedPlayer, SavedPlayer> {
     @Override
     protected UnsavedPlayer givenAnUnsavedRecord() {
-        return ImmutableUnsavedPlayer.builder()
-                .name("Player " + randomString(5))
-                .experience(100)
-                .health(50)
-                .build();
+        return randomUnsavedPlayer();
     }
 
     @Override
     protected SavedPlayer whenASavedRecordIsModified(SavedPlayer original) {
-        return ImmutableSavedPlayer
-                .copyOf(original)
+        return SavedPlayer.copy(original)
                 .withName("Modified Player " + randomString(5))
                 .withHealth(original.health()-1);
     }

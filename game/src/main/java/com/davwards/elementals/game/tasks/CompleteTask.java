@@ -1,13 +1,14 @@
 package com.davwards.elementals.game.tasks;
 
 import com.davwards.elementals.game.GameConstants;
-import com.davwards.elementals.game.players.ImmutableSavedPlayer;
+import com.davwards.elementals.game.players.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
 public class CompleteTask {
     public interface Outcome<T> {
         T taskSuccessfullyCompleted(SavedTask completedTask);
+
         T noSuchTask();
     }
 
@@ -19,17 +20,18 @@ public class CompleteTask {
     }
 
     private SavedTask updateTaskStatusAndAwardExperienceToPlayer(SavedTask task) {
-        playerRepository.find(task.playerId()).ifPresent(player -> {
-            playerRepository.update(ImmutableSavedPlayer
-                    .copyOf(player)
-                    .withExperience(player.experience() + GameConstants.TASK_COMPLETION_PRIZE)
-            );
-        });
-        return taskRepository.update(ImmutableSavedTask.builder()
-                .from(task)
-                .status(Task.Status.COMPLETE)
-                .build()
-        );
+        playerRepository
+                .find(task.playerId())
+                .ifPresent(player -> playerRepository.update(
+                        SavedPlayer.copy(player).withExperience(
+                                player.experience() + GameConstants.TASK_COMPLETION_PRIZE
+                        )
+                ));
+
+        return taskRepository
+                .update(SavedTask.copy(task)
+                        .withStatus(Task.Status.COMPLETE)
+                );
     }
 
     private final TaskRepository taskRepository;

@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import static com.davwards.elementals.TestUtils.assertThatValues;
 import static com.davwards.elementals.TestUtils.randomString;
+import static com.davwards.elementals.TestUtils.randomUnsavedPlayer;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -20,23 +21,20 @@ public class ResurrectPlayerTest {
     private FakeNotifier notifier = new FakeNotifier();
     private ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository, notifier);
 
-    private SavedPlayer deadPlayer = playerRepository.save(ImmutableUnsavedPlayer.builder()
-            .name("dead")
-            .experience(100)
-            .health(0)
-            .build());
+    private SavedPlayer deadPlayer = playerRepository.save(randomUnsavedPlayer()
+            .withName("dead")
+            .withExperience(100)
+            .withHealth(0));
 
-    private SavedPlayer veryDeadPlayer = playerRepository.save(ImmutableUnsavedPlayer.builder()
-            .name("very dead")
-            .experience(100)
-            .health(-10)
-            .build());
+    private SavedPlayer veryDeadPlayer = playerRepository.save(randomUnsavedPlayer()
+            .withName("very dead")
+            .withExperience(100)
+            .withHealth(-10));
 
-    private SavedPlayer alivePlayer = playerRepository.save(ImmutableUnsavedPlayer.builder()
-            .name("alive")
-            .experience(100)
-            .health(10)
-            .build());
+    private SavedPlayer alivePlayer = playerRepository.save(randomUnsavedPlayer()
+            .withName("alive")
+            .withExperience(100)
+            .withHealth(10));
 
     @Test
     public void whenPlayerIsAlive_doesNothing() throws Exception {
