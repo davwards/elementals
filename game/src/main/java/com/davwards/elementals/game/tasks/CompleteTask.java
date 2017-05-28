@@ -5,22 +5,12 @@ import com.davwards.elementals.game.players.ImmutableSavedPlayer;
 import com.davwards.elementals.game.players.PlayerRepository;
 
 public class CompleteTask {
-    private final TaskRepository taskRepository;
-    private final PlayerRepository playerRepository;
-
-    public CompleteTask(TaskRepository taskRepository, PlayerRepository playerRepository) {
-        this.taskRepository = taskRepository;
-        this.playerRepository = playerRepository;
-    }
-
     public interface Outcome<T> {
         T taskSuccessfullyCompleted(SavedTask completedTask);
         T noSuchTask();
     }
 
-    public <T> T perform(TaskId id,
-                         Outcome<T> handle) {
-
+    public <T> T perform(TaskId id, Outcome<T> handle) {
         return taskRepository.find(id)
                 .map(this::updateTaskStatusAndAwardExperienceToPlayer)
                 .map(handle::taskSuccessfullyCompleted)
@@ -39,5 +29,13 @@ public class CompleteTask {
                 .status(Task.Status.COMPLETE)
                 .build()
         );
+    }
+
+    private final TaskRepository taskRepository;
+    private final PlayerRepository playerRepository;
+
+    public CompleteTask(TaskRepository taskRepository, PlayerRepository playerRepository) {
+        this.taskRepository = taskRepository;
+        this.playerRepository = playerRepository;
     }
 }

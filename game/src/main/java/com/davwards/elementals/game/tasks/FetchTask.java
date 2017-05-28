@@ -1,12 +1,6 @@
 package com.davwards.elementals.game.tasks;
 
 public class FetchTask {
-    private final TaskRepository taskRepository;
-
-    public FetchTask(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
-
     public interface Outcome<T> {
         T successfullyFetchedTask(SavedTask task);
         T noSuchTask();
@@ -17,5 +11,11 @@ public class FetchTask {
                 .find(id)
                 .map(handle::successfullyFetchedTask)
                 .orElseGet(handle::noSuchTask);
+    }
+
+    private final TaskRepository taskRepository;
+
+    public FetchTask(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
 }

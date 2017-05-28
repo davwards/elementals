@@ -4,15 +4,8 @@ import com.davwards.elementals.game.players.PlayerId;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class CreateTask {
-    private final TaskRepository taskRepository;
-
-    public CreateTask(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
-    }
-
     public interface Outcome<T> {
         T successfullyCreatedTask(SavedTask createdTask);
     }
@@ -41,5 +34,11 @@ public class CreateTask {
                         .deadline(deadline)
                         .build())
         );
+    }
+
+    private final TaskRepository taskRepository;
+
+    public CreateTask(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
     }
 }
