@@ -1,12 +1,5 @@
 package com.davwards.elementals.game.tasks;
 
-import com.davwards.elementals.game.tasks.SavedTask;
-import com.davwards.elementals.game.tasks.TaskId;
-import com.davwards.elementals.game.tasks.TaskRepository;
-
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 public class FetchTask {
     private final TaskRepository taskRepository;
 
@@ -14,10 +7,15 @@ public class FetchTask {
         this.taskRepository = taskRepository;
     }
 
-    public <T> T perform(TaskId id, Function<SavedTask, T> fetchedTask, Supplier<T> noSuchTask) {
+    public interface Outcome<T> {
+        T successfullyFetchedTask(SavedTask task);
+        T noSuchTask();
+    }
+
+    public <T> T perform(TaskId id, Outcome<T> handle) {
         return taskRepository
                 .find(id)
-                .map(fetchedTask)
-                .orElseGet(noSuchTask);
+                .map(handle::successfullyFetchedTask)
+                .orElseGet(handle::noSuchTask);
     }
 }

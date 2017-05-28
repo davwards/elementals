@@ -62,8 +62,17 @@ public class TaskController {
     public ResponseEntity getTask(@PathVariable("id") String id) {
         return fetchTask.perform(
                 new TaskId(id),
-                task -> ResponseEntity.ok(responseFor(task)),
-                () -> ResponseEntity.notFound().build()
+                new FetchTask.Outcome<ResponseEntity>() {
+                    @Override
+                    public ResponseEntity successfullyFetchedTask(SavedTask task) {
+                        return ResponseEntity.ok(responseFor(task));
+                    }
+
+                    @Override
+                    public ResponseEntity noSuchTask() {
+                        return ResponseEntity.notFound().build();
+                    }
+                }
         );
     }
 
