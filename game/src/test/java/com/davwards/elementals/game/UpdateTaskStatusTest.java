@@ -1,10 +1,9 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.players.PlayerRepository;
-import com.davwards.elementals.game.players.SavedPlayer;
-import com.davwards.elementals.game.exceptions.NoSuchTaskException;
 import com.davwards.elementals.game.fakes.InMemoryPlayerRepository;
 import com.davwards.elementals.game.fakes.InMemoryTaskRepository;
+import com.davwards.elementals.game.players.PlayerRepository;
+import com.davwards.elementals.game.players.SavedPlayer;
 import com.davwards.elementals.game.tasks.*;
 import org.junit.Test;
 

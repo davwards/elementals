@@ -1,11 +1,9 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.exceptions.NoSuchPlayerException;
 import com.davwards.elementals.game.fakes.FakeNotifier;
 import com.davwards.elementals.game.fakes.InMemoryPlayerRepository;
 import com.davwards.elementals.game.notification.Notification;
 import com.davwards.elementals.game.players.*;
-import junit.framework.Assert;
 import org.junit.Test;
 
 import static com.davwards.elementals.TestUtils.assertThatValues;
@@ -16,22 +14,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 public class ResurrectPlayerTest {
 
-    private final ResurrectPlayer.Outcome<Void> noopOutcome = new ResurrectPlayer.Outcome<Void>() {
-        @Override
-        public Void noSuchPlayer() {
-            return null;
-        }
-
-        @Override
-        public Void playerWasResurrected(SavedPlayer updatedPlayer) {
-            return null;
-        }
-
-        @Override
-        public Void playerDidNotNeedToBeResurrected(SavedPlayer player) {
-            return null;
-        }
-    };
     private PlayerRepository playerRepository = new InMemoryPlayerRepository();
     private FakeNotifier notifier = new FakeNotifier();
     private ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository, notifier);
@@ -170,4 +152,21 @@ public class ResurrectPlayerTest {
 
         assertThat(result, equalTo(expectedResult));
     }
+
+    private final ResurrectPlayer.Outcome<Void> noopOutcome = new ResurrectPlayer.Outcome<Void>() {
+        @Override
+        public Void noSuchPlayer() {
+            return null;
+        }
+
+        @Override
+        public Void playerWasResurrected(SavedPlayer updatedPlayer) {
+            return null;
+        }
+
+        @Override
+        public Void playerDidNotNeedToBeResurrected(SavedPlayer player) {
+            return null;
+        }
+    };
 }
