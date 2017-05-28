@@ -1,11 +1,5 @@
 package com.davwards.elementals.game.players;
 
-import com.davwards.elementals.game.players.ImmutableUnsavedPlayer;
-import com.davwards.elementals.game.players.PlayerRepository;
-import com.davwards.elementals.game.players.SavedPlayer;
-
-import java.util.function.Function;
-
 import static com.davwards.elementals.game.GameConstants.STARTING_HEALTH;
 
 public class CreatePlayer {
@@ -15,10 +9,14 @@ public class CreatePlayer {
         this.playerRepository = playerRepository;
     }
 
-    public <T> T perform(String playerName,
-                         Function<SavedPlayer, T> playerSaved) {
+    public interface Outcome<T> {
+        T playerSaved(SavedPlayer player);
+    }
 
-        return playerSaved.apply(
+    public <T> T perform(String playerName,
+                         Outcome<T> handle) {
+
+        return handle.playerSaved(
                 playerRepository.save(ImmutableUnsavedPlayer.builder()
                         .name(playerName)
                         .experience(0)

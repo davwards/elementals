@@ -45,7 +45,8 @@ public class MainWorkflowTest {
     };
     private final CreateTask.Outcome<SavedTask> getCreatedTask = createdTask -> createdTask;
 
-    private SavedPlayer player = createPlayer.perform("testplayer", identity());
+    private SavedPlayer player = createPlayer
+            .perform("testplayer", createdPlayer -> createdPlayer);
 
     private final LocalDateTime now = LocalDateTime.of(2015, 3, 2, 16, 42, 55);
     private final LocalDateTime tomorrow = now.plusDays(1);
