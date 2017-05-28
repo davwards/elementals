@@ -1,12 +1,5 @@
 package com.davwards.elementals.game.players;
 
-import com.davwards.elementals.game.players.SavedPlayer;
-import com.davwards.elementals.game.players.PlayerId;
-import com.davwards.elementals.game.players.PlayerRepository;
-
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 public class FetchPlayer {
     private final PlayerRepository playerRepository;
 
@@ -14,13 +7,17 @@ public class FetchPlayer {
         this.playerRepository = playerRepository;
     }
 
+    public interface Outcome<T> {
+        T foundPlayer(SavedPlayer player);
+        T noSuchPlayer();
+    }
+
     public <T> T perform(PlayerId id,
-                         Function<SavedPlayer, T> foundPlayer,
-                         Supplier<T> noSuchPlayer) {
+                         Outcome<T> handle) {
 
         return playerRepository
                 .find(id)
-                .map(foundPlayer)
-                .orElseGet(noSuchPlayer);
+                .map(handle::foundPlayer)
+                .orElseGet(handle::noSuchPlayer);
     }
 }

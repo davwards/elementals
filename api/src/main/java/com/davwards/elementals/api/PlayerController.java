@@ -43,8 +43,17 @@ public class PlayerController {
 
         return fetchPlayer.perform(
                 new PlayerId(id),
-                player -> ResponseEntity.ok(playerResponseFor(player)),
-                () -> ResponseEntity.notFound().build());
+                new FetchPlayer.Outcome<ResponseEntity>() {
+                    @Override
+                    public ResponseEntity foundPlayer(SavedPlayer player) {
+                        return ResponseEntity.ok(playerResponseFor(player));
+                    }
+
+                    @Override
+                    public ResponseEntity noSuchPlayer() {
+                        return ResponseEntity.notFound().build();
+                    }
+                });
     }
 
     private PlayerResponse playerResponseFor(SavedPlayer player) {
