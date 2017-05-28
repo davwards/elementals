@@ -1,20 +1,37 @@
 package com.davwards.elementals.game;
 
-
 import com.davwards.elementals.game.exceptions.NoSuchPlayerException;
 import com.davwards.elementals.game.fakes.FakeNotifier;
 import com.davwards.elementals.game.fakes.InMemoryPlayerRepository;
 import com.davwards.elementals.game.notification.Notification;
 import com.davwards.elementals.game.players.*;
+import junit.framework.Assert;
 import org.junit.Test;
 
 import static com.davwards.elementals.TestUtils.assertThatValues;
+import static com.davwards.elementals.TestUtils.randomString;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class ResurrectPlayerTest {
 
+    private final ResurrectPlayer.Outcome<Void> noopOutcome = new ResurrectPlayer.Outcome<Void>() {
+        @Override
+        public Void noSuchPlayer() {
+            return null;
+        }
+
+        @Override
+        public Void playerWasResurrected(SavedPlayer updatedPlayer) {
+            return null;
+        }
+
+        @Override
+        public Void playerDidNotNeedToBeResurrected(SavedPlayer player) {
+            return null;
+        }
+    };
     private PlayerRepository playerRepository = new InMemoryPlayerRepository();
     private FakeNotifier notifier = new FakeNotifier();
     private ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository, notifier);
@@ -43,42 +60,114 @@ public class ResurrectPlayerTest {
                 () -> playerRepository.find(alivePlayer.getId()).get().experience(),
                 () -> playerRepository.find(alivePlayer.getId()).get().health()
         ).doNotChangeWhen(
-                () -> resurrectPlayer.perform(alivePlayer.getId())
+                () -> resurrectPlayer.perform(alivePlayer.getId(), noopOutcome)
         );
     }
 
     @Test
+    public void whenPlayerIsAlive_returnsPlayerDidNotNeedToBeResurrectedOutcome() throws Exception {
+        SavedPlayer result = resurrectPlayer.perform(
+                alivePlayer.getId(),
+                new ResurrectPlayer.Outcome<SavedPlayer>() {
+                    @Override
+                    public SavedPlayer noSuchPlayer() {
+                        fail("Expected playerDidNotNeedToBeResurrected outcome");
+                        return null;
+                    }
+
+                    @Override
+                    public SavedPlayer playerWasResurrected(SavedPlayer updatedPlayer) {
+                        fail("Expected playerDidNotNeedToBeResurrected outcome");
+                        return null;
+                    }
+
+                    @Override
+                    public SavedPlayer playerDidNotNeedToBeResurrected(SavedPlayer player) {
+                        return player;
+                    }
+                }
+        );
+
+        assertThat(result, equalTo(alivePlayer));
+    }
+
+    @Test
     public void whenPlayerIsDead_clearsExperience() throws Exception {
-        resurrectPlayer.perform(deadPlayer.getId());
+        resurrectPlayer.perform(deadPlayer.getId(), noopOutcome);
         assertThat(playerRepository.find(deadPlayer.getId()).get().experience(), equalTo(0));
 
-        resurrectPlayer.perform(veryDeadPlayer.getId());
+        resurrectPlayer.perform(veryDeadPlayer.getId(), noopOutcome);
         assertThat(playerRepository.find(veryDeadPlayer.getId()).get().experience(), equalTo(0));
     }
 
     @Test
     public void whenPlayerIsDead_restoresHealth() throws Exception {
-        resurrectPlayer.perform(deadPlayer.getId());
+        resurrectPlayer.perform(deadPlayer.getId(), noopOutcome);
         assertThat(playerRepository.find(deadPlayer.getId()).get().health(), equalTo(GameConstants.STARTING_HEALTH));
 
-        resurrectPlayer.perform(veryDeadPlayer.getId());
+        resurrectPlayer.perform(veryDeadPlayer.getId(), noopOutcome);
         assertThat(playerRepository.find(veryDeadPlayer.getId()).get().health(), equalTo(GameConstants.STARTING_HEALTH));
     }
 
     @Test
     public void whenPlayerIsDead_sendsNotification() throws Exception {
-        resurrectPlayer.perform(deadPlayer.getId());
+        resurrectPlayer.perform(deadPlayer.getId(), noopOutcome);
         assertThat(notifier.notificationsSent().get(0).getPlayerId(), equalTo(deadPlayer.getId()));
         assertThat(notifier.notificationsSent().get(0).getType(), equalTo(Notification.NotificationType.PLAYER_HAS_DIED));
     }
 
     @Test
-    public void whenPlayerDoesNotExist_throwsException() {
-        try {
-            resurrectPlayer.perform(new PlayerId("no-such-id"));
-            fail("Expected a NoSuchPlayerException to be thrown");
-        } catch (NoSuchPlayerException e) {
-            assertThat(e.getPlayerId(), equalTo(new PlayerId("no-such-id")));
-        }
+    public void whenPlayerIsDead_returnsPlayerWasResurrectedOutcome() throws Exception {
+        SavedPlayer result = resurrectPlayer.perform(
+                deadPlayer.getId(),
+                new ResurrectPlayer.Outcome<SavedPlayer>() {
+                    @Override
+                    public SavedPlayer noSuchPlayer() {
+                        fail("Expected playerWasResurrected outcome");
+                        return null;
+                    }
+
+                    @Override
+                    public SavedPlayer playerWasResurrected(SavedPlayer updatedPlayer) {
+                        return updatedPlayer;
+                    }
+
+                    @Override
+                    public SavedPlayer playerDidNotNeedToBeResurrected(SavedPlayer player) {
+                        fail("Expected playerWasResurrected outcome");
+                        return null;
+                    }
+                }
+        );
+        assertThat(result, equalTo(playerRepository.find(deadPlayer.getId()).get()));
+    }
+
+    @Test
+    public void whenPlayerDoesNotExist_returnsNoSuchPlayerOutcome() {
+        String expectedResult = randomString(10);
+
+        String result = resurrectPlayer.perform(
+                new PlayerId("no-such-id"),
+                new ResurrectPlayer.Outcome<String>() {
+                    @Override
+                    public String noSuchPlayer() {
+                        return expectedResult;
+                    }
+
+                    @Override
+                    public String playerWasResurrected(SavedPlayer updatedPlayer) {
+                        fail("Expected noSuchPlayer outcome");
+                        return null;
+                    }
+
+                    @Override
+                    public String playerDidNotNeedToBeResurrected(SavedPlayer player) {
+                        fail("Expected noSuchPlayer outcome");
+                        return null;
+                    }
+                }
+        );
+
+        assertThat(result, equalTo(expectedResult));
     }
 }

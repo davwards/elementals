@@ -3,10 +3,6 @@ package com.davwards.elementals.game.players;
 import com.davwards.elementals.game.GameConstants;
 import com.davwards.elementals.game.exceptions.NoSuchPlayerException;
 import com.davwards.elementals.game.notification.Notifier;
-import com.davwards.elementals.game.players.ImmutableSavedPlayer;
-import com.davwards.elementals.game.players.PlayerId;
-import com.davwards.elementals.game.players.PlayerRepository;
-import com.davwards.elementals.game.players.SavedPlayer;
 
 import static com.davwards.elementals.game.notification.Notification.NotificationType.PLAYER_HAS_DIED;
 
@@ -19,15 +15,27 @@ public class ResurrectPlayer {
         this.notifier = notifier;
     }
 
-    public void perform(PlayerId id) {
-        SavedPlayer player = playerRepository.find(id)
-                .orElseThrow(() -> new NoSuchPlayerException(id));
+    public interface Outcome<T> {
+        T noSuchPlayer();
+        T playerWasResurrected(SavedPlayer updatedPlayer);
+        T playerDidNotNeedToBeResurrected(SavedPlayer player);
+    }
 
-        if(!player.isAlive()) {
-            playerRepository.update(ImmutableSavedPlayer.copyOf(player)
-                    .withHealth(GameConstants.STARTING_HEALTH)
-                    .withExperience(0));
-            notifier.sendNotification(id, PLAYER_HAS_DIED);
-        }
+    public <T> T perform(PlayerId id, Outcome<T> handle) {
+        return playerRepository.find(id)
+                .map(player -> {
+                    if(!player.isAlive()) {
+                        SavedPlayer updatedPlayer = ImmutableSavedPlayer.copyOf(player)
+                                .withHealth(GameConstants.STARTING_HEALTH)
+                                .withExperience(0);
+                        playerRepository.update(updatedPlayer);
+                        notifier.sendNotification(id, PLAYER_HAS_DIED);
+
+                        return handle.playerWasResurrected(updatedPlayer);
+                    } else {
+                        return handle.playerDidNotNeedToBeResurrected(player);
+                    }
+                })
+                .orElseGet(handle::noSuchPlayer);
     }
 }
