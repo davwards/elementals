@@ -17,24 +17,34 @@ public class UpdateTaskStatus {
         this.playerRepository = playerRepository;
     }
 
-    public void perform(TaskId id, LocalDateTime currentTime) throws NoSuchTaskException {
-        SavedTask task = taskRepository.find(id)
-                .orElseThrow(() -> new NoSuchTaskException(id));
+    public interface Outcome<T> {
+        T noSuchTask();
+        T taskExpired(SavedTask updatedTask);
+        T noStatusChange(SavedTask task);
+    }
 
-        if (taskIsPastDue(task, currentTime) && task.isIncomplete()) {
+    public <T> T perform(TaskId id, LocalDateTime currentTime, Outcome<T> handle) throws NoSuchTaskException {
+        return taskRepository.find(id)
+                .map(task -> {
+                    if (taskIsPastDue(task, currentTime) && task.isIncomplete()) {
+                        ImmutableSavedTask updatedTask = ImmutableSavedTask.copyOf(task)
+                                .withStatus(Task.Status.PAST_DUE);
 
-            taskRepository
-                    .update(ImmutableSavedTask.copyOf(task)
-                            .withStatus(Task.Status.PAST_DUE));
+                        taskRepository.update(updatedTask);
 
-            playerRepository.find(task.playerId())
-                    .ifPresent(player -> {
-                        playerRepository.update(ImmutableSavedPlayer
-                                .copyOf(player)
-                                .withHealth(player.health() - GameConstants.EXPIRED_TASK_PENALTY)
-                        );
-                    });
-        }
+                        playerRepository.find(task.playerId())
+                                .ifPresent(player -> {
+                                    playerRepository.update(ImmutableSavedPlayer
+                                            .copyOf(player)
+                                            .withHealth(player.health() - GameConstants.EXPIRED_TASK_PENALTY)
+                                    );
+                                });
+                        return handle.taskExpired(updatedTask);
+                    } else {
+                        return handle.noStatusChange(task);
+                    }
+                })
+                .orElseGet(handle::noSuchTask);
     }
 
     private static boolean taskIsPastDue(Task task, LocalDateTime currentTime) {

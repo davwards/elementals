@@ -2,6 +2,7 @@ package com.davwards.elementals.scheduler;
 
 import com.davwards.elementals.game.players.ResurrectPlayer;
 import com.davwards.elementals.game.players.SavedPlayer;
+import com.davwards.elementals.game.tasks.SavedTask;
 import com.davwards.elementals.game.tasks.UpdateTaskStatus;
 import com.davwards.elementals.game.players.PlayerRepository;
 import com.davwards.elementals.game.tasks.TaskRepository;
@@ -32,7 +33,29 @@ public class Scheduler {
 
     @Scheduled(fixedDelay = 1000)
     public void updateTasks() {
-        taskRepository.all().forEach(task -> updateTaskStatus.perform(task.getId(), timeProvider.currentTime()));
+        taskRepository.all().forEach(task -> updateTaskStatus.perform(
+                task.getId(),
+                timeProvider.currentTime(),
+                new UpdateTaskStatus.Outcome<Void>() {
+                    @Override
+                    public Void noSuchTask() {
+                        logger.error("Tried to check task #" + task.getId() + " for expiration, but it did not exist");
+                        return null;
+                    }
+
+                    @Override
+                    public Void taskExpired(SavedTask updatedTask) {
+                        logger.info("Expired task #" + updatedTask.getId() + " at " + timeProvider.currentTime());
+                        return null;
+                    }
+
+                    @Override
+                    public Void noStatusChange(SavedTask task) {
+                        logger.error("Checked task #" + task.getId() + " for expiration at " + timeProvider.currentTime() + " but it required no change");
+                        return null;
+                    }
+                }
+        ));
     }
 
     @Scheduled(fixedDelay = 1000)

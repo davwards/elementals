@@ -59,7 +59,7 @@ public class MainWorkflowTest {
 
             SavedTask task = createTask
                     .perform(player.getId(), "Missed task #" + missedTasks, tomorrow, getCreatedTask);
-            updateTaskStatus.perform(task.getId(), nextWeek);
+            updateTaskStatus.perform(task.getId(), nextWeek, noopUpdateTaskStatusOutcome);
         }
 
         assertThat(notifier.notificationsSent().size(), equalTo(0));
@@ -75,7 +75,7 @@ public class MainWorkflowTest {
     private void playerDoesNotTakeDamageForTasksThatArentDueOrWereCompleted(LocalDateTime currentTime, SavedTask... tasks) {
         Arrays.stream(tasks).forEach(task ->
                 assertThatValue(this::currentPlayerHealth).doesNotChangeWhen(
-                        () -> updateTaskStatus.perform(task.getId(), currentTime.plusMinutes(2))
+                        () -> updateTaskStatus.perform(task.getId(), currentTime.plusMinutes(2), noopUpdateTaskStatusOutcome)
                 )
         );
     }
@@ -86,8 +86,8 @@ public class MainWorkflowTest {
                         .decreasesWhen(
                                 () -> updateTaskStatus.perform(
                                         task.getId(),
-                                        currentTime.plusMinutes(2)
-                                )
+                                        currentTime.plusMinutes(2),
+                                        noopUpdateTaskStatusOutcome)
                         )
         );
     }
@@ -153,6 +153,22 @@ public class MainWorkflowTest {
 
         @Override
         public Void playerDidNotNeedToBeResurrected(SavedPlayer player) {
+            return null;
+        }
+    };
+    private final UpdateTaskStatus.Outcome<Void> noopUpdateTaskStatusOutcome = new UpdateTaskStatus.Outcome<Void>() {
+        @Override
+        public Void noSuchTask() {
+            return null;
+        }
+
+        @Override
+        public Void taskExpired(SavedTask updatedTask) {
+            return null;
+        }
+
+        @Override
+        public Void noStatusChange(SavedTask task) {
             return null;
         }
     };
