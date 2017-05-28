@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-import static com.davwards.elementals.TestUtils.*;
+import static com.davwards.elementals.game.support.test.TestUtils.*;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;

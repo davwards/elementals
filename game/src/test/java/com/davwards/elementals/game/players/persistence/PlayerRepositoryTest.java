@@ -1,14 +1,13 @@
 package com.davwards.elementals.game.players.persistence;
 
-import com.davwards.elementals.game.entities.CrudRepositoryTest;
-import com.davwards.elementals.game.players.*;
+import com.davwards.elementals.game.support.persistence.CrudRepositoryTest;
 import com.davwards.elementals.game.players.models.ImmutableUnsavedPlayer;
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.models.UnsavedPlayer;
 
-import static com.davwards.elementals.TestUtils.randomString;
-import static com.davwards.elementals.TestUtils.randomUnsavedPlayer;
+import static com.davwards.elementals.game.support.test.TestUtils.randomString;
+import static com.davwards.elementals.game.support.test.TestUtils.randomUnsavedPlayer;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;

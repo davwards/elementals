@@ -9,9 +9,9 @@ import com.davwards.elementals.game.notification.Notification;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
 import org.junit.Test;
 
-import static com.davwards.elementals.TestUtils.assertThatValues;
-import static com.davwards.elementals.TestUtils.randomString;
-import static com.davwards.elementals.TestUtils.randomUnsavedPlayer;
+import static com.davwards.elementals.game.support.test.TestUtils.assertThatValues;
+import static com.davwards.elementals.game.support.test.TestUtils.randomString;
+import static com.davwards.elementals.game.support.test.TestUtils.randomUnsavedPlayer;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;

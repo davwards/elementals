@@ -1,4 +1,4 @@
-package com.davwards.elementals;
+package com.davwards.elementals.game.support.test;
 
 import com.davwards.elementals.game.players.models.ImmutableUnsavedPlayer;
 import com.davwards.elementals.game.players.models.PlayerId;

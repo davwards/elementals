@@ -9,7 +9,7 @@ import com.davwards.elementals.game.players.persistence.PlayerRepository;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import org.junit.Test;
 
-import static com.davwards.elementals.TestUtils.*;
+import static com.davwards.elementals.game.support.test.TestUtils.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.fail;

@@ -15,8 +15,8 @@ import org.junit.Test;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
-import static com.davwards.elementals.TestUtils.assertThatInteger;
-import static com.davwards.elementals.TestUtils.assertThatValue;
+import static com.davwards.elementals.game.support.test.TestUtils.assertThatInteger;
+import static com.davwards.elementals.game.support.test.TestUtils.assertThatValue;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
