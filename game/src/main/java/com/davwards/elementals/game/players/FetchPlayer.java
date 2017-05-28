@@ -1,5 +1,7 @@
 package com.davwards.elementals.game.players;
 
+import com.davwards.elementals.game.players.persistence.PlayerRepository;
+
 public class FetchPlayer {
     public interface Outcome<T> {
         T foundPlayer(SavedPlayer player);

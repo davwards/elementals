@@ -1,7 +1,8 @@
 package com.davwards.elementals.game.tasks;
 
+import com.davwards.elementals.game.tasks.persistence.TaskRepository;
+
 import java.util.List;
-import java.util.function.Function;
 
 public class FetchTasks {
     public interface Outcome<T> {

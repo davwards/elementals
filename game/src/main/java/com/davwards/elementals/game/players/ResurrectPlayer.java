@@ -2,6 +2,7 @@ package com.davwards.elementals.game.players;
 
 import com.davwards.elementals.game.GameConstants;
 import com.davwards.elementals.game.notification.Notifier;
+import com.davwards.elementals.game.players.persistence.PlayerRepository;
 
 import static com.davwards.elementals.game.notification.Notification.NotificationType.PLAYER_HAS_DIED;
 

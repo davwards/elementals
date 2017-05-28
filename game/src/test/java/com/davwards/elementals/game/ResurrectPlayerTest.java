@@ -1,9 +1,10 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.fakes.FakeNotifier;
-import com.davwards.elementals.game.fakes.InMemoryPlayerRepository;
+import com.davwards.elementals.game.notification.fakes.FakeNotifier;
+import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.game.notification.Notification;
 import com.davwards.elementals.game.players.*;
+import com.davwards.elementals.game.players.persistence.PlayerRepository;
 import org.junit.Test;
 
 import static com.davwards.elementals.TestUtils.assertThatValues;

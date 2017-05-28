@@ -1,7 +1,7 @@
 package com.davwards.elementals.api;
 
-import com.davwards.elementals.game.fakes.InMemoryPlayerRepository;
-import com.davwards.elementals.game.fakes.InMemoryTaskRepository;
+import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
 import com.davwards.elementals.game.players.CreatePlayer;
 import com.davwards.elementals.game.players.FetchPlayer;
 import com.davwards.elementals.game.players.ResurrectPlayer;

@@ -1,11 +1,10 @@
 package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.players.PlayerId;
-import com.davwards.elementals.game.fakes.InMemoryTaskRepository;
+import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
 import com.davwards.elementals.game.tasks.*;
+import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 import org.junit.Test;
-
-import java.util.function.Function;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;

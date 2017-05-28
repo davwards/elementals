@@ -2,7 +2,8 @@ package com.davwards.elementals.game.tasks;
 
 import com.davwards.elementals.game.GameConstants;
 import com.davwards.elementals.game.players.ImmutableSavedPlayer;
-import com.davwards.elementals.game.players.PlayerRepository;
+import com.davwards.elementals.game.players.persistence.PlayerRepository;
+import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
 import java.time.LocalDateTime;
 

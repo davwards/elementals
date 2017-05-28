@@ -1,5 +1,7 @@
 package com.davwards.elementals.game.players;
 
+import com.davwards.elementals.game.players.persistence.PlayerRepository;
+
 import static com.davwards.elementals.game.GameConstants.STARTING_HEALTH;
 
 public class CreatePlayer {

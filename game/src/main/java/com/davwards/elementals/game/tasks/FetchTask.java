@@ -1,5 +1,7 @@
 package com.davwards.elementals.game.tasks;
 
+import com.davwards.elementals.game.tasks.persistence.TaskRepository;
+
 public class FetchTask {
     public interface Outcome<T> {
         T successfullyFetchedTask(SavedTask task);

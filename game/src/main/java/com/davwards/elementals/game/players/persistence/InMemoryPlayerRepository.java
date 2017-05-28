@@ -1,6 +1,7 @@
-package com.davwards.elementals.game.fakes;
+package com.davwards.elementals.game.players.persistence;
 
 import com.davwards.elementals.game.players.*;
+import com.davwards.elementals.game.players.persistence.PlayerRepository;
 
 import java.util.*;
 

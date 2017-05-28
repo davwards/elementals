@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.fakes;
+package com.davwards.elementals.game.notification.fakes;
 
 import com.davwards.elementals.game.players.PlayerId;
 import com.davwards.elementals.game.notification.Notification;
