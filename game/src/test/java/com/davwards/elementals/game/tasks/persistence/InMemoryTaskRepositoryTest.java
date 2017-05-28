@@ -1,7 +1,4 @@
-package com.davwards.elementals.game.tasks;
-
-import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
-import com.davwards.elementals.game.tasks.persistence.TaskRepository;
+package com.davwards.elementals.game.tasks.persistence;
 
 public class InMemoryTaskRepositoryTest extends TaskRepositoryTest {
 

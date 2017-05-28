@@ -1,4 +1,4 @@
-package com.davwards.elementals.game;
+package com.davwards.elementals.game.entities;
 
 import com.davwards.elementals.game.entities.CrudRepository;
 import com.davwards.elementals.game.entities.SavedEntity;

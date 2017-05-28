@@ -1,4 +1,4 @@
-package com.davwards.elementals.game;
+package com.davwards.elementals.game.tasks;
 
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;

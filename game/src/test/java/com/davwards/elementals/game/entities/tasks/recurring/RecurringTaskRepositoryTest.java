@@ -1,6 +1,6 @@
 package com.davwards.elementals.game.entities.tasks.recurring;
 
-import com.davwards.elementals.game.CrudRepositoryTest;
+import com.davwards.elementals.game.entities.CrudRepositoryTest;
 
 import static com.davwards.elementals.TestUtils.randomString;
 import static org.hamcrest.MatcherAssert.assertThat;

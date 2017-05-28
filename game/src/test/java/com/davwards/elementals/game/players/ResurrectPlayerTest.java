@@ -1,5 +1,6 @@
-package com.davwards.elementals.game;
+package com.davwards.elementals.game.players;
 
+import com.davwards.elementals.game.GameConstants;
 import com.davwards.elementals.game.notification.fakes.FakeNotifier;
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.game.notification.Notification;

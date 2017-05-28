@@ -1,7 +1,7 @@
-package com.davwards.elementals.game.players;
+package com.davwards.elementals.game.players.persistence;
 
-import com.davwards.elementals.game.CrudRepositoryTest;
-import com.davwards.elementals.game.players.persistence.PlayerRepository;
+import com.davwards.elementals.game.entities.CrudRepositoryTest;
+import com.davwards.elementals.game.players.*;
 
 import static com.davwards.elementals.TestUtils.randomString;
 import static org.hamcrest.CoreMatchers.equalTo;
