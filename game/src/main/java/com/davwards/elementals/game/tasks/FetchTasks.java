@@ -1,8 +1,5 @@
 package com.davwards.elementals.game.tasks;
 
-import com.davwards.elementals.game.tasks.SavedTask;
-import com.davwards.elementals.game.tasks.TaskRepository;
-
 import java.util.List;
 import java.util.function.Function;
 
@@ -13,7 +10,11 @@ public class FetchTasks {
         this.taskRepository = taskRepository;
     }
 
-    public <T> T perform(Function<List<SavedTask>, T> foundTasks) {
-        return foundTasks.apply(taskRepository.all());
+    public interface Outcome<T> {
+        T foundTasks(List<SavedTask> tasks);
+    }
+
+    public <T> T perform(Outcome<T> handle) {
+        return handle.foundTasks(taskRepository.all());
     }
 }
