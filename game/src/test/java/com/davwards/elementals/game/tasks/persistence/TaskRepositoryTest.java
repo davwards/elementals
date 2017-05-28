@@ -6,7 +6,7 @@ import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.TaskId;
 import com.davwards.elementals.game.tasks.models.UnsavedTask;
 
-import static com.davwards.elementals.game.support.test.TestUtils.randomUnsavedTask;
+import static com.davwards.elementals.game.support.test.Factories.randomUnsavedTask;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;

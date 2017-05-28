@@ -8,7 +8,7 @@ import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 import org.junit.Test;
 
-import static com.davwards.elementals.game.support.test.TestUtils.randomUnsavedTask;
+import static com.davwards.elementals.game.support.test.Factories.randomUnsavedTask;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.fail;

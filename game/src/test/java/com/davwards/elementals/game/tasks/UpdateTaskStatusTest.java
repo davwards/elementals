@@ -1,6 +1,8 @@
 package com.davwards.elementals.game.tasks;
 
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.game.support.test.Assertions;
+import com.davwards.elementals.game.support.test.Factories;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.Task;
 import com.davwards.elementals.game.tasks.models.TaskId;
@@ -14,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.function.Supplier;
 
-import static com.davwards.elementals.game.support.test.TestUtils.*;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -24,12 +25,12 @@ public class UpdateTaskStatusTest {
     private TaskRepository taskRepository = new InMemoryTaskRepository();
     private PlayerRepository playerRepository = new InMemoryPlayerRepository();
     private UpdateTaskStatus updateTaskStatus = new UpdateTaskStatus(taskRepository, playerRepository);
-    private SavedPlayer player = playerRepository.save(randomUnsavedPlayer());
+    private SavedPlayer player = playerRepository.save(Factories.randomUnsavedPlayer());
 
     private LocalDateTime currentTime = LocalDateTime.of(2016, 11, 5, 14, 35, 59);
 
     private SavedTask incompleteTaskDueLater = taskRepository.save(
-            randomUnsavedTask()
+            Factories.randomUnsavedTask()
                     .withPlayerId(player.getId())
                     .withTitle("Incomplete task due later")
                     .withStatus(Task.Status.INCOMPLETE)
@@ -37,7 +38,7 @@ public class UpdateTaskStatusTest {
     );
 
     private SavedTask completeTaskDueLater = taskRepository.save(
-            randomUnsavedTask()
+            Factories.randomUnsavedTask()
                     .withPlayerId(player.getId())
                     .withTitle("Complete task due later")
                     .withStatus(Task.Status.COMPLETE)
@@ -45,7 +46,7 @@ public class UpdateTaskStatusTest {
     );
 
     private SavedTask incompleteTaskDueNow = taskRepository.save(
-            randomUnsavedTask()
+            Factories.randomUnsavedTask()
                     .withPlayerId(player.getId())
                     .withTitle("Incomplete task due now")
                     .withStatus(Task.Status.INCOMPLETE)
@@ -53,7 +54,7 @@ public class UpdateTaskStatusTest {
     );
 
     private SavedTask completeTaskDueNow = taskRepository.save(
-            randomUnsavedTask()
+            Factories.randomUnsavedTask()
                     .withPlayerId(player.getId())
                     .withTitle("Complete task due now")
                     .withStatus(Task.Status.COMPLETE)
@@ -61,7 +62,7 @@ public class UpdateTaskStatusTest {
     );
 
     private SavedTask incompleteTaskDueEarlier = taskRepository.save(
-            randomUnsavedTask()
+            Factories.randomUnsavedTask()
                     .withPlayerId(player.getId())
                     .withTitle("Incomplete task due earlier")
                     .withStatus(Task.Status.INCOMPLETE)
@@ -69,7 +70,7 @@ public class UpdateTaskStatusTest {
     );
 
     private SavedTask completeTaskDueEarlier = taskRepository.save(
-            randomUnsavedTask()
+            Factories.randomUnsavedTask()
                     .withPlayerId(player.getId())
                     .withTitle("Complete task due earlier")
                     .withStatus(Task.Status.COMPLETE)
@@ -77,7 +78,7 @@ public class UpdateTaskStatusTest {
     );
 
     private SavedTask pastDueTaskDueEarlier = taskRepository.save(
-            randomUnsavedTask()
+            Factories.randomUnsavedTask()
                     .withPlayerId(player.getId())
                     .withTitle("Past due task due earlier")
                     .withStatus(Task.Status.PAST_DUE)
@@ -92,7 +93,7 @@ public class UpdateTaskStatusTest {
                 incompleteTaskDueNow,
                 incompleteTaskDueNow
         ).forEach(task ->
-                assertThatValue(statusOf(task))
+                Assertions.assertThatValue(statusOf(task))
                         .doesNotChangeWhen(useCaseRunsOn(task))
         );
     }
@@ -117,13 +118,13 @@ public class UpdateTaskStatusTest {
 
     @Test
     public void whenCurrentTimeIsAfterDeadline_changesIncompleteTasksToPastDue() throws Exception {
-        assertThatValue(
+        Assertions.assertThatValue(
                 statusOf(incompleteTaskDueEarlier)
         ).changesFrom(Task.Status.INCOMPLETE, Task.Status.PAST_DUE).when(
                 useCaseRunsOn(incompleteTaskDueEarlier)
         );
 
-        assertThatValue(statusOf(completeTaskDueEarlier))
+        Assertions.assertThatValue(statusOf(completeTaskDueEarlier))
                 .doesNotChangeWhen(useCaseRunsOn(completeTaskDueEarlier));
     }
 
@@ -135,20 +136,20 @@ public class UpdateTaskStatusTest {
                 incompleteTaskDueNow,
                 incompleteTaskDueNow
         ).forEach(task ->
-                assertThatValue(healthOf(player))
+                Assertions.assertThatValue(healthOf(player))
                         .doesNotChangeWhen(useCaseRunsOn(completeTaskDueNow))
         );
     }
 
     @Test
     public void whenCurrentTimeIsAfterDeadline_damagesPlayerForIncompleteTasks() throws Exception {
-        assertThatInteger(healthOf(player))
+        Assertions.assertThatInteger(healthOf(player))
                 .decreasesWhen(useCaseRunsOn(incompleteTaskDueEarlier));
 
-        assertThatValue(healthOf(player))
+        Assertions.assertThatValue(healthOf(player))
                 .doesNotChangeWhen(useCaseRunsOn(completeTaskDueEarlier));
 
-        assertThatValue(healthOf(player))
+        Assertions.assertThatValue(healthOf(player))
                 .doesNotChangeWhen(useCaseRunsOn(pastDueTaskDueEarlier));
     }
 
@@ -204,7 +205,7 @@ public class UpdateTaskStatusTest {
 
     @Test
     public void whenTaskDoesNotExist_returnsNoSuchTaskOutcome() {
-        String expectedResult = randomString(10);
+        String expectedResult = Factories.randomString(10);
         String result = updateTaskStatus.perform(
                 new TaskId("no-such-id"),
                 currentTime,

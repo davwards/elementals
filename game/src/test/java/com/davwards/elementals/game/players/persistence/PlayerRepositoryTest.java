@@ -6,8 +6,8 @@ import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.models.UnsavedPlayer;
 
-import static com.davwards.elementals.game.support.test.TestUtils.randomString;
-import static com.davwards.elementals.game.support.test.TestUtils.randomUnsavedPlayer;
+import static com.davwards.elementals.game.support.test.Factories.randomString;
+import static com.davwards.elementals.game.support.test.Factories.randomUnsavedPlayer;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;

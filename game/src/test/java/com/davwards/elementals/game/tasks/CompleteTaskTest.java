@@ -1,6 +1,8 @@
 package com.davwards.elementals.game.tasks;
 
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.game.support.test.Assertions;
+import com.davwards.elementals.game.support.test.Factories;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.Task;
 import com.davwards.elementals.game.tasks.models.TaskId;
@@ -9,7 +11,6 @@ import com.davwards.elementals.game.players.persistence.PlayerRepository;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import org.junit.Test;
 
-import static com.davwards.elementals.game.support.test.TestUtils.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.fail;
@@ -32,18 +33,18 @@ public class CompleteTaskTest {
     private InMemoryTaskRepository taskRepository = new InMemoryTaskRepository();
     private CompleteTask completeTask = new CompleteTask(taskRepository, playerRepository);
 
-    private SavedPlayer existingPlayer = playerRepository.save(randomUnsavedPlayer());
+    private SavedPlayer existingPlayer = playerRepository.save(Factories.randomUnsavedPlayer());
 
     @Test
     public void whenTaskExists_marksTaskComplete() {
         SavedTask task = taskRepository.save(
-                randomUnsavedTask()
+                Factories.randomUnsavedTask()
                         .withPlayerId(existingPlayer.getId())
                         .withTitle("test task")
                         .withStatus(Task.Status.INCOMPLETE)
         );
 
-        assertThatValue(() -> taskRepository.find(task.getId()).get().isComplete())
+        Assertions.assertThatValue(() -> taskRepository.find(task.getId()).get().isComplete())
                 .changesFrom(false, true)
                 .when(() -> completeTask.perform(
                         task.getId(),
@@ -54,7 +55,7 @@ public class CompleteTaskTest {
     @Test
     public void whenTaskExists_returnsResultOfSuccessMapper() {
         SavedTask task = taskRepository.save(
-                randomUnsavedTask()
+                Factories.randomUnsavedTask()
                         .withPlayerId(existingPlayer.getId())
                         .withTitle("test task")
                         .withStatus(Task.Status.INCOMPLETE)
@@ -83,13 +84,13 @@ public class CompleteTaskTest {
     @Test
     public void whenTaskExists_awardsPlayerExperience() {
         SavedTask task = taskRepository.save(
-                randomUnsavedTask()
+                Factories.randomUnsavedTask()
                         .withPlayerId(existingPlayer.getId())
                         .withTitle("test task")
                         .withStatus(Task.Status.INCOMPLETE)
         );
 
-        assertThatInteger(() ->
+        Assertions.assertThatInteger(() ->
                 playerRepository
                         .find(existingPlayer.getId()).get()
                         .experience()
