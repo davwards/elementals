@@ -1,19 +1,42 @@
 package com.davwards.elementals.game.tasks.persistence;
 
+import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.support.persistence.CrudRepositoryTest;
 import com.davwards.elementals.game.tasks.models.ImmutableUnsavedTask;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.TaskId;
 import com.davwards.elementals.game.tasks.models.UnsavedTask;
+import org.junit.Test;
 
+import java.util.List;
+
+import static com.davwards.elementals.game.support.test.Factories.randomUnsavedPlayer;
 import static com.davwards.elementals.game.support.test.Factories.randomUnsavedTask;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 public abstract class TaskRepositoryTest extends
         CrudRepositoryTest<TaskRepository, TaskId, UnsavedTask, SavedTask> {
     protected abstract TaskRepository repository();
+
+    @Test
+    public void findByPlayer() throws Exception {
+        PlayerId matchingPlayerId = new PlayerId("matching");
+        PlayerId nonmatchingPlayerId = new PlayerId("nonmatching");
+
+        SavedTask matchingTask1 = repository().save(randomUnsavedTask()
+                .withPlayerId(matchingPlayerId));
+        SavedTask matchingTask2 = repository().save(randomUnsavedTask()
+                .withPlayerId(matchingPlayerId));
+        SavedTask nonmatchingTask = repository().save(randomUnsavedTask()
+                .withPlayerId(nonmatchingPlayerId));
+
+        List<SavedTask> results = repository().findByPlayerId(matchingPlayerId);
+
+        assertThat(results, hasItem(matchingTask1));
+        assertThat(results, hasItem(matchingTask2));
+        assertThat(results, not(hasItem(nonmatchingTask)));
+    }
 
     @Override
     protected UnsavedTask givenAnUnsavedRecord() {
