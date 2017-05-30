@@ -10,6 +10,8 @@ import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
 import java.time.LocalDateTime;
 
+import static com.davwards.elementals.game.support.lookup.GivenRecordExists.givenRecordExists;
+
 public class UpdateTaskStatus {
     public interface Outcome<T> {
         T noSuchTask();
@@ -23,11 +25,12 @@ public class UpdateTaskStatus {
                          LocalDateTime currentTime,
                          Outcome<T> handle) {
 
-        return taskRepository.find(id)
-                .map(task -> (taskIsPastDue(task, currentTime) && task.isIncomplete())
+        return givenRecordExists(
+                taskRepository.find(id),
+                task -> (taskIsPastDue(task, currentTime) && task.isIncomplete())
                         ? handle.taskExpired(updatePlayerAndTask(task))
-                        : handle.noStatusChange(task))
-                .orElseGet(handle::noSuchTask);
+                        : handle.noStatusChange(task)
+        ).otherwise(handle::noSuchTask);
     }
 
     private final TaskRepository taskRepository;
