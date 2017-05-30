@@ -7,12 +7,24 @@ import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.TaskId;
 import com.davwards.elementals.game.tasks.models.UnsavedTask;
 
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class InMemoryTaskRepository
         extends InMemoryRepositoryOfImmutableRecords<UnsavedTask, SavedTask, TaskId>
         implements TaskRepository {
+
+    private final Supplier<LocalDateTime> currentTimeProvider;
+
+    public InMemoryTaskRepository() {
+        this.currentTimeProvider = LocalDateTime::now;
+    }
+
+    public InMemoryTaskRepository(Supplier<LocalDateTime> currentTimeProvider) {
+        this.currentTimeProvider = currentTimeProvider;
+    }
 
     @Override
     protected TaskId createId(String value) {
@@ -21,7 +33,11 @@ public class InMemoryTaskRepository
 
     @Override
     protected SavedTask buildSavedRecord(UnsavedTask record, TaskId id) {
-        return ImmutableSavedTask.builder().from(record).id(id).build();
+        return ImmutableSavedTask.builder()
+                .from(record)
+                .id(id)
+                .createdAt(currentTimeProvider.get())
+                .build();
     }
 
     @Override

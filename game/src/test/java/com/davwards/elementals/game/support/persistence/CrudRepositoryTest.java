@@ -6,6 +6,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsNull.nullValue;
 
 public abstract class CrudRepositoryTest<R extends CrudRepository<U, S, I>, I, U, S extends SavedEntity<I>> {
 
@@ -25,6 +26,9 @@ public abstract class CrudRepositoryTest<R extends CrudRepository<U, S, I>, I, U
         S savedTask2 = repository().save(unsavedRecord2);
 
         assertThat(savedTask1.getId(), not(equalTo(savedTask2.getId())));
+
+        assertThat(savedTask1.createdAt(), not(nullValue()));
+        assertThat(savedTask2.createdAt(), not(nullValue()));
 
         assertIdentical(unsavedRecord1, repository().find(savedTask1.getId()).get());
         assertIdentical(unsavedRecord2, repository().find(savedTask2.getId()).get());
