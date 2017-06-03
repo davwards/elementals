@@ -8,7 +8,7 @@ import com.davwards.elementals.game.tasks.models.Task;
 import com.davwards.elementals.game.tasks.models.TaskId;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
-import static com.davwards.elementals.game.support.lookup.GivenRecordExists.givenRecordExists;
+import static com.davwards.elementals.game.support.language.StrictOptional.strict;
 
 public class CompleteTask {
     public interface Outcome<T> {
@@ -18,15 +18,13 @@ public class CompleteTask {
     }
 
     public <T> T perform(TaskId id, Outcome<T> handle) {
-        return givenRecordExists(
-                taskRepository.find(id),
-                task -> handle.taskSuccessfullyCompleted(
-                        updateTaskStatusAndAwardExperienceToPlayer(task)
-                )
-        ).otherwise(handle::noSuchTask);
+        return strict(taskRepository.find(id))
+                .map(this::markTaskCompletedAndAwardExperienceToPlayer)
+                .map(handle::taskSuccessfullyCompleted)
+                .orElseGet(handle::noSuchTask);
     }
 
-    private SavedTask updateTaskStatusAndAwardExperienceToPlayer(SavedTask task) {
+    private SavedTask markTaskCompletedAndAwardExperienceToPlayer(SavedTask task) {
         playerRepository
                 .find(task.playerId())
                 .ifPresent(player -> playerRepository.update(

@@ -5,6 +5,17 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+/* This is a less "friendly" implementation of Optional than the
+ * standard one in java.util. The standard Optional will helpfully
+ * become empty if a function passed to `map` returns null. Most
+ * of the time that's helpful behavior, but on many occasions I
+ * need an optional to behave more strictly.
+ *
+ * StrictOptional doesn't handle any special cases for you. If you
+ * map a function that returns null, you'll have a Strict.Just
+ * containing null. If you don't want that, use `flatMap`.
+ */
+
 public interface StrictOptional<T> {
     <U> StrictOptional<U> map(Function<T, U> fn);
     <U> StrictOptional<U> flatMap(Function<T, StrictOptional<U>> fn);
@@ -14,8 +25,8 @@ public interface StrictOptional<T> {
 
     static <U> StrictOptional<U> of(U value) {
         return value == null
-                ? new StrictNone<>()
-                : new StrictJust<>(value);
+                ? new None<>()
+                : new Just<>(value);
     }
 
     static <U> StrictOptional<U> strict(Optional<U> optional) {
@@ -23,18 +34,18 @@ public interface StrictOptional<T> {
     }
 
     static <U> StrictOptional<U> empty() {
-        return new StrictNone<>();
+        return new None<>();
     }
 
-    class StrictJust<T> implements StrictOptional<T> {
+    class Just<T> implements StrictOptional<T> {
         private T value;
-        private StrictJust(T value) {
+        private Just(T value) {
             this.value = value;
         }
 
         @Override
         public <U> StrictOptional<U> map(Function<T, U> fn) {
-            return new StrictJust<>(fn.apply(value));
+            return new Just<>(fn.apply(value));
         }
 
         @Override
@@ -46,7 +57,7 @@ public interface StrictOptional<T> {
         public StrictOptional<T> filter(Predicate<T> test) {
             return test.test(value)
                     ? this
-                    : new StrictNone<>();
+                    : new None<>();
         }
 
         @Override
@@ -60,20 +71,22 @@ public interface StrictOptional<T> {
         }
     }
 
-    class StrictNone<T> implements StrictOptional<T> {
+    class None<T> implements StrictOptional<T> {
+        private None() {}
+
         @Override
         public <U> StrictOptional<U> map(Function<T, U> fn) {
-            return new StrictNone<>();
+            return new None<>();
         }
 
         @Override
         public <U> StrictOptional<U> flatMap(Function<T, StrictOptional<U>> fn) {
-            return new StrictNone<>();
+            return new None<>();
         }
 
         @Override
         public StrictOptional<T> filter(Predicate<T> test) {
-            return new StrictNone<>();
+            return new None<>();
         }
 
         @Override

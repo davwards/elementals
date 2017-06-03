@@ -7,7 +7,7 @@ import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
 
 import static com.davwards.elementals.game.notification.Notification.NotificationType.PLAYER_HAS_DIED;
-import static com.davwards.elementals.game.support.lookup.GivenRecordExists.givenRecordExists;
+import static com.davwards.elementals.game.support.language.StrictOptional.strict;
 
 public class ResurrectPlayer {
     public interface Outcome<T> {
@@ -17,12 +17,11 @@ public class ResurrectPlayer {
     }
 
     public <T> T perform(PlayerId id, Outcome<T> handle) {
-        return givenRecordExists(
-                playerRepository.find(id),
-                player -> player.isAlive()
+        return strict(playerRepository.find(id))
+                .map(player -> player.isAlive()
                         ? handle.playerDidNotNeedToBeResurrected(player)
-                        : handle.playerWasResurrected(updateDeadPlayer(id, player))
-        ).otherwise(handle::noSuchPlayer);
+                        : handle.playerWasResurrected(updateDeadPlayer(id, player)))
+                .orElseGet(handle::noSuchPlayer);
     }
 
     private SavedPlayer updateDeadPlayer(PlayerId id, SavedPlayer player) {

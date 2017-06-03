@@ -4,7 +4,7 @@ import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
 
-import static com.davwards.elementals.game.support.lookup.GivenRecordExists.givenRecordExists;
+import static com.davwards.elementals.game.support.language.StrictOptional.strict;
 
 public class FetchPlayer {
     public interface Outcome<T> {
@@ -13,10 +13,9 @@ public class FetchPlayer {
     }
 
     public <T> T perform(PlayerId id, Outcome<T> handle) {
-        return givenRecordExists(
-                playerRepository.find(id),
-                handle::foundPlayer
-        ).otherwise(handle::noSuchPlayer);
+        return strict(playerRepository.find(id))
+                .map(handle::foundPlayer)
+                .orElseGet(handle::noSuchPlayer);
     }
 
     private final PlayerRepository playerRepository;

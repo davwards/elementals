@@ -4,7 +4,7 @@ import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.TaskId;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
-import static com.davwards.elementals.game.support.lookup.GivenRecordExists.givenRecordExists;
+import static com.davwards.elementals.game.support.language.StrictOptional.strict;
 
 public class FetchTask {
     public interface Outcome<T> {
@@ -13,10 +13,9 @@ public class FetchTask {
     }
 
     public <T> T perform(TaskId id, Outcome<T> handle) {
-        return givenRecordExists(
-                taskRepository.find(id),
-                handle::successfullyFetchedTask
-        ).otherwise(handle::noSuchTask);
+        return strict(taskRepository.find(id))
+                .map(handle::successfullyFetchedTask)
+                .orElseGet(handle::noSuchTask);
     }
 
     private final TaskRepository taskRepository;
