@@ -10,6 +10,7 @@ public interface Task {
     Status status();
     Optional<LocalDateTime> deadline();
     PlayerId playerId();
+    Optional<RecurringTaskId> parentRecurringTaskId();
 
     default Boolean isComplete() {
         return this.status().equals(Status.COMPLETE);
@@ -17,6 +18,10 @@ public interface Task {
 
     default Boolean isIncomplete() {
         return this.status().equals(Status.INCOMPLETE);
+    }
+
+    default Boolean isInstanceOfRecurringTask() {
+        return this.parentRecurringTaskId().isPresent();
     }
 
     enum Status {COMPLETE, PAST_DUE, INCOMPLETE}

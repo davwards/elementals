@@ -2,13 +2,11 @@ package com.davwards.elementals.game.tasks.persistence;
 
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.support.persistence.CrudRepositoryTest;
-import com.davwards.elementals.game.tasks.models.ImmutableUnsavedTask;
-import com.davwards.elementals.game.tasks.models.SavedTask;
-import com.davwards.elementals.game.tasks.models.TaskId;
-import com.davwards.elementals.game.tasks.models.UnsavedTask;
+import com.davwards.elementals.game.tasks.models.*;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.davwards.elementals.game.support.test.Factories.randomUnsavedPlayer;
 import static com.davwards.elementals.game.support.test.Factories.randomUnsavedTask;
@@ -36,6 +34,28 @@ public abstract class TaskRepositoryTest extends
         assertThat(results, hasItem(matchingTask1));
         assertThat(results, hasItem(matchingTask2));
         assertThat(results, not(hasItem(nonmatchingTask)));
+    }
+
+    @Test
+    public void findByParentRecurringTaskId() {
+        RecurringTaskId matchingRecurringTaskId = new RecurringTaskId("matching");
+        RecurringTaskId nonmatchingRecurringTaskId = new RecurringTaskId("nonmatching");
+
+        SavedTask matchingTask1 = repository().save(randomUnsavedTask()
+                .withParentRecurringTaskId(matchingRecurringTaskId));
+        SavedTask matchingTask2 = repository().save(randomUnsavedTask()
+                .withParentRecurringTaskId(matchingRecurringTaskId));
+        SavedTask nonmatchingTask1 = repository().save(randomUnsavedTask()
+                .withParentRecurringTaskId(nonmatchingRecurringTaskId));
+        SavedTask nonmatchingTask2 = repository().save(randomUnsavedTask()
+                .withParentRecurringTaskId(Optional.empty()));
+
+        List<SavedTask> results = repository().findByParentRecurringTaskId(matchingRecurringTaskId);
+
+        assertThat(results, hasItem(matchingTask1));
+        assertThat(results, hasItem(matchingTask2));
+        assertThat(results, not(hasItem(nonmatchingTask1)));
+        assertThat(results, not(hasItem(nonmatchingTask2)));
     }
 
     @Override

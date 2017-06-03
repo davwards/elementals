@@ -2,9 +2,12 @@ package com.davwards.elementals.game.support.test;
 
 import com.davwards.elementals.game.players.models.ImmutableUnsavedPlayer;
 import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.game.tasks.models.ImmutableUnsavedRecurringTask;
 import com.davwards.elementals.game.tasks.models.ImmutableUnsavedTask;
 import com.davwards.elementals.game.tasks.models.Task;
 
+import java.time.LocalDateTime;
+import java.time.Period;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -30,6 +33,15 @@ public class Factories {
                 .title("Test Task " + randomString(10))
                 .playerId(new PlayerId(randomString(10)))
                 .status(Task.Status.INCOMPLETE)
+                .build();
+    }
+
+    public static ImmutableUnsavedRecurringTask randomUnsavedRecurringTask() {
+        return ImmutableUnsavedRecurringTask.builder()
+                .playerId(new PlayerId("some-player"))
+                .title("Test Recurring Task " + randomString(10))
+                .cadence("FREQ=DAILY")
+                .duration(Period.ofDays(1))
                 .build();
     }
 }

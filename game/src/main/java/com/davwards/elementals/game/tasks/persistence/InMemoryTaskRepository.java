@@ -2,10 +2,7 @@ package com.davwards.elementals.game.tasks.persistence;
 
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.support.persistence.InMemoryRepositoryOfImmutableRecords;
-import com.davwards.elementals.game.tasks.models.ImmutableSavedTask;
-import com.davwards.elementals.game.tasks.models.SavedTask;
-import com.davwards.elementals.game.tasks.models.TaskId;
-import com.davwards.elementals.game.tasks.models.UnsavedTask;
+import com.davwards.elementals.game.tasks.models.*;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -44,6 +41,13 @@ public class InMemoryTaskRepository
     public List<SavedTask> findByPlayerId(PlayerId playerId) {
         return contents.values().stream()
                 .filter(task -> task.playerId().equals(playerId))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SavedTask> findByParentRecurringTaskId(RecurringTaskId recurringTaskId) {
+        return contents.values().stream()
+                .filter(task -> task.parentRecurringTaskId().map(recurringTaskId::equals).orElse(false))
                 .collect(Collectors.toList());
     }
 }
