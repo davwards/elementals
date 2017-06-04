@@ -1,4 +1,4 @@
-package com.davwards.elementals.api;
+package com.davwards.elementals.api.dev;
 
 import com.davwards.elementals.scheduler.ManualTimeProvider;
 import org.springframework.beans.factory.annotation.Autowired;

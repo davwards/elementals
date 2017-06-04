@@ -1,4 +1,4 @@
-package com.davwards.elementals.api;
+package com.davwards.elementals.api.dev;
 
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.notification.Notification;
