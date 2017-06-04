@@ -27,16 +27,18 @@ public class CompleteTask {
     private SavedTask markTaskCompletedAndAwardExperienceToPlayer(SavedTask task) {
         playerRepository
                 .find(task.playerId())
-                .ifPresent(player -> playerRepository.update(
-                        SavedPlayer.copy(player).withExperience(
-                                player.experience() + GameConstants.TASK_COMPLETION_PRIZE
-                        )
-                ));
+                .ifPresent(this::awardExperienceToPlayer);
 
         return taskRepository
-                .update(SavedTask.copy(task)
-                        .withStatus(Task.Status.COMPLETE)
-                );
+                .update(SavedTask.copy(task).withStatus(Task.Status.COMPLETE));
+    }
+
+    private SavedPlayer awardExperienceToPlayer(SavedPlayer player) {
+        return playerRepository.update(
+                SavedPlayer.copy(player).withExperience(
+                        player.experience() + GameConstants.TASK_COMPLETION_PRIZE
+                )
+        );
     }
 
     private final TaskRepository taskRepository;
