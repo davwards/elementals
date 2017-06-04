@@ -2,6 +2,7 @@ package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.tasks.CreateRecurringTask;
+import com.davwards.elementals.game.tasks.GetPlayerTasks;
 import com.davwards.elementals.game.tasks.SpawnRecurringTask;
 import com.davwards.elementals.game.tasks.models.SavedRecurringTask;
 import com.davwards.elementals.game.tasks.models.SavedTask;
@@ -11,18 +12,21 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.time.Period;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.davwards.elementals.game.support.test.Factories.randomString;
+import static junit.framework.TestCase.fail;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class RecurringTaskWorkflowTest {
     private InMemoryRecurringTaskRepository recurringTaskRepository = new InMemoryRecurringTaskRepository();
     private InMemoryTaskRepository taskRepository = new InMemoryTaskRepository();
 
-    private LocalDateTime todayAtNoon = LocalDateTime.of(2017, 11, 5, 12, 0);
     private CreateRecurringTask createRecurringTask = new CreateRecurringTask(recurringTaskRepository);
     private LocalDateTime tonightAtMidnight = LocalDateTime.of(2017, 11, 6, 0, 0);
 
@@ -30,6 +34,11 @@ public class RecurringTaskWorkflowTest {
             recurringTaskRepository,
             taskRepository,
             (lastOccurrence, cadence) -> Stream.of(tonightAtMidnight).iterator()
+    );
+
+    private GetPlayerTasks getPlayerTasks = new GetPlayerTasks(
+            taskRepository,
+            recurringTaskRepository
     );
 
     @Test
@@ -43,11 +52,29 @@ public class RecurringTaskWorkflowTest {
         thenThePlayerHasATaskWithTheCorrectDetails(spawnedTask, recurringTask);
     }
 
-    private void thenThePlayerHasATaskWithTheCorrectDetails(Optional<SavedTask> spawnedTask, SavedRecurringTask recurringTask) {
-        assertThat(spawnedTask.isPresent(), is(true));
-        assertThat(spawnedTask.get().title(), equalTo(recurringTask.title()));
-        assertThat(spawnedTask.get().playerId(), equalTo(recurringTask.playerId()));
-        assertThat(spawnedTask.get().deadline().get(), equalTo(tonightAtMidnight.plusDays(1)));
+    private void thenThePlayerHasATaskWithTheCorrectDetails(Optional<SavedTask> maybeSpawnedTask, SavedRecurringTask recurringTask) {
+        SavedTask spawnedTask = maybeSpawnedTask.get();
+
+        assertThat(spawnedTask.title(), equalTo(recurringTask.title()));
+        assertThat(spawnedTask.playerId(), equalTo(recurringTask.playerId()));
+        assertThat(spawnedTask.deadline().get(), equalTo(tonightAtMidnight.plusDays(1)));
+
+        String expectedResult = randomString(10);
+
+        String result = getPlayerTasks.perform(
+                recurringTask.playerId(),
+                new GetPlayerTasks.Outcome<String>() {
+                    @Override
+                    public String foundTasks(List<SavedTask> tasks,
+                                             List<SavedRecurringTask> recurringTasks) {
+                        assertThat(tasks, hasItem(spawnedTask));
+                        assertThat(recurringTasks, hasItem(recurringTask));
+                        return expectedResult;
+                    }
+
+                });
+
+        assertThat(result, equalTo(expectedResult));
     }
 
     private Optional<SavedTask> whenTheSpawnUseCaseRuns(SavedRecurringTask task) {

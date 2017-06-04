@@ -8,7 +8,6 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static com.davwards.elementals.game.support.test.Factories.randomUnsavedPlayer;
 import static com.davwards.elementals.game.support.test.Factories.randomUnsavedTask;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;

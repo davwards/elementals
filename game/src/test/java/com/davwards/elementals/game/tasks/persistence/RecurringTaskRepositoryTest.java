@@ -1,19 +1,41 @@
 package com.davwards.elementals.game.tasks.persistence;
 
+import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.support.persistence.CrudRepositoryTest;
 import com.davwards.elementals.game.tasks.models.ImmutableUnsavedRecurringTask;
 import com.davwards.elementals.game.tasks.models.RecurringTaskId;
 import com.davwards.elementals.game.tasks.models.SavedRecurringTask;
 import com.davwards.elementals.game.tasks.models.UnsavedRecurringTask;
+import org.junit.Test;
+
+import java.util.List;
 
 import static com.davwards.elementals.game.support.test.Factories.randomUnsavedRecurringTask;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 
 public abstract class RecurringTaskRepositoryTest extends
         CrudRepositoryTest<RecurringTaskRepository, RecurringTaskId, UnsavedRecurringTask, SavedRecurringTask> {
     protected abstract RecurringTaskRepository repository();
+
+    @Test
+    public void findByPlayer() throws Exception {
+        PlayerId matchingPlayerId = new PlayerId("matching");
+        PlayerId nonmatchingPlayerId = new PlayerId("nonmatching");
+
+        SavedRecurringTask matchingTask1 = repository().save(randomUnsavedRecurringTask()
+                .withPlayerId(matchingPlayerId));
+        SavedRecurringTask matchingTask2 = repository().save(randomUnsavedRecurringTask()
+                .withPlayerId(matchingPlayerId));
+        SavedRecurringTask nonmatchingTask = repository().save(randomUnsavedRecurringTask()
+                .withPlayerId(nonmatchingPlayerId));
+
+        List<SavedRecurringTask> results = repository().findByPlayerId(matchingPlayerId);
+
+        assertThat(results, hasItem(matchingTask1));
+        assertThat(results, hasItem(matchingTask2));
+        assertThat(results, not(hasItem(nonmatchingTask)));
+    }
 
     @Override
     protected UnsavedRecurringTask givenAnUnsavedRecord() {
