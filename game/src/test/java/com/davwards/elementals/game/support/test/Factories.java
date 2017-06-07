@@ -25,6 +25,7 @@ public class Factories {
                 .name("Test Player " + randomString(10))
                 .experience(randomInt(0, 100))
                 .health(randomInt(1,100))
+                .coin(randomInt(0, 500))
                 .build();
     }
 

@@ -7,6 +7,8 @@ public interface Player {
 
     Integer health();
 
+    Integer coin();
+
     default boolean isAlive() {
         return this.health() > 0;
     }

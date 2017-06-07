@@ -8,6 +8,8 @@ import com.davwards.elementals.game.tasks.models.Task;
 import com.davwards.elementals.game.tasks.models.TaskId;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
+import static com.davwards.elementals.game.GameConstants.TASK_COMPLETION_COIN_PRIZE;
+import static com.davwards.elementals.game.GameConstants.TASK_COMPLETION_EXPERIENCE_PRIZE;
 import static com.davwards.elementals.game.support.language.StrictOptional.strict;
 
 public class CompleteTask {
@@ -27,17 +29,19 @@ public class CompleteTask {
     private SavedTask markTaskCompletedAndAwardExperienceToPlayer(SavedTask task) {
         playerRepository
                 .find(task.playerId())
-                .ifPresent(this::awardExperienceToPlayer);
+                .ifPresent(this::rewardPlayer);
 
         return taskRepository
                 .update(SavedTask.copy(task).withStatus(Task.Status.COMPLETE));
     }
 
-    private SavedPlayer awardExperienceToPlayer(SavedPlayer player) {
+    private SavedPlayer rewardPlayer(SavedPlayer player) {
         return playerRepository.update(
-                SavedPlayer.copy(player).withExperience(
-                        player.experience() + GameConstants.TASK_COMPLETION_PRIZE
-                )
+                SavedPlayer.copy(player)
+                        .withExperience(
+                                player.experience() + TASK_COMPLETION_EXPERIENCE_PRIZE)
+                        .withCoin(
+                                player.coin() + TASK_COMPLETION_COIN_PRIZE)
         );
     }
 

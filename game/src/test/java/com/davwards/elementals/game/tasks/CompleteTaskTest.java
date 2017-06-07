@@ -34,35 +34,28 @@ public class CompleteTaskTest {
     private CompleteTask completeTask = new CompleteTask(taskRepository, playerRepository);
 
     private SavedPlayer existingPlayer = playerRepository.save(Factories.randomUnsavedPlayer());
+    private final SavedTask existingTask = taskRepository.save(
+            Factories.randomUnsavedTask()
+                    .withPlayerId(existingPlayer.getId())
+                    .withTitle("test task")
+                    .withStatus(Task.Status.INCOMPLETE)
+    );
 
     @Test
     public void whenTaskExists_marksTaskComplete() {
-        SavedTask task = taskRepository.save(
-                Factories.randomUnsavedTask()
-                        .withPlayerId(existingPlayer.getId())
-                        .withTitle("test task")
-                        .withStatus(Task.Status.INCOMPLETE)
-        );
-
-        Assertions.assertThatValue(() -> taskRepository.find(task.getId()).get().isComplete())
+        Assertions.assertThatValue(
+                () -> taskRepository.find(existingTask.getId()).get().isComplete())
                 .changesFrom(false, true)
                 .when(() -> completeTask.perform(
-                        task.getId(),
+                        existingTask.getId(),
                         noopCompleteTaskResult)
                 );
     }
 
     @Test
     public void whenTaskExists_returnsResultOfSuccessMapper() {
-        SavedTask task = taskRepository.save(
-                Factories.randomUnsavedTask()
-                        .withPlayerId(existingPlayer.getId())
-                        .withTitle("test task")
-                        .withStatus(Task.Status.INCOMPLETE)
-        );
-
         SavedTask updatedTask = completeTask.perform(
-                task.getId(),
+                existingTask.getId(),
                 new CompleteTask.Outcome<SavedTask>() {
                     @Override
                     public SavedTask taskSuccessfullyCompleted(SavedTask completedTask) {
@@ -77,26 +70,33 @@ public class CompleteTaskTest {
                 }
         );
 
-        assertThat(updatedTask.getId(), equalTo(task.getId()));
+        assertThat(updatedTask.getId(), equalTo(existingTask.getId()));
         assertThat(updatedTask.isComplete(), equalTo(true));
     }
 
     @Test
     public void whenTaskExists_awardsPlayerExperience() {
-        SavedTask task = taskRepository.save(
-                Factories.randomUnsavedTask()
-                        .withPlayerId(existingPlayer.getId())
-                        .withTitle("test task")
-                        .withStatus(Task.Status.INCOMPLETE)
-        );
-
         Assertions.assertThatInteger(() ->
                 playerRepository
                         .find(existingPlayer.getId()).get()
                         .experience()
         ).increasesWhen(() ->
                 completeTask.perform(
-                        task.getId(),
+                        existingTask.getId(),
+                        noopCompleteTaskResult
+                )
+        );
+    }
+
+    @Test
+    public void whenTaskExists_awardsPlayerCoin() {
+        Assertions.assertThatInteger(() ->
+                playerRepository
+                        .find(existingPlayer.getId()).get()
+                        .coin()
+        ).increasesWhen(() ->
+                completeTask.perform(
+                        existingTask.getId(),
                         noopCompleteTaskResult
                 )
         );
