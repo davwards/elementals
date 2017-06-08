@@ -1,22 +1,23 @@
 package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.notification.fakes.FakeNotifier;
-import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
-import com.davwards.elementals.game.tasks.models.SavedTask;
-import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
 import com.davwards.elementals.game.players.CreatePlayer;
-import com.davwards.elementals.game.players.persistence.PlayerRepository;
 import com.davwards.elementals.game.players.ResurrectPlayer;
 import com.davwards.elementals.game.players.models.SavedPlayer;
-import com.davwards.elementals.game.tasks.*;
+import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.game.players.persistence.PlayerRepository;
+import com.davwards.elementals.game.tasks.CompleteTask;
+import com.davwards.elementals.game.tasks.CreateTask;
+import com.davwards.elementals.game.tasks.UpdateTaskStatus;
+import com.davwards.elementals.game.tasks.models.SavedTask;
+import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 import static com.davwards.elementals.game.support.test.Assertions.assertThatInteger;
-import static com.davwards.elementals.game.support.test.Assertions.assertThatValue;
+import static com.davwards.elementals.game.support.test.Factories.randomString;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
@@ -25,33 +26,38 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class MainWorkflowTest {
 
     @Test
-    public void creatingAndCompletingTasks() {
-        SavedTask takeOutTrash = createTask.perform(
-                player.getId(),
-                "Take out trash",
-                tomorrow,
-                getCreatedTask
-        );
+    public void completingATask() {
+        givenAPlayer();
+        SavedTask task = givenATaskThatIsNotYetDue();
 
-        SavedTask understandRelativity = createTask.perform(
-                player.getId(),
-                "Understand relativity",
-                nextWeek,
-                getCreatedTask
-        );
-
-        playerGainsExperienceForCompletingATask(takeOutTrash);
-
-        playerDoesNotTakeDamageForTasksThatArentDueOrWereCompleted(tomorrow, takeOutTrash, understandRelativity);
-
-        playerDoesNotTakeDamageForTasksThatArentDueOrWereCompleted(nextWeek, takeOutTrash);
-
-        playerTakesDamageForTasksThatWerentDoneByDeadline(nextWeek, understandRelativity);
-
-        playerDiesAndIsResurrectedAfterTakingTooMuchDamage();
+        playerGainsExperienceForCompletingATask(task);
     }
 
-    private void playerDiesAndIsResurrectedAfterTakingTooMuchDamage() {
+    @Test
+    public void notCompletingATask() {
+        givenAPlayer();
+        SavedTask task = givenATaskThatIsPastDue();
+
+        playerTakesDamageForExpiredTask(task);
+    }
+
+    @Test
+    public void playerDiesAndIsResurrectedAfterTakingTooMuchDamage() {
+        givenAPlayerWithExperience();
+
+        whenPlayerMissesTooManyTasks();
+
+        assertThat(notifier.notificationsSent().size(), equalTo(0));
+
+        assertThatInteger(this::currentPlayerExperience)
+                .decreasesWhen(() -> new ResurrectPlayer(playerRepository, notifier).perform(player.getId(), noopResurrectPlayerOutcome));
+
+        assertThat(notifier.notificationsSent().size(), equalTo(1));
+
+        assertThat(currentPlayerHealth(), greaterThan(0));
+    }
+
+    private void whenPlayerMissesTooManyTasks() {
         int missedTasks = 0;
         while (currentPlayerHealth() > 0) {
             missedTasks++;
@@ -59,45 +65,66 @@ public class MainWorkflowTest {
                 fail("Player has missed " + missedTasks + " tasks and hasn't died, something's probably wrong");
             }
 
-            SavedTask task = createTask
-                    .perform(player.getId(), "Missed task #" + missedTasks, tomorrow, getCreatedTask);
-            updateTaskStatus.perform(task.getId(), nextWeek, noopUpdateTaskStatusOutcome);
+            SavedTask task = new CreateTask(taskRepository).perform(
+                    player.getId(),
+                    "Missed task #" + missedTasks,
+                    currentTime.minusDays(1),
+                    getCreatedTask
+            );
+
+            new UpdateTaskStatus(taskRepository, playerRepository).perform(
+                    task.getId(),
+                    currentTime,
+                    noopUpdateTaskStatusOutcome
+            );
         }
-
-        assertThat(notifier.notificationsSent().size(), equalTo(0));
-
-        assertThatInteger(this::currentPlayerExperience)
-                .decreasesWhen(() -> resurrectPlayer.perform(player.getId(), noopResurrectPlayerOutcome));
-
-        assertThat(notifier.notificationsSent().size(), equalTo(1));
-
-        assertThat(currentPlayerHealth(), greaterThan(0));
     }
 
-    private void playerDoesNotTakeDamageForTasksThatArentDueOrWereCompleted(LocalDateTime currentTime, SavedTask... tasks) {
-        Arrays.stream(tasks).forEach(task ->
-                assertThatValue(this::currentPlayerHealth).doesNotChangeWhen(
-                        () -> updateTaskStatus.perform(task.getId(), currentTime.plusMinutes(2), noopUpdateTaskStatusOutcome)
-                )
+    private void playerTakesDamageForExpiredTask(SavedTask task) {
+        assertThatInteger(this::currentPlayerHealth)
+                .decreasesWhen(
+                        () -> new UpdateTaskStatus(taskRepository, playerRepository).perform(
+                                task.getId(),
+                                currentTime,
+                                noopUpdateTaskStatusOutcome)
+                );
+    }
+
+    private SavedTask givenATaskThatIsPastDue() {
+        return new CreateTask(taskRepository).perform(
+                player.getId(),
+                "Test Task " + randomString(5),
+                currentTime.minusDays(1),
+                getCreatedTask
         );
     }
 
-    private void playerTakesDamageForTasksThatWerentDoneByDeadline(LocalDateTime currentTime, SavedTask... tasks) {
-        Arrays.stream(tasks).forEach(task ->
-                assertThatInteger(this::currentPlayerHealth)
-                        .decreasesWhen(
-                                () -> updateTaskStatus.perform(
-                                        task.getId(),
-                                        currentTime.plusMinutes(2),
-                                        noopUpdateTaskStatusOutcome)
-                        )
+    private SavedTask givenATaskThatIsNotYetDue() {
+        return new CreateTask(taskRepository).perform(
+                player.getId(),
+                "Test Task " + randomString(5),
+                currentTime.plusDays(1),
+                getCreatedTask
         );
+    }
+
+    private void givenAPlayer() {
+        player = new CreatePlayer(playerRepository)
+                .perform("testplayer", createdPlayer -> createdPlayer);
+    }
+
+    private void givenAPlayerWithExperience() {
+        player = new CreatePlayer(playerRepository)
+                .perform("testplayer", createdPlayer -> createdPlayer);
+        SavedTask task = new CreateTask(taskRepository)
+                .perform(player.getId(), "Some completed task", getCreatedTask);
+        new CompleteTask(taskRepository, playerRepository).perform(task.getId(), noopCompleteTaskResult);
     }
 
     private void playerGainsExperienceForCompletingATask(SavedTask takeOutTrash) {
         assertThatInteger(this::currentPlayerExperience)
                 .increasesWhen(
-                        () -> completeTask.perform(
+                        () -> new CompleteTask(taskRepository, playerRepository).perform(
                                 takeOutTrash.getId(),
                                 noopCompleteTaskResult
                         )
@@ -112,22 +139,12 @@ public class MainWorkflowTest {
         return playerRepository.find(player.getId()).orElse(null).experience();
     }
 
-    private final LocalDateTime now = LocalDateTime.of(2015, 3, 2, 16, 42, 55);
-    private final LocalDateTime tomorrow = now.plusDays(1);
-    private final LocalDateTime nextWeek = now.plusDays(7);
+    private final LocalDateTime currentTime = LocalDateTime.of(2015, 3, 2, 16, 42, 55);
+    private SavedPlayer player;
 
     private final TaskRepository taskRepository = new InMemoryTaskRepository();
     private final PlayerRepository playerRepository = new InMemoryPlayerRepository();
     private final FakeNotifier notifier = new FakeNotifier();
-
-    private final CreatePlayer createPlayer = new CreatePlayer(playerRepository);
-    private final CreateTask createTask = new CreateTask(taskRepository);
-    private final CompleteTask completeTask = new CompleteTask(taskRepository, playerRepository);
-    private final UpdateTaskStatus updateTaskStatus = new UpdateTaskStatus(taskRepository, playerRepository);
-    private final ResurrectPlayer resurrectPlayer = new ResurrectPlayer(playerRepository, notifier);
-
-    private SavedPlayer player = createPlayer
-            .perform("testplayer", createdPlayer -> createdPlayer);
 
     private final CreateTask.Outcome<SavedTask> getCreatedTask = createdTask -> createdTask;
 
@@ -142,6 +159,7 @@ public class MainWorkflowTest {
             return null;
         }
     };
+
     private final ResurrectPlayer.Outcome<Void> noopResurrectPlayerOutcome = new ResurrectPlayer.Outcome<Void>() {
         @Override
         public Void noSuchPlayer() {
@@ -158,6 +176,7 @@ public class MainWorkflowTest {
             return null;
         }
     };
+
     private final UpdateTaskStatus.Outcome<Void> noopUpdateTaskStatusOutcome = new UpdateTaskStatus.Outcome<Void>() {
         @Override
         public Void noSuchTask() {
