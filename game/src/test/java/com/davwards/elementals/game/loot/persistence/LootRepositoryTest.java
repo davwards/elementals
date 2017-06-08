@@ -3,14 +3,34 @@ package com.davwards.elementals.game.loot.persistence;
 import com.davwards.elementals.game.loot.models.*;
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.support.persistence.CrudRepositoryTest;
+import org.junit.Test;
+
+import java.util.List;
 
 import static com.davwards.elementals.game.support.test.Factories.randomString;
 import static com.davwards.elementals.game.support.test.Factories.randomUnsavedLoot;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 
 public abstract class LootRepositoryTest extends CrudRepositoryTest<LootRepository, LootId, UnsavedLoot, SavedLoot> {
+
+    @Test
+    public void findByPlayerId() throws Exception {
+        LootRepository lootRepository = repository();
+
+        SavedLoot matchingLoot1 = lootRepository.save(randomUnsavedLoot()
+                .withPlayerId(new PlayerId("matching")));
+        SavedLoot matchingLoot2 = lootRepository.save(randomUnsavedLoot()
+                .withPlayerId(new PlayerId("matching")));
+        lootRepository.save(randomUnsavedLoot()
+                .withPlayerId(new PlayerId("nonmatching")));
+
+        List<SavedLoot> fetchedLoot = lootRepository.findByPlayerId(new PlayerId("matching"));
+
+        assertThat(fetchedLoot, containsInAnyOrder(matchingLoot1, matchingLoot2));
+    }
 
     @Override
     protected UnsavedLoot givenAnUnsavedRecord() {

@@ -4,11 +4,14 @@ import com.davwards.elementals.game.loot.models.ImmutableSavedLoot;
 import com.davwards.elementals.game.loot.models.LootId;
 import com.davwards.elementals.game.loot.models.SavedLoot;
 import com.davwards.elementals.game.loot.models.UnsavedLoot;
+import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.support.persistence.InMemoryRepositoryOfImmutableRecords;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class InMemoryLootRepository
         extends InMemoryRepositoryOfImmutableRecords<UnsavedLoot, SavedLoot, LootId>
@@ -22,6 +25,13 @@ public class InMemoryLootRepository
 
     public InMemoryLootRepository(Supplier<LocalDateTime> currentTimeProvider) {
         this.currentTimeProvider = currentTimeProvider;
+    }
+
+    @Override
+    public List<SavedLoot> findByPlayerId(PlayerId playerId) {
+        return contents.values().stream()
+                .filter(loot -> loot.playerId().equals(playerId))
+                .collect(Collectors.toList());
     }
 
     @Override
