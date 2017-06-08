@@ -44,7 +44,8 @@ public class FeatureTest {
                 .body("name", equalTo("TestPlayer"))
                 .body("id", notNullValue())
                 .body("health", notNullValue())
-                .body("experience", equalTo(0));
+                .body("experience", equalTo(0))
+                .body("coin", equalTo(0));
 
         String playerUrl = createPlayerResponse
                 .then().extract().header("Location");
