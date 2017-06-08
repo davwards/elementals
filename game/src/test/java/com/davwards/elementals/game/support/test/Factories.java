@@ -1,12 +1,13 @@
 package com.davwards.elementals.game.support.test;
 
+import com.davwards.elementals.game.loot.models.KindOfLootId;
+import com.davwards.elementals.game.loot.models.ImmutableUnsavedLoot;
 import com.davwards.elementals.game.players.models.ImmutableUnsavedPlayer;
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.tasks.models.ImmutableUnsavedRecurringTask;
 import com.davwards.elementals.game.tasks.models.ImmutableUnsavedTask;
 import com.davwards.elementals.game.tasks.models.Task;
 
-import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -43,6 +44,13 @@ public class Factories {
                 .title("Test Recurring Task " + randomString(10))
                 .cadence("FREQ=DAILY")
                 .duration(Period.ofDays(1))
+                .build();
+    }
+
+    public static ImmutableUnsavedLoot randomUnsavedLoot() {
+        return ImmutableUnsavedLoot.builder()
+                .playerId(new PlayerId("some-player"))
+                .kindId(KindOfLootId.COPPER_SWORD)
                 .build();
     }
 }
