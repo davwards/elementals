@@ -25,23 +25,27 @@ public class ResurrectPlayerTest {
     private SavedPlayer deadPlayer = playerRepository.save(randomUnsavedPlayer()
             .withName("dead")
             .withExperience(100)
+            .withCoin(200)
             .withHealth(0));
 
     private SavedPlayer veryDeadPlayer = playerRepository.save(randomUnsavedPlayer()
             .withName("very dead")
             .withExperience(100)
+            .withCoin(200)
             .withHealth(-10));
 
     private SavedPlayer alivePlayer = playerRepository.save(randomUnsavedPlayer()
             .withName("alive")
             .withExperience(100)
+            .withCoin(200)
             .withHealth(10));
 
     @Test
     public void whenPlayerIsAlive_doesNothing() throws Exception {
         assertThatValues(
                 () -> playerRepository.find(alivePlayer.getId()).get().experience(),
-                () -> playerRepository.find(alivePlayer.getId()).get().health()
+                () -> playerRepository.find(alivePlayer.getId()).get().health(),
+                () -> playerRepository.find(alivePlayer.getId()).get().coin()
         ).doNotChangeWhen(
                 () -> resurrectPlayer.perform(alivePlayer.getId(), noopOutcome)
         );
@@ -90,6 +94,15 @@ public class ResurrectPlayerTest {
 
         resurrectPlayer.perform(veryDeadPlayer.getId(), noopOutcome);
         assertThat(playerRepository.find(veryDeadPlayer.getId()).get().health(), equalTo(GameConstants.STARTING_HEALTH));
+    }
+
+    @Test
+    public void whenPlayerIsDead_clearsCoin() throws Exception {
+        resurrectPlayer.perform(deadPlayer.getId(), noopOutcome);
+        assertThat(playerRepository.find(deadPlayer.getId()).get().coin(), equalTo(0));
+
+        resurrectPlayer.perform(veryDeadPlayer.getId(), noopOutcome);
+        assertThat(playerRepository.find(veryDeadPlayer.getId()).get().coin(), equalTo(0));
     }
 
     @Test

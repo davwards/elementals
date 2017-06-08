@@ -30,6 +30,7 @@ public class ResurrectPlayer {
                 SavedPlayer.copy(player)
                         .withHealth(GameConstants.STARTING_HEALTH)
                         .withExperience(0)
+                        .withCoin(0)
         );
     }
 
