@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.tasks;
+package com.davwards.elementals.game.tasks.recurring;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;

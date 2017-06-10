@@ -1,9 +1,9 @@
 package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.tasks.CreateRecurringTask;
+import com.davwards.elementals.game.tasks.recurring.CreateRecurringTask;
 import com.davwards.elementals.game.tasks.GetPlayerTasks;
-import com.davwards.elementals.game.tasks.SpawnRecurringTask;
+import com.davwards.elementals.game.tasks.recurring.SpawnRecurringTask;
 import com.davwards.elementals.game.tasks.models.SavedRecurringTask;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.persistence.InMemoryRecurringTaskRepository;

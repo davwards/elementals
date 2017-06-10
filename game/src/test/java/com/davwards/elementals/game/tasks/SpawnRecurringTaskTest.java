@@ -7,6 +7,8 @@ import com.davwards.elementals.game.tasks.persistence.InMemoryRecurringTaskRepos
 import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
 import com.davwards.elementals.game.tasks.persistence.RecurringTaskRepository;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
+import com.davwards.elementals.game.tasks.recurring.CadenceInterpreter;
+import com.davwards.elementals.game.tasks.recurring.SpawnRecurringTask;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
