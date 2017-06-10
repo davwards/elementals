@@ -22,6 +22,7 @@ public interface StrictOptional<T> {
     StrictOptional<T> filter(Predicate<T> test);
     T orElse(T defaultValue);
     T orElseGet(Supplier<T> supplier);
+    T orElseThrow(Supplier<RuntimeException> boom);
 
     static <U> StrictOptional<U> of(U value) {
         return value == null
@@ -69,6 +70,11 @@ public interface StrictOptional<T> {
         public T orElseGet(Supplier<T> supplier) {
             return value;
         }
+
+        @Override
+        public T orElseThrow(Supplier<RuntimeException> boom) {
+            return value;
+        }
     }
 
     class None<T> implements StrictOptional<T> {
@@ -97,6 +103,11 @@ public interface StrictOptional<T> {
         @Override
         public T orElseGet(Supplier<T> supplier) {
             return supplier.get();
+        }
+
+        @Override
+        public T orElseThrow(Supplier<RuntimeException> boom) {
+            throw boom.get();
         }
     }
 }

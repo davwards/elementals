@@ -1,8 +1,10 @@
 package com.davwards.elementals.game.loot;
 
+import com.davwards.elementals.game.loot.models.KindOfLootId;
 import com.davwards.elementals.game.loot.models.SavedLoot;
 import com.davwards.elementals.game.loot.persistence.InMemoryLootRepository;
 import com.davwards.elementals.game.loot.persistence.LootRepository;
+import com.davwards.elementals.game.players.models.Player;
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
@@ -18,40 +20,31 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 public class PurchaseLootTest {
 
+    private static final Integer LOOT_COST = 20;
     private PlayerRepository playerRepository = new InMemoryPlayerRepository();
     private SavedPlayer player = playerRepository.save(randomUnsavedPlayer().withCoin(200));
-    private LootCostCalculator stubCalculator = kind -> 199;
     private LootRepository lootRepository = new InMemoryLootRepository();
-    private PurchaseLoot purchaseLoot = new PurchaseLoot(lootRepository, playerRepository, stubCalculator);
+    private PurchaseLoot purchaseLoot = new PurchaseLoot(
+            lootRepository,
+            playerRepository,
+            new DummyLootCheck()
+    );
 
     @Test
-    public void whenPlayerHasEnoughCoin_subtractsCostFromPlayerCoin() {
+    public void whenPlayerCanPurchaseLoot_subtractsCostFromPlayerCoin() {
+        givenLootCheckIs(new SuccessfulLootCheck());
         purchaseLoot.perform(
                 player.getId(),
                 COPPER_SWORD,
-                new PurchaseLoot.Outcome<Void>() {
-                    @Override
-                    public Void successfullyPurchasedLoot(SavedLoot savedLoot) {
-                        return null;
-                    }
-
-                    @Override
-                    public Void noSuchPlayer() {
-                        return null;
-                    }
-
-                    @Override
-                    public Void notEnoughCoin() {
-                        return null;
-                    }
-                }
+                outcome("")
         );
 
-        assertThat(playerRepository.find(player.getId()).get().coin(), equalTo(200-199));
+        assertThat(playerRepository.find(player.getId()).get().coin(), equalTo(200-LOOT_COST));
     }
 
     @Test
-    public void whenPlayerHasEnoughCoin_returnsSuccessOutcome() {
+    public void whenPlayerCanPurchaseLoot_returnsSuccessOutcomeWithCreatedLoot() {
+        givenLootCheckIs(new SuccessfulLootCheck());
         SavedLoot loot = purchaseLoot.perform(
                 player.getId(),
                 COPPER_SWORD,
@@ -72,6 +65,12 @@ public class PurchaseLootTest {
                         fail("Expected successfullyPurchasedLoot outcome");
                         return null;
                     }
+
+                    @Override
+                    public SavedLoot notHighEnoughLevel() {
+                        fail("Expected successfullyPurchasedLoot outcome");
+                        return null;
+                    }
                 }
         );
 
@@ -79,104 +78,100 @@ public class PurchaseLootTest {
     }
 
     @Test
+    public void whenPlayerDoesNotHaveEnoughCoin_returnsNotEnoughCoinOutcome() {
+        givenLootCheckIs(new NotEnoughCoinLootCheck());
+
+        String noise = randomString(10);
+
+        String result = purchaseLoot.perform(
+                player.getId(),
+                COPPER_SWORD,
+                outcome(noise)
+        );
+
+        assertThat(result, equalTo("not enough coin - " + noise));
+    }
+
+    @Test
+    public void whenPlayerIsNotHighEnoughLevel_returnsNotEnoughCoinOutcome() {
+        givenLootCheckIs(new NotHighEnoughLevelLootCheck());
+
+        String noise = randomString(10);
+        String result = purchaseLoot.perform(
+                player.getId(),
+                COPPER_SWORD,
+                outcome(noise)
+        );
+
+        assertThat(result, equalTo("not high enough level - " + noise));
+    }
+
+    @Test
     public void whenPlayerDoesNotExist() {
-        String expectedResult = randomString(10);
+        String noise = randomString(10);
 
         String result = purchaseLoot.perform(
                 new PlayerId("nonsense"),
                 COPPER_SWORD,
-                new PurchaseLoot.Outcome<String>() {
-                    @Override
-                    public String successfullyPurchasedLoot(SavedLoot savedLoot) {
-                        fail("Expected noSuchPlayer outcome");
-                        return null;
-                    }
-
-                    @Override
-                    public String noSuchPlayer() {
-                        return expectedResult;
-                    }
-
-                    @Override
-                    public String notEnoughCoin() {
-                        fail("Expected noSuchPlayer outcome");
-                        return null;
-                    }
-                }
+                outcome(noise)
         );
 
-        assertThat(result, equalTo(expectedResult));
+        assertThat(result, equalTo("no such player - " + noise));
     }
 
-    @Test
-    public void whenPlayerDoesNotHaveEnoughCoin_returnsNotEnoughCoinOutcome() {
-        purchaseLoot = new PurchaseLoot(
-                lootRepository,
-                playerRepository,
-                kind -> player.coin() + 1
-        );
+    private PurchaseLoot.Outcome<String> outcome(String noise) {
+        return new PurchaseLoot.Outcome<String>() {
+            @Override
+            public String successfullyPurchasedLoot(SavedLoot savedLoot) {
+                return "purchased " + savedLoot + " - " + noise;
+            }
 
-        String expectedResult = randomString(10);
+            @Override
+            public String noSuchPlayer() {
+                return "no such player - " + noise;
+            }
 
-        String result = purchaseLoot.perform(
-                player.getId(),
-                COPPER_SWORD,
-                new PurchaseLoot.Outcome<String>() {
-                    @Override
-                    public String successfullyPurchasedLoot(SavedLoot savedLoot) {
-                        fail("Expected notEnoughCoin outcome");
-                        return null;
-                    }
+            @Override
+            public String notEnoughCoin() {
+                return "not enough coin - " + noise;
+            }
 
-                    @Override
-                    public String noSuchPlayer() {
-                        fail("Expected notEnoughCoin outcome");
-                        return null;
-                    }
-
-                    @Override
-                    public String notEnoughCoin() {
-                        return expectedResult;
-                    }
-                }
-        );
-
-        assertThat(result, equalTo(expectedResult));
+            @Override
+            public String notHighEnoughLevel() {
+                return "not high enough level - " + noise;
+            }
+        };
     }
 
-    @Test
-    public void whenPlayerHasJustEnoughCoin_returnsSuccess() {
-        purchaseLoot = new PurchaseLoot(
-                lootRepository,
-                playerRepository,
-                kind -> player.coin()
-        );
+    private void givenLootCheckIs(CheckWhetherPlayerCanPurchaseLoot lootCheck) {
+        purchaseLoot = new PurchaseLoot(lootRepository, playerRepository, lootCheck);
+    }
 
-        String expectedResult = randomString(10);
+    private class DummyLootCheck implements CheckWhetherPlayerCanPurchaseLoot {
+        @Override
+        public <T> T perform(Player player, KindOfLootId kindOfLootId, Outcome<T> outcome) {
+            throw new RuntimeException("Dummy should not have been invoked");
+        }
+    }
 
-        String result = purchaseLoot.perform(
-                player.getId(),
-                COPPER_SWORD,
-                new PurchaseLoot.Outcome<String>() {
-                    @Override
-                    public String successfullyPurchasedLoot(SavedLoot savedLoot) {
-                        return expectedResult;
-                    }
+    private class SuccessfulLootCheck implements CheckWhetherPlayerCanPurchaseLoot {
+        @Override
+        public <T> T perform(Player player, KindOfLootId kindOfLootId, Outcome<T> outcome) {
+            return outcome.playerCanPurchaseLoot(LOOT_COST);
+        }
+    }
 
-                    @Override
-                    public String noSuchPlayer() {
-                        fail("Expected successfullyPurchasedLoot outcome");
-                        return null;
-                    }
+    private class NotEnoughCoinLootCheck implements CheckWhetherPlayerCanPurchaseLoot {
+        @Override
+        public <T> T perform(Player player, KindOfLootId kindOfLootId, Outcome<T> outcome) {
+            return outcome.playerDoesNotHaveEnoughCoin(10);
+        }
+    }
 
-                    @Override
-                    public String notEnoughCoin() {
-                        fail("Expected successfullyPurchasedLoot outcome");
-                        return null;
-                    }
-                }
-        );
-
-        assertThat(result, equalTo(expectedResult));
+    private class NotHighEnoughLevelLootCheck implements CheckWhetherPlayerCanPurchaseLoot {
+        @Override
+        public <T> T perform(Player player, KindOfLootId kindOfLootId, Outcome<T> outcome) {
+            return outcome.playerIsNotHighEnoughLevel(3);
+        }
     }
 }

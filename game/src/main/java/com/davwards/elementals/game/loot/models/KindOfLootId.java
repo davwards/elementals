@@ -1,5 +1,5 @@
 package com.davwards.elementals.game.loot.models;
 
 public enum KindOfLootId {
-    COPPER_SWORD
+    COPPER_SWORD, VORPAL_SWORD
 }

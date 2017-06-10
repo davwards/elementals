@@ -10,4 +10,18 @@ public interface CheckWhetherPlayerCanLevelUp {
     }
 
     <T> T perform(Player player, Outcome<T> outcome);
+
+    class InProcess implements CheckWhetherPlayerCanLevelUp {
+        public <T> T perform(Player player, Outcome<T> outcome) {
+            Integer costOfNextLevel = costOfLevel(player.level() + 1);
+
+            return player.experience() >= costOfNextLevel
+                    ? outcome.playerCanLevelUp(costOfNextLevel)
+                    : outcome.playerCannotLevelUp(costOfNextLevel - player.experience());
+        }
+
+        private Integer costOfLevel(Integer level) {
+            return 50 + (level - 2) * 20;
+        }
+    }
 }
