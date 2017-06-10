@@ -24,9 +24,10 @@ public class Factories {
     public static ImmutableUnsavedPlayer randomUnsavedPlayer() {
         return ImmutableUnsavedPlayer.builder()
                 .name("Test Player " + randomString(10))
-                .experience(randomInt(0, 100))
+                .experience(randomInt(0, 10000))
                 .health(randomInt(1,100))
                 .coin(randomInt(0, 500))
+                .level(randomInt(1,50))
                 .build();
     }
 

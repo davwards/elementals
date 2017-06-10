@@ -17,6 +17,7 @@ public class CreatePlayer {
                 playerRepository.save(ImmutableUnsavedPlayer.builder()
                         .name(playerName)
                         .experience(0)
+                        .level(1)
                         .health(STARTING_HEALTH)
                         .coin(STARTING_COIN)
                         .build()

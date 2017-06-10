@@ -37,7 +37,6 @@ public class PurchaseLootTest {
 
                     @Override
                     public Void noSuchPlayer() {
-                        fail("Expected successfullyPurchasedLoot outcome");
                         return null;
                     }
 
