@@ -7,14 +7,12 @@ import com.davwards.elementals.game.tasks.persistence.InMemoryRecurringTaskRepos
 import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
 import com.davwards.elementals.game.tasks.persistence.RecurringTaskRepository;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static com.davwards.elementals.game.support.test.Factories.*;

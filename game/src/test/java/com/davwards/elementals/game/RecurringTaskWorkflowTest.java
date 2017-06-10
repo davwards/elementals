@@ -17,8 +17,6 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static com.davwards.elementals.game.support.test.Factories.randomString;
-import static junit.framework.TestCase.fail;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsEqual.equalTo;

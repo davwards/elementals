@@ -2,7 +2,6 @@ package com.davwards.elementals.game.tasks.models;
 
 import com.davwards.elementals.game.players.models.PlayerId;
 
-import java.time.LocalDateTime;
 import java.time.Period;
 
 public interface RecurringTask {

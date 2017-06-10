@@ -4,9 +4,6 @@ import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import static com.davwards.elementals.game.support.language.StrictOptional.strict;
 
 public class LevelUpPlayer {

@@ -6,9 +6,7 @@ import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
 import org.junit.Test;
 
-import static com.davwards.elementals.game.support.test.Factories.randomInt;
-import static com.davwards.elementals.game.support.test.Factories.randomString;
-import static com.davwards.elementals.game.support.test.Factories.randomUnsavedPlayer;
+import static com.davwards.elementals.game.support.test.Factories.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.fail;
