@@ -19,7 +19,8 @@ import static com.davwards.elementals.game.support.language.Either.success;
 public class ExerciseHabitEndpoint {
 
     private static class ExerciseHabitRequest {
-        @JsonProperty private String side;
+        @JsonProperty
+        private String side;
     }
 
     private static class PossibleResponses implements ExerciseHabit.Outcome<ResponseEntity> {
@@ -58,19 +59,16 @@ public class ExerciseHabitEndpoint {
             @PathVariable("id") String habitId,
             @RequestBody ExerciseHabitRequest request) {
 
-        return parseSide(request.side).join(
-                side -> exerciseHabit
-                        .perform(
-                                new HabitId(habitId),
-                                side,
-                                new PossibleResponses()
-                        ),
-                PossibleResponses::invalidSide
-        );
+        return parseSide(request.side)
+                .map(side -> exerciseHabit.perform(
+                        new HabitId(habitId),
+                        side,
+                        new PossibleResponses()))
+                .orIfFailure(PossibleResponses::invalidSide);
     }
 
     private static Either<ExerciseHabit.Sides, String> parseSide(String side) {
-        switch(side) {
+        switch (side) {
             case "up":
                 return success(UPSIDE);
             case "down":

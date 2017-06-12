@@ -61,46 +61,37 @@ public class CreateTaskEndpoint {
             @RequestBody CreateTaskRequest createTaskRequest) {
 
         return createTaskRequest.deadline
-                .map(deadline -> parseDeadline(deadline).join(
-                        createTaskWithDeadline(
-                                playerId,
-                                createTaskRequest.title,
-                                new PossibleResponses(uriBuilder)
-                        ),
-                        PossibleResponses::malformedDeadline
-                ))
-                .orElseGet(
-                        createTaskWithoutDeadline(
-                                playerId,
-                                createTaskRequest.title,
-                                new PossibleResponses(uriBuilder)
-                        )
+                .map(createTaskWithDeadline())
+                .orElse(createTaskWithoutDeadline())
+                .applyRequiredParameters(
+                        new PlayerId(playerId),
+                        createTaskRequest.title,
+                        new PossibleResponses(uriBuilder)
                 );
     }
 
-    private Supplier<ResponseEntity> createTaskWithoutDeadline(
-            String playerId,
-            String title,
-            PossibleResponses possibleResponses) {
+    private final CreateTask createTask;
 
-        return () -> createTask.perform(
-                new PlayerId(playerId),
-                title,
-                possibleResponses
-        );
+    public CreateTaskEndpoint(CreateTask createTask) {
+        this.createTask = createTask;
     }
 
-    private Function<LocalDateTime, ResponseEntity> createTaskWithDeadline(
-            String playerId,
-            String title,
-            PossibleResponses possibleResponses) {
+    private ApplyRequiredParameters createTaskWithoutDeadline() {
+        return createTask::perform;
+    }
 
-        return deadline -> createTask.perform(
-                new PlayerId(playerId),
-                title,
-                deadline,
-                possibleResponses
-        );
+    private Function<String, ApplyRequiredParameters> createTaskWithDeadline() {
+
+        return deadline -> (playerId, title, possibleResponses) ->
+                parseDeadline(deadline)
+                        .map(parsedDeadline ->
+                                createTask.perform(
+                                        playerId,
+                                        title,
+                                        parsedDeadline,
+                                        possibleResponses
+                                ))
+                        .orIfFailure(PossibleResponses::malformedDeadline);
     }
 
     private Either<LocalDateTime, DateTimeParseException> parseDeadline(String deadline) {
@@ -111,9 +102,11 @@ public class CreateTaskEndpoint {
         }
     }
 
-    private final CreateTask createTask;
-
-    public CreateTaskEndpoint(CreateTask createTask) {
-        this.createTask = createTask;
+    private interface ApplyRequiredParameters {
+        ResponseEntity applyRequiredParameters(
+                PlayerId playerId,
+                String title,
+                PossibleResponses possibleResponses
+        );
     }
 }

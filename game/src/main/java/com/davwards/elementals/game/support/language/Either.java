@@ -3,11 +3,13 @@ package com.davwards.elementals.game.support.language;
 import java.util.function.Function;
 
 public interface Either<S, F> {
-    <T> Either<T, F> mapSuccess(Function<S, T> fn);
+    <T> Either<T, F> map(Function<S, T> fn);
 
     <T> Either<S, T> mapFailure(Function<F, T> fn);
 
     <T> T join(Function<S, T> ifSuccess, Function<F, T> ifFailure);
+
+    S orIfFailure(Function<F, S> fn);
 
     static <S, F> Success<S, F> success(S value) {
         return new Success<>(value);
@@ -25,7 +27,7 @@ public interface Either<S, F> {
         }
 
         @Override
-        public <T> Either<T, F> mapSuccess(Function<S, T> fn) {
+        public <T> Either<T, F> map(Function<S, T> fn) {
             return new Success<>(fn.apply(value));
         }
 
@@ -38,6 +40,11 @@ public interface Either<S, F> {
         public <T> T join(Function<S, T> ifSuccess, Function<F, T> ifFailure) {
             return ifSuccess.apply(value);
         }
+
+        @Override
+        public S orIfFailure(Function<F, S> fn) {
+            return value;
+        }
     }
 
     class Failure<S, F> implements Either<S, F> {
@@ -48,7 +55,7 @@ public interface Either<S, F> {
         }
 
         @Override
-        public <T> Either<T, F> mapSuccess(Function<S, T> fn) {
+        public <T> Either<T, F> map(Function<S, T> fn) {
             return new Failure<>(value);
         }
 
@@ -60,6 +67,11 @@ public interface Either<S, F> {
         @Override
         public <T> T join(Function<S, T> ifSuccess, Function<F, T> ifFailure) {
             return ifFailure.apply(value);
+        }
+
+        @Override
+        public S orIfFailure(Function<F, S> fn) {
+            return fn.apply(value);
         }
     }
 }

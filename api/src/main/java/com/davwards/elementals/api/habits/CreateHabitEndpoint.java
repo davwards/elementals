@@ -58,20 +58,17 @@ public class CreateHabitEndpoint {
             @PathVariable("playerId") String playerId,
             @RequestBody CreateHabitRequest request) {
 
-        return parseSide(request.sides).join(
-                side -> createHabit
-                        .perform(
-                                new PlayerId(playerId),
-                                request.title,
-                                side,
-                                new PossibleResponses(uriBuilder)
-                        ),
-                PossibleResponses::malformedRequest
-        );
+        return parseSide(request.sides)
+                .map(side -> createHabit.perform(
+                        new PlayerId(playerId),
+                        request.title,
+                        side,
+                        new PossibleResponses(uriBuilder)))
+                .orIfFailure(PossibleResponses::malformedRequest);
     }
 
     private Either<CreateHabit.Sides, String> parseSide(String side) {
-        switch(side) {
+        switch (side) {
             case "up":
                 return success(UPSIDE);
             case "down":
