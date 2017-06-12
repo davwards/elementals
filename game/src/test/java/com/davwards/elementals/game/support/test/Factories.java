@@ -1,5 +1,6 @@
 package com.davwards.elementals.game.support.test;
 
+import com.davwards.elementals.game.habits.models.ImmutableUnsavedHabit;
 import com.davwards.elementals.game.loot.models.ImmutableUnsavedLoot;
 import com.davwards.elementals.game.loot.models.KindOfLootId;
 import com.davwards.elementals.game.players.models.ImmutableUnsavedPlayer;
@@ -45,6 +46,16 @@ public class Factories {
                 .title("Test Recurring Task " + randomString(10))
                 .cadence("FREQ=DAILY")
                 .duration(Period.ofDays(1))
+                .build();
+    }
+
+    public static ImmutableUnsavedHabit randomUnsavedHabit() {
+        Integer upsideDownsideMode = randomInt(1,3);
+        return ImmutableUnsavedHabit.builder()
+                .playerId(new PlayerId("some-player"))
+                .title("Test Habit " + randomString(10))
+                .hasUpside(upsideDownsideMode != 1)
+                .hasDownside(upsideDownsideMode != 2)
                 .build();
     }
 
