@@ -3,7 +3,7 @@ package com.davwards.elementals.api.players;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-class PlayerResponse {
+public class PlayerResponse {
     @JsonProperty
     private final String name;
 
@@ -19,7 +19,7 @@ class PlayerResponse {
     @JsonProperty
     private final Integer coin;
 
-    PlayerResponse(SavedPlayer player) {
+    public PlayerResponse(SavedPlayer player) {
         this.id = player.getId().toString();
         this.name = player.name();
         this.health = player.health();

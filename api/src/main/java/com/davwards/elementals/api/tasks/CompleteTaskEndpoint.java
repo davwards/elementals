@@ -15,12 +15,15 @@ public class CompleteTaskEndpoint {
     private static class PossibleResponses implements CompleteTask.Outcome<ResponseEntity> {
         @Override
         public ResponseEntity taskSuccessfullyCompleted(SavedTask completedTask) {
-            return ResponseEntity.ok(new TaskResponse(completedTask));
+            return ResponseEntity
+                    .ok(new TaskResponse(completedTask));
         }
 
         @Override
         public ResponseEntity noSuchTask() {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity
+                    .notFound()
+                    .build();
         }
     }
 
@@ -28,8 +31,8 @@ public class CompleteTaskEndpoint {
             value = "/api/tasks/{id}/complete",
             method = RequestMethod.PUT)
     public ResponseEntity completeTask(
-            @PathVariable("id") String id
-    ) {
+            @PathVariable("id") String id) {
+
         return completeTask.perform(
                 new TaskId(id),
                 new PossibleResponses()
