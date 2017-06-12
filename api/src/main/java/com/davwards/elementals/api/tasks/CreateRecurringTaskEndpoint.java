@@ -1,5 +1,6 @@
 package com.davwards.elementals.api.tasks;
 
+import com.davwards.elementals.api.support.responses.ErrorResponse;
 import com.davwards.elementals.api.support.responses.ResourceCreatedResponses;
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.support.language.Either;
@@ -12,6 +13,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.Period;
 import java.time.format.DateTimeParseException;
+
+import static com.davwards.elementals.game.support.language.Either.failure;
+import static com.davwards.elementals.game.support.language.Either.success;
 
 @RestController
 public class CreateRecurringTaskEndpoint {
@@ -29,11 +33,18 @@ public class CreateRecurringTaskEndpoint {
 
     private static class PossibleResponses extends ResourceCreatedResponses<SavedRecurringTask>
             implements CreateRecurringTask.Outcome<ResponseEntity> {
+
         @Override
         public ResponseEntity successfullyCreatedRecurringTask(SavedRecurringTask createdTask) {
             return ResponseEntity
                     .created(resourceLocation(createdTask))
                     .body(new RecurringTaskResponse(createdTask));
+        }
+
+        static ResponseEntity malformedDuration(DateTimeParseException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
         }
 
         private PossibleResponses(UriComponentsBuilder uriBuilder) {
@@ -50,26 +61,23 @@ public class CreateRecurringTaskEndpoint {
             @RequestBody CreateRecurringTaskRequest request) {
 
         return parseDuration(request.duration).join(
-                duration -> createRecurringTask.perform(
-                        request.title,
-                        new PlayerId(playerId),
-                        request.cadence,
-                        duration,
-                        new PossibleResponses(uriComponentsBuilder)
-                ),
-
-                dateTimeParseException ->
-                        ResponseEntity.badRequest().body(
-                                "{\"error\":\"Bad duration syntax. Duration should follow ISO-8601 format for durations up to 'day' level of granularity, PnYnMnD or PnW.\"}"
-                        )
+                duration -> createRecurringTask
+                        .perform(
+                                request.title,
+                                new PlayerId(playerId),
+                                request.cadence,
+                                duration,
+                                new PossibleResponses(uriComponentsBuilder)
+                        ),
+                PossibleResponses::malformedDuration
         );
     }
 
     private Either<Period, DateTimeParseException> parseDuration(String duration) {
         try {
-            return new Either.Success<>(Period.parse(duration));
+            return success(Period.parse(duration));
         } catch (DateTimeParseException e) {
-            return new Either.Failure<>(e);
+            return failure(e);
         }
     }
 

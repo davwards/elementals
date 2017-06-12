@@ -9,10 +9,18 @@ public interface Either<S, F> {
 
     <T> T join(Function<S, T> ifSuccess, Function<F, T> ifFailure);
 
+    static <S, F> Success<S, F> success(S value) {
+        return new Success<>(value);
+    }
+
+    static <S, F> Failure<S, F> failure(F value) {
+        return new Failure<>(value);
+    }
+
     class Success<S, F> implements Either<S, F> {
         private final S value;
 
-        public Success(S value) {
+        private Success(S value) {
             this.value = value;
         }
 
@@ -35,7 +43,7 @@ public interface Either<S, F> {
     class Failure<S, F> implements Either<S, F> {
         private final F value;
 
-        public Failure(F value) {
+        private Failure(F value) {
             this.value = value;
         }
 

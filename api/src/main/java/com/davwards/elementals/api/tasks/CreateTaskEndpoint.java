@@ -1,7 +1,9 @@
 package com.davwards.elementals.api.tasks;
 
+import com.davwards.elementals.api.support.responses.ErrorResponse;
 import com.davwards.elementals.api.support.responses.ResourceCreatedResponses;
 import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.game.support.language.Either;
 import com.davwards.elementals.game.tasks.CreateTask;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -9,8 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.function.Supplier;
+
+import static com.davwards.elementals.game.support.language.Either.failure;
+import static com.davwards.elementals.game.support.language.Either.success;
 
 @RestController
 public class CreateTaskEndpoint {
@@ -19,7 +27,7 @@ public class CreateTaskEndpoint {
         @JsonProperty
         private String title;
         @JsonProperty
-        private String deadline;
+        private Optional<String> deadline;
     }
 
     private static class PossibleResponses extends ResourceCreatedResponses<SavedTask>
@@ -30,6 +38,12 @@ public class CreateTaskEndpoint {
             return ResponseEntity
                     .created(resourceLocation(createdTask))
                     .body(new TaskResponse(createdTask));
+        }
+
+        static ResponseEntity malformedDeadline(DateTimeParseException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new ErrorResponse(e.getMessage()));
         }
 
         private PossibleResponses(UriComponentsBuilder uriBuilder) {
@@ -44,14 +58,57 @@ public class CreateTaskEndpoint {
     public ResponseEntity createTaskForPlayer(
             UriComponentsBuilder uriBuilder,
             @PathVariable("playerId") String playerId,
-            @RequestBody CreateTaskRequest createTaskRequest
-    ) {
-        return createTask.perform(
+            @RequestBody CreateTaskRequest createTaskRequest) {
+
+        return createTaskRequest.deadline
+                .map(deadline -> parseDeadline(deadline).join(
+                        createTaskWithDeadline(
+                                playerId,
+                                createTaskRequest.title,
+                                new PossibleResponses(uriBuilder)
+                        ),
+                        PossibleResponses::malformedDeadline
+                ))
+                .orElseGet(
+                        createTaskWithoutDeadline(
+                                playerId,
+                                createTaskRequest.title,
+                                new PossibleResponses(uriBuilder)
+                        )
+                );
+    }
+
+    private Supplier<ResponseEntity> createTaskWithoutDeadline(
+            String playerId,
+            String title,
+            PossibleResponses possibleResponses) {
+
+        return () -> createTask.perform(
                 new PlayerId(playerId),
-                createTaskRequest.title,
-                LocalDateTime.parse(createTaskRequest.deadline),
-                new PossibleResponses(uriBuilder)
+                title,
+                possibleResponses
         );
+    }
+
+    private Function<LocalDateTime, ResponseEntity> createTaskWithDeadline(
+            String playerId,
+            String title,
+            PossibleResponses possibleResponses) {
+
+        return deadline -> createTask.perform(
+                new PlayerId(playerId),
+                title,
+                deadline,
+                possibleResponses
+        );
+    }
+
+    private Either<LocalDateTime, DateTimeParseException> parseDeadline(String deadline) {
+        try {
+            return success(LocalDateTime.parse(deadline));
+        } catch (DateTimeParseException e) {
+            return failure(e);
+        }
     }
 
     private final CreateTask createTask;
