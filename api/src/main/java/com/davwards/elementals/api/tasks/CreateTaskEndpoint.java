@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import static com.davwards.elementals.game.support.language.Either.failure;
 import static com.davwards.elementals.game.support.language.Either.success;
@@ -27,7 +26,7 @@ public class CreateTaskEndpoint {
         @JsonProperty
         private String title;
         @JsonProperty
-        private Optional<String> deadline;
+        private String deadline;
     }
 
     private static class PossibleResponses extends ResourceCreatedResponses<SavedTask>
@@ -60,7 +59,7 @@ public class CreateTaskEndpoint {
             @PathVariable("playerId") String playerId,
             @RequestBody CreateTaskRequest createTaskRequest) {
 
-        return createTaskRequest.deadline
+        return Optional.ofNullable(createTaskRequest.deadline)
                 .map(createTaskWithDeadline())
                 .orElse(createTaskWithoutDeadline())
                 .applyRequiredParameters(

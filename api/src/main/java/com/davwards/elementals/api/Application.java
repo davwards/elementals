@@ -1,6 +1,11 @@
 package com.davwards.elementals.api;
 
+import com.davwards.elementals.game.habits.CreateHabit;
+import com.davwards.elementals.game.habits.ExerciseHabit;
+import com.davwards.elementals.game.habits.FetchHabit;
+import com.davwards.elementals.game.habits.persistence.InMemoryHabitRepository;
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.game.tasks.persistence.InMemoryRecurringTaskRepository;
 import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
 import com.davwards.elementals.game.players.CreatePlayer;
 import com.davwards.elementals.game.players.FetchPlayer;
@@ -9,6 +14,8 @@ import com.davwards.elementals.game.tasks.CompleteTask;
 import com.davwards.elementals.game.tasks.CreateTask;
 import com.davwards.elementals.game.tasks.FetchTask;
 import com.davwards.elementals.game.tasks.UpdateTaskStatus;
+import com.davwards.elementals.game.tasks.recurring.CreateRecurringTask;
+import com.davwards.elementals.game.tasks.recurring.FetchRecurringTask;
 import com.davwards.elementals.scheduler.ManualTimeProvider;
 import com.davwards.elementals.scheduler.Scheduler;
 import com.davwards.elementals.scheduler.TimeProvider;
@@ -27,16 +34,26 @@ import java.time.LocalDateTime;
 @Import({
         CreatePlayer.class,
         FetchPlayer.class,
+        ResurrectPlayer.class,
+
         CreateTask.class,
         FetchTask.class,
         CompleteTask.class,
         UpdateTaskStatus.class,
-        ResurrectPlayer.class,
+
+        CreateHabit.class,
+        ExerciseHabit.class,
+        FetchHabit.class,
+
+        CreateRecurringTask.class,
+        FetchRecurringTask.class,
 
         Scheduler.class,
 
         InMemoryPlayerRepository.class,
         InMemoryTaskRepository.class,
+        InMemoryHabitRepository.class,
+        InMemoryRecurringTaskRepository.class,
 
         ManualTimeProvider.class
 })
