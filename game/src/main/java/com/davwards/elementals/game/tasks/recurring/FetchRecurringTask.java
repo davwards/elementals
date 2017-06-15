@@ -12,10 +12,10 @@ public class FetchRecurringTask {
         T noSuchRecurringTask();
     }
 
-    public <T> T perform(RecurringTaskId id, Outcome<T> handle) {
+    public <T> T perform(RecurringTaskId id, Outcome<T> outcome) {
         return strict(recurringTaskRepository.find(id))
-                .map(handle::successfullyFetchedRecurringTask)
-                .orElseGet(handle::noSuchRecurringTask);
+                .map(outcome::successfullyFetchedRecurringTask)
+                .orElseGet(outcome::noSuchRecurringTask);
     }
 
     private final RecurringTaskRepository recurringTaskRepository;

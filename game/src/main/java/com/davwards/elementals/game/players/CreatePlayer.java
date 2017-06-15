@@ -12,8 +12,8 @@ public class CreatePlayer {
         T playerSaved(SavedPlayer player);
     }
 
-    public <T> T perform(String playerName, Outcome<T> handle) {
-        return handle.playerSaved(
+    public <T> T perform(String playerName, Outcome<T> outcome) {
+        return outcome.playerSaved(
                 playerRepository.save(ImmutableUnsavedPlayer.builder()
                         .name(playerName)
                         .experience(0)

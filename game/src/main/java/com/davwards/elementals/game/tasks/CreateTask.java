@@ -16,21 +16,26 @@ public class CreateTask {
 
     public <T> T perform(PlayerId playerId,
                          String title,
-                         Outcome<T> handle) {
+                         Outcome<T> outcome) {
 
-        return perform(playerId, title, Optional.empty(), handle);
+        return perform(playerId, title, Optional.empty(), outcome);
     }
 
     public <T> T perform(PlayerId playerId,
                          String title,
                          LocalDateTime deadline,
-                         Outcome<T> handle) {
+                         Outcome<T> outcome) {
 
-        return perform(playerId, title, Optional.of(deadline), handle);
+        return perform(playerId, title, Optional.of(deadline), outcome);
     }
 
-    private <T> T perform(PlayerId playerId, String title, Optional<LocalDateTime> deadline, Outcome<T> handle) {
-        return handle.successfullyCreatedTask(
+    private <T> T perform(
+            PlayerId playerId,
+            String title,
+            Optional<LocalDateTime> deadline,
+            Outcome<T> outcome) {
+
+        return outcome.successfullyCreatedTask(
                 taskRepository.save(ImmutableUnsavedTask.builder()
                         .playerId(playerId)
                         .title(title)

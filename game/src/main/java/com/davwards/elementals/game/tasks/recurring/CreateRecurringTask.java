@@ -16,9 +16,9 @@ public class CreateRecurringTask {
                          PlayerId playerId,
                          String cadence,
                          Period duration,
-                         Outcome<T> handle) {
+                         Outcome<T> outcome) {
 
-        return handle.successfullyCreatedRecurringTask(
+        return outcome.successfullyCreatedRecurringTask(
                 recurringTaskRepository.save(
                         ImmutableUnsavedRecurringTask.builder()
                                 .title(title)

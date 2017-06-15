@@ -12,10 +12,10 @@ public class FetchHabit {
         T noSuchHabit();
     }
 
-    public <T> T perform(HabitId id, Outcome<T> handle) {
+    public <T> T perform(HabitId id, Outcome<T> outcome) {
         return strict(habitRepository.find(id))
-                .map(handle::successfullyFetchedHabit)
-                .orElseGet(handle::noSuchHabit);
+                .map(outcome::successfullyFetchedHabit)
+                .orElseGet(outcome::noSuchHabit);
     }
 
     private final HabitRepository habitRepository;

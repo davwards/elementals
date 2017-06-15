@@ -16,12 +16,12 @@ public class ResurrectPlayer {
         T playerDidNotNeedToBeResurrected(SavedPlayer player);
     }
 
-    public <T> T perform(PlayerId id, Outcome<T> handle) {
+    public <T> T perform(PlayerId id, Outcome<T> outcome) {
         return strict(playerRepository.find(id))
                 .map(player -> player.isAlive()
-                        ? handle.playerDidNotNeedToBeResurrected(player)
-                        : handle.playerWasResurrected(updateDeadPlayer(id, player)))
-                .orElseGet(handle::noSuchPlayer);
+                        ? outcome.playerDidNotNeedToBeResurrected(player)
+                        : outcome.playerWasResurrected(updateDeadPlayer(id, player)))
+                .orElseGet(outcome::noSuchPlayer);
     }
 
     private SavedPlayer updateDeadPlayer(PlayerId id, SavedPlayer player) {

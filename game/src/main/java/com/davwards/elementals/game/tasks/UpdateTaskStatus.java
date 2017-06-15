@@ -23,13 +23,13 @@ public class UpdateTaskStatus {
 
     public <T> T perform(TaskId id,
                          LocalDateTime currentTime,
-                         Outcome<T> handle) {
+                         Outcome<T> outcome) {
 
         return strict(taskRepository.find(id))
                 .map(task -> (taskIsPastDue(task, currentTime) && task.isIncomplete())
-                        ? handle.taskExpired(updatePlayerAndTask(task))
-                        : handle.noStatusChange(task))
-                .orElseGet(handle::noSuchTask);
+                        ? outcome.taskExpired(updatePlayerAndTask(task))
+                        : outcome.noStatusChange(task))
+                .orElseGet(outcome::noSuchTask);
     }
 
     private final TaskRepository taskRepository;

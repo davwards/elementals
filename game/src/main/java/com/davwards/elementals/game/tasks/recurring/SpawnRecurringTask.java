@@ -25,13 +25,13 @@ public class SpawnRecurringTask {
 
     public <T> T perform(RecurringTaskId recurringTaskId,
                          LocalDateTime currentTime,
-                         Outcome<T> handle) {
+                         Outcome<T> outcome) {
 
         return strict(recurringTaskRepository.find(recurringTaskId))
                 .map(recurringTask -> taskShouldSpawn(recurringTask, currentTime)
-                        ? handle.spawnedNewTask(createTask(recurringTask, currentTime))
-                        : handle.taskNotDueToSpawn())
-                .orElseGet(handle::noSuchRecurringTask);
+                        ? outcome.spawnedNewTask(createTask(recurringTask, currentTime))
+                        : outcome.taskNotDueToSpawn())
+                .orElseGet(outcome::noSuchRecurringTask);
     }
 
     private final RecurringTaskRepository recurringTaskRepository;

@@ -18,11 +18,11 @@ public class CompleteTask {
         T noSuchTask();
     }
 
-    public <T> T perform(TaskId id, Outcome<T> handle) {
+    public <T> T perform(TaskId id, Outcome<T> outcome) {
         return strict(taskRepository.find(id))
                 .map(this::markTaskCompletedAndAwardExperienceToPlayer)
-                .map(handle::taskSuccessfullyCompleted)
-                .orElseGet(handle::noSuchTask);
+                .map(outcome::taskSuccessfullyCompleted)
+                .orElseGet(outcome::noSuchTask);
     }
 
     private SavedTask markTaskCompletedAndAwardExperienceToPlayer(SavedTask task) {

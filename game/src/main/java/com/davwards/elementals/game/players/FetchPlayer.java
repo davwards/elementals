@@ -12,10 +12,10 @@ public class FetchPlayer {
         T noSuchPlayer();
     }
 
-    public <T> T perform(PlayerId id, Outcome<T> handle) {
+    public <T> T perform(PlayerId id, Outcome<T> outcome) {
         return strict(playerRepository.find(id))
-                .map(handle::foundPlayer)
-                .orElseGet(handle::noSuchPlayer);
+                .map(outcome::foundPlayer)
+                .orElseGet(outcome::noSuchPlayer);
     }
 
     private final PlayerRepository playerRepository;

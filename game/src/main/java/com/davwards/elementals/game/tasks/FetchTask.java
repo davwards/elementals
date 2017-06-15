@@ -12,10 +12,10 @@ public class FetchTask {
         T noSuchTask();
     }
 
-    public <T> T perform(TaskId id, Outcome<T> handle) {
+    public <T> T perform(TaskId id, Outcome<T> outcome) {
         return strict(taskRepository.find(id))
-                .map(handle::successfullyFetchedTask)
-                .orElseGet(handle::noSuchTask);
+                .map(outcome::successfullyFetchedTask)
+                .orElseGet(outcome::noSuchTask);
     }
 
     private final TaskRepository taskRepository;
