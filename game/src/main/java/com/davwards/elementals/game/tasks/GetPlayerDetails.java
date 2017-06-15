@@ -8,7 +8,7 @@ import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
 import java.util.List;
 
-public class GetPlayerTasks {
+public class GetPlayerDetails {
     public interface Outcome<T> {
         T foundTasks(List<SavedTask> tasks, List<SavedRecurringTask> recurringTasks);
     }
@@ -23,7 +23,7 @@ public class GetPlayerTasks {
     private final TaskRepository taskRepository;
     private final RecurringTaskRepository recurringTaskRepository;
 
-    public GetPlayerTasks(TaskRepository taskRepository, RecurringTaskRepository recurringTaskRepository) {
+    public GetPlayerDetails(TaskRepository taskRepository, RecurringTaskRepository recurringTaskRepository) {
         this.taskRepository = taskRepository;
         this.recurringTaskRepository = recurringTaskRepository;
     }

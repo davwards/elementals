@@ -2,7 +2,7 @@ package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.tasks.recurring.CreateRecurringTask;
-import com.davwards.elementals.game.tasks.GetPlayerTasks;
+import com.davwards.elementals.game.tasks.GetPlayerDetails;
 import com.davwards.elementals.game.tasks.recurring.SpawnRecurringTask;
 import com.davwards.elementals.game.tasks.models.SavedRecurringTask;
 import com.davwards.elementals.game.tasks.models.SavedTask;
@@ -34,7 +34,7 @@ public class RecurringTaskWorkflowTest {
             (lastOccurrence, cadence) -> Stream.of(tonightAtMidnight).iterator()
     );
 
-    private GetPlayerTasks getPlayerTasks = new GetPlayerTasks(
+    private GetPlayerDetails getPlayerDetails = new GetPlayerDetails(
             taskRepository,
             recurringTaskRepository
     );
@@ -59,9 +59,9 @@ public class RecurringTaskWorkflowTest {
 
         String expectedResult = randomString(10);
 
-        String result = getPlayerTasks.perform(
+        String result = getPlayerDetails.perform(
                 recurringTask.playerId(),
-                new GetPlayerTasks.Outcome<String>() {
+                new GetPlayerDetails.Outcome<String>() {
                     @Override
                     public String foundTasks(List<SavedTask> tasks,
                                              List<SavedRecurringTask> recurringTasks) {
