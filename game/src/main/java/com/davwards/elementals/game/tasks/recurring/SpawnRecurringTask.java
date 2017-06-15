@@ -9,8 +9,6 @@ import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.Optional;
-import java.util.function.Function;
 
 import static com.davwards.elementals.game.support.language.StrictOptional.strict;
 
@@ -28,10 +26,49 @@ public class SpawnRecurringTask {
                          Outcome<T> outcome) {
 
         return strict(recurringTaskRepository.find(recurringTaskId))
-                .map(recurringTask -> taskShouldSpawn(recurringTask, currentTime)
-                        ? outcome.spawnedNewTask(createTask(recurringTask, currentTime))
-                        : outcome.taskNotDueToSpawn())
+                .map(recurringTask -> latestScheduledOccurrence(recurringTask, currentTime)
+                        .map(x -> createTask(recurringTask, currentTime))
+                        .map(outcome::spawnedNewTask)
+                        .orElseGet(outcome::taskNotDueToSpawn))
                 .orElseGet(outcome::noSuchRecurringTask);
+    }
+
+    private StrictOptional<LocalDateTime> latestScheduledOccurrence(SavedRecurringTask recurringTask, LocalDateTime currentTime) {
+        Iterator<LocalDateTime> scheduledOccurrences =
+                cadenceInterpreter.nextOccurrences(
+                        recurringTask.createdAt(),
+                        recurringTask.cadence()
+                );
+
+        StrictOptional<LocalDateTime> result = StrictOptional.empty();
+        while (scheduledOccurrences.hasNext()) {
+            LocalDateTime next = scheduledOccurrences.next();
+            if (!next.isAfter(currentTime)) {
+                result = StrictOptional.of(next);
+            } else {
+                break;
+            }
+        }
+
+        LocalDateTime lastOccurrence = taskRepository
+                .findByParentRecurringTaskId(recurringTask.getId())
+                .stream()
+                .map(SavedEntity::createdAt)
+                .max(Comparator.naturalOrder())
+                .orElse(recurringTask.createdAt().minusMinutes(1));
+
+        return result.filter(lastOccurrence::isBefore);
+    }
+
+    private SavedTask createTask(SavedRecurringTask recurringTask, LocalDateTime currentTime) {
+        return taskRepository.save(
+                ImmutableUnsavedTask.builder()
+                        .title(recurringTask.title())
+                        .playerId(recurringTask.playerId())
+                        .status(Task.Status.INCOMPLETE)
+                        .deadline(currentTime.plus(recurringTask.duration()))
+                        .parentRecurringTaskId(recurringTask.getId())
+                        .build());
     }
 
     private final RecurringTaskRepository recurringTaskRepository;
@@ -45,48 +82,5 @@ public class SpawnRecurringTask {
         this.recurringTaskRepository = recurringTaskRepository;
         this.taskRepository = taskRepository;
         this.cadenceInterpreter = cadenceInterpreter;
-    }
-
-    private Boolean taskShouldSpawn(SavedRecurringTask recurringTask, LocalDateTime currentTime) {
-        return latestScheduledOccurrence(recurringTask, currentTime)
-                .map(isLaterThanLatestInstanceOfTask(recurringTask))
-                .orElse(false);
-    }
-
-    private Function<LocalDateTime, Boolean> isLaterThanLatestInstanceOfTask(SavedRecurringTask recurringTask) {
-        return time -> taskRepository
-                .findByParentRecurringTaskId(recurringTask.getId())
-                .stream()
-                .map(SavedEntity::createdAt)
-                .max(Comparator.naturalOrder())
-                .map(lastTimeSpawned -> lastTimeSpawned.isBefore(time))
-                .orElse(false);
-    }
-
-    private Optional<LocalDateTime> latestScheduledOccurrence(SavedRecurringTask recurringTask, LocalDateTime currentTime) {
-        Iterator<LocalDateTime> scheduledOccurrences =
-                cadenceInterpreter.nextOccurrences(
-                        recurringTask.createdAt(),
-                        recurringTask.cadence()
-                );
-
-        Optional<LocalDateTime> result = Optional.empty();
-        while (scheduledOccurrences.hasNext()) {
-            LocalDateTime next = scheduledOccurrences.next();
-            if (next.isAfter(currentTime)) break;
-            result = Optional.of(next);
-        }
-        return result;
-    }
-
-    private SavedTask createTask(SavedRecurringTask recurringTask, LocalDateTime currentTime) {
-        return taskRepository.save(ImmutableUnsavedTask.builder()
-                .title(recurringTask.title())
-                .playerId(recurringTask.playerId())
-                .status(Task.Status.INCOMPLETE)
-                .deadline(currentTime.plus(recurringTask.duration()))
-                .parentRecurringTaskId(recurringTask.getId())
-                .build()
-        );
     }
 }
