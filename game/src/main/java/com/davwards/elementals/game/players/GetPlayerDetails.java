@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.tasks;
+package com.davwards.elementals.game.players;
 
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.tasks.models.SavedRecurringTask;

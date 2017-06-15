@@ -2,7 +2,7 @@ package com.davwards.elementals.game;
 
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.tasks.recurring.CreateRecurringTask;
-import com.davwards.elementals.game.tasks.GetPlayerDetails;
+import com.davwards.elementals.game.players.GetPlayerDetails;
 import com.davwards.elementals.game.tasks.recurring.SpawnRecurringTask;
 import com.davwards.elementals.game.tasks.models.SavedRecurringTask;
 import com.davwards.elementals.game.tasks.models.SavedTask;
