@@ -39,7 +39,7 @@ public class CreateTaskEndpoint {
                     .body(new TaskResponse(createdTask));
         }
 
-        static ResponseEntity malformedDeadline(DateTimeParseException e) {
+        ResponseEntity malformedDeadline(DateTimeParseException e) {
             return ResponseEntity
                     .badRequest()
                     .body(new ErrorResponse(e.getMessage()));
@@ -90,7 +90,7 @@ public class CreateTaskEndpoint {
                                         parsedDeadline,
                                         possibleResponses
                                 ))
-                        .orIfFailure(PossibleResponses::malformedDeadline);
+                        .orIfFailure(possibleResponses::malformedDeadline);
     }
 
     private Either<LocalDateTime, DateTimeParseException> parseDeadline(String deadline) {

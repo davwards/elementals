@@ -39,7 +39,7 @@ public class CreateHabitEndpoint {
                     .body(new HabitResponse(createdHabit));
         }
 
-        static ResponseEntity malformedRequest(String error) {
+        ResponseEntity malformedRequest(String error) {
             return ResponseEntity
                     .badRequest()
                     .body(new ErrorResponse(error));
@@ -58,13 +58,15 @@ public class CreateHabitEndpoint {
             @PathVariable("playerId") String playerId,
             @RequestBody CreateHabitRequest request) {
 
+        PossibleResponses possibleResponses = new PossibleResponses(uriBuilder);
+
         return parseSide(request.sides)
                 .map(side -> createHabit.perform(
                         new PlayerId(playerId),
                         request.title,
                         side,
-                        new PossibleResponses(uriBuilder)))
-                .orIfFailure(PossibleResponses::malformedRequest);
+                        possibleResponses))
+                .orIfFailure(possibleResponses::malformedRequest);
     }
 
     private Either<CreateHabit.Sides, String> parseSide(String side) {

@@ -45,7 +45,7 @@ public class ExerciseHabitEndpoint {
                     .body(new ErrorResponse("Habit does not have the specified side"));
         }
 
-        static ResponseEntity invalidSide(String error) {
+        ResponseEntity invalidSide(String error) {
             return ResponseEntity
                     .badRequest()
                     .body(new ErrorResponse(error));
@@ -59,12 +59,14 @@ public class ExerciseHabitEndpoint {
             @PathVariable("id") String habitId,
             @RequestBody ExerciseHabitRequest request) {
 
+        PossibleResponses responses = new PossibleResponses();
+
         return parseSide(request.side)
                 .map(side -> exerciseHabit.perform(
                         new HabitId(habitId),
                         side,
-                        new PossibleResponses()))
-                .orIfFailure(PossibleResponses::invalidSide);
+                        responses))
+                .orIfFailure(responses::invalidSide);
     }
 
     private static Either<ExerciseHabit.Sides, String> parseSide(String side) {

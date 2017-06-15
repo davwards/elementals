@@ -41,7 +41,7 @@ public class CreateRecurringTaskEndpoint {
                     .body(new RecurringTaskResponse(createdTask));
         }
 
-        static ResponseEntity malformedDuration(DateTimeParseException e) {
+        ResponseEntity malformedDuration(DateTimeParseException e) {
             return ResponseEntity
                     .badRequest()
                     .body(new ErrorResponse(e.getMessage()));
@@ -60,17 +60,18 @@ public class CreateRecurringTaskEndpoint {
             @PathVariable("playerId") String playerId,
             @RequestBody CreateRecurringTaskRequest request) {
 
-        return parseDuration(request.duration).join(
-                duration -> createRecurringTask
+        PossibleResponses possibleResponses = new PossibleResponses(uriComponentsBuilder);
+
+        return parseDuration(request.duration)
+                .map(duration -> createRecurringTask
                         .perform(
                                 request.title,
                                 new PlayerId(playerId),
                                 request.cadence,
                                 duration,
-                                new PossibleResponses(uriComponentsBuilder)
-                        ),
-                PossibleResponses::malformedDuration
-        );
+                                possibleResponses
+                        ))
+                .orIfFailure(possibleResponses::malformedDuration);
     }
 
     private Either<Period, DateTimeParseException> parseDuration(String duration) {
