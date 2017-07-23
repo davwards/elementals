@@ -10,7 +10,7 @@ import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
 import java.time.LocalDateTime;
 
-import static com.davwards.elementals.game.support.language.StrictOptional.strict;
+import static com.davwards.elementals.support.language.StrictOptional.strict;
 
 public class UpdateTaskStatus {
     public interface Outcome<T> {

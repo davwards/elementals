@@ -4,7 +4,7 @@ import com.davwards.elementals.game.tasks.models.RecurringTaskId;
 import com.davwards.elementals.game.tasks.models.SavedRecurringTask;
 import com.davwards.elementals.game.tasks.persistence.RecurringTaskRepository;
 
-import static com.davwards.elementals.game.support.language.StrictOptional.strict;
+import static com.davwards.elementals.support.language.StrictOptional.strict;
 
 public class FetchRecurringTask {
     public interface Outcome<T> {

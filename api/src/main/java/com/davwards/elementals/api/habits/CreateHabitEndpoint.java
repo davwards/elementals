@@ -5,7 +5,7 @@ import com.davwards.elementals.api.support.responses.ResourceCreatedResponses;
 import com.davwards.elementals.game.habits.CreateHabit;
 import com.davwards.elementals.game.habits.models.SavedHabit;
 import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.support.language.Either;
+import com.davwards.elementals.support.language.Either;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +14,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import static com.davwards.elementals.game.habits.CreateHabit.Sides.BOTH_SIDES;
 import static com.davwards.elementals.game.habits.CreateHabit.Sides.DOWNSIDE;
 import static com.davwards.elementals.game.habits.CreateHabit.Sides.UPSIDE;
-import static com.davwards.elementals.game.support.language.Either.failure;
-import static com.davwards.elementals.game.support.language.Either.success;
+import static com.davwards.elementals.support.language.Either.failure;
+import static com.davwards.elementals.support.language.Either.success;
 
 @RestController
 public class CreateHabitEndpoint {

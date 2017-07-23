@@ -1,6 +1,6 @@
 package com.davwards.elementals.game.loot.models;
 
-import com.davwards.elementals.game.support.persistence.SavedEntity;
+import com.davwards.elementals.support.persistence.SavedEntity;
 import org.immutables.value.Value;
 
 @Value.Immutable

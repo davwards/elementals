@@ -1,7 +1,7 @@
 package com.davwards.elementals.game.tasks.persistence;
 
 import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.support.persistence.InMemoryRepositoryOfImmutableRecords;
+import com.davwards.elementals.support.persistence.InMemoryRepositoryOfImmutableRecords;
 import com.davwards.elementals.game.tasks.models.*;
 
 import java.time.LocalDateTime;

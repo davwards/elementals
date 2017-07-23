@@ -5,10 +5,9 @@ import com.davwards.elementals.game.habits.models.ImmutableSavedHabit;
 import com.davwards.elementals.game.habits.models.SavedHabit;
 import com.davwards.elementals.game.habits.models.UnsavedHabit;
 import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.support.persistence.InMemoryRepositoryOfImmutableRecords;
+import com.davwards.elementals.support.persistence.InMemoryRepositoryOfImmutableRecords;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Supplier;

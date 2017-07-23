@@ -8,7 +8,7 @@ import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
 
-import static com.davwards.elementals.game.support.language.StrictOptional.strict;
+import static com.davwards.elementals.support.language.StrictOptional.strict;
 
 public class PurchaseLoot {
     public interface Outcome<T> {

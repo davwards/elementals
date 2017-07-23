@@ -14,4 +14,8 @@ apply plugin: 'net.ltgt.apt'
 
 dependencies {
     compile 'org.immutables:value:2.4.4'
+    compile project(':language-support')
+    compile project(':persistence-support')
+
+    testCompile project(':persistence-support').sourceSets.test.output
 }

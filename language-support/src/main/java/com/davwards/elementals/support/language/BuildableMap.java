@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.support.language;
+package com.davwards.elementals.support.language;
 
 import java.util.HashMap;
 

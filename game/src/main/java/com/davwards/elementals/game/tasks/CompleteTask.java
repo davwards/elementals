@@ -2,7 +2,6 @@ package com.davwards.elementals.game.tasks;
 
 import com.davwards.elementals.game.players.UpdatePlayerCurrencies;
 import com.davwards.elementals.game.players.models.SavedPlayer;
-import com.davwards.elementals.game.players.persistence.PlayerRepository;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.Task;
 import com.davwards.elementals.game.tasks.models.TaskId;
@@ -10,7 +9,7 @@ import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
 import static com.davwards.elementals.game.GameConstants.TASK_COMPLETION_COIN_PRIZE;
 import static com.davwards.elementals.game.GameConstants.TASK_COMPLETION_EXPERIENCE_PRIZE;
-import static com.davwards.elementals.game.support.language.StrictOptional.strict;
+import static com.davwards.elementals.support.language.StrictOptional.strict;
 
 public class CompleteTask {
     public interface Outcome<T> {

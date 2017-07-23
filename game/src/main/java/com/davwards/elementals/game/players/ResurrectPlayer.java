@@ -7,7 +7,7 @@ import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
 
 import static com.davwards.elementals.game.notification.Notification.NotificationType.PLAYER_HAS_DIED;
-import static com.davwards.elementals.game.support.language.StrictOptional.strict;
+import static com.davwards.elementals.support.language.StrictOptional.strict;
 
 public class ResurrectPlayer {
     public interface Outcome<T> {

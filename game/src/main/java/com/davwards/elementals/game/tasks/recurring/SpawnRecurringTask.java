@@ -1,6 +1,6 @@
 package com.davwards.elementals.game.tasks.recurring;
 
-import com.davwards.elementals.game.support.persistence.SavedEntity;
+import com.davwards.elementals.support.persistence.SavedEntity;
 import com.davwards.elementals.game.tasks.models.*;
 import com.davwards.elementals.game.tasks.persistence.RecurringTaskRepository;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static com.davwards.elementals.game.support.language.StrictOptional.strict;
+import static com.davwards.elementals.support.language.StrictOptional.strict;
 
 public class SpawnRecurringTask {
     public interface Outcome<T> {

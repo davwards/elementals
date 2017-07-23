@@ -4,7 +4,7 @@ import com.davwards.elementals.game.players.models.ImmutableSavedPlayer;
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.models.UnsavedPlayer;
-import com.davwards.elementals.game.support.persistence.InMemoryRepositoryOfImmutableRecords;
+import com.davwards.elementals.support.persistence.InMemoryRepositoryOfImmutableRecords;
 
 import java.time.LocalDateTime;
 import java.util.function.Supplier;

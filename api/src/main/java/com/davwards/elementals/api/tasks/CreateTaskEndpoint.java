@@ -3,7 +3,7 @@ package com.davwards.elementals.api.tasks;
 import com.davwards.elementals.api.support.responses.ErrorResponse;
 import com.davwards.elementals.api.support.responses.ResourceCreatedResponses;
 import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.support.language.Either;
+import com.davwards.elementals.support.language.Either;
 import com.davwards.elementals.game.tasks.CreateTask;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,8 +16,8 @@ import java.time.format.DateTimeParseException;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static com.davwards.elementals.game.support.language.Either.failure;
-import static com.davwards.elementals.game.support.language.Either.success;
+import static com.davwards.elementals.support.language.Either.failure;
+import static com.davwards.elementals.support.language.Either.success;
 
 @RestController
 public class CreateTaskEndpoint {

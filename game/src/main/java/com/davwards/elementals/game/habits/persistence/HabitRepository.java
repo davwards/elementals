@@ -4,7 +4,7 @@ import com.davwards.elementals.game.habits.models.HabitId;
 import com.davwards.elementals.game.habits.models.SavedHabit;
 import com.davwards.elementals.game.habits.models.UnsavedHabit;
 import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.support.persistence.CrudRepository;
+import com.davwards.elementals.support.persistence.CrudRepository;
 
 import java.util.List;
 

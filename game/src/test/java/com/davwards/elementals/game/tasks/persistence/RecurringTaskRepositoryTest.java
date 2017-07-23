@@ -1,7 +1,7 @@
 package com.davwards.elementals.game.tasks.persistence;
 
 import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.support.persistence.CrudRepositoryTest;
+import com.davwards.elementals.support.persistence.CrudRepositoryTest;
 import com.davwards.elementals.game.tasks.models.ImmutableUnsavedRecurringTask;
 import com.davwards.elementals.game.tasks.models.RecurringTaskId;
 import com.davwards.elementals.game.tasks.models.SavedRecurringTask;

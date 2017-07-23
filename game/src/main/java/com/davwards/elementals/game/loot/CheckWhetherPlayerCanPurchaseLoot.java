@@ -2,13 +2,13 @@ package com.davwards.elementals.game.loot;
 
 import com.davwards.elementals.game.loot.models.KindOfLootId;
 import com.davwards.elementals.game.players.models.Player;
-import com.davwards.elementals.game.support.language.StrictOptional;
+import com.davwards.elementals.support.language.StrictOptional;
 
 import java.util.Map;
 
 import static com.davwards.elementals.game.loot.models.KindOfLootId.COPPER_SWORD;
 import static com.davwards.elementals.game.loot.models.KindOfLootId.VORPAL_SWORD;
-import static com.davwards.elementals.game.support.language.BuildableMap.mappingOf;
+import static com.davwards.elementals.support.language.BuildableMap.mappingOf;
 
 public interface CheckWhetherPlayerCanPurchaseLoot {
     interface Outcome<T> {

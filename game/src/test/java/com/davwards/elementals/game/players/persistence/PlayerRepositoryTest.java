@@ -4,7 +4,7 @@ import com.davwards.elementals.game.players.models.ImmutableUnsavedPlayer;
 import com.davwards.elementals.game.players.models.PlayerId;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.models.UnsavedPlayer;
-import com.davwards.elementals.game.support.persistence.CrudRepositoryTest;
+import com.davwards.elementals.support.persistence.CrudRepositoryTest;
 
 import static com.davwards.elementals.game.support.test.Factories.randomString;
 import static com.davwards.elementals.game.support.test.Factories.randomUnsavedPlayer;

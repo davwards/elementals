@@ -4,7 +4,7 @@ import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.TaskId;
 import com.davwards.elementals.game.tasks.persistence.TaskRepository;
 
-import static com.davwards.elementals.game.support.language.StrictOptional.strict;
+import static com.davwards.elementals.support.language.StrictOptional.strict;
 
 public class FetchTask {
     public interface Outcome<T> {

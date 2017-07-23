@@ -4,7 +4,7 @@ import com.davwards.elementals.game.habits.models.HabitId;
 import com.davwards.elementals.game.habits.models.SavedHabit;
 import com.davwards.elementals.game.habits.persistence.HabitRepository;
 
-import static com.davwards.elementals.game.support.language.StrictOptional.strict;
+import static com.davwards.elementals.support.language.StrictOptional.strict;
 
 public class FetchHabit {
     public interface Outcome<T> {

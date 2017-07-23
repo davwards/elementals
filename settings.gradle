@@ -4,3 +4,6 @@ include 'game'
 include 'api'
 include 'scheduler'
 include 'biweekly-adapter'
+
+include 'language-support'
+include 'persistence-support'

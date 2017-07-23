@@ -2,7 +2,7 @@ package com.davwards.elementals.game.habits.persistence;
 
 import com.davwards.elementals.game.habits.models.*;
 import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.support.persistence.CrudRepositoryTest;
+import com.davwards.elementals.support.persistence.CrudRepositoryTest;
 import org.junit.Test;
 
 import java.util.List;

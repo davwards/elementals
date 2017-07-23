@@ -11,7 +11,7 @@ import com.davwards.elementals.game.players.persistence.PlayerRepository;
 
 import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.DOWNSIDE;
 import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.UPSIDE;
-import static com.davwards.elementals.game.support.language.StrictOptional.strict;
+import static com.davwards.elementals.support.language.StrictOptional.strict;
 
 public class ExerciseHabit {
     public interface Outcome<T> {

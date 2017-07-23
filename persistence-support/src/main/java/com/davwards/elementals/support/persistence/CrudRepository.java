@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.support.persistence;
+package com.davwards.elementals.support.persistence;
 
 import java.util.List;
 import java.util.Optional;
