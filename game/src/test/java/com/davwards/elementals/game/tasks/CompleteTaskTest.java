@@ -1,5 +1,6 @@
 package com.davwards.elementals.game.tasks;
 
+import com.davwards.elementals.game.players.UpdatePlayerCurrencies;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
@@ -31,7 +32,8 @@ public class CompleteTaskTest {
 
     private PlayerRepository playerRepository = new InMemoryPlayerRepository();
     private InMemoryTaskRepository taskRepository = new InMemoryTaskRepository();
-    private CompleteTask completeTask = new CompleteTask(taskRepository, playerRepository);
+    private UpdatePlayerCurrencies updatePlayerCurrencies = new UpdatePlayerCurrencies(playerRepository);
+    private CompleteTask completeTask = new CompleteTask(taskRepository, updatePlayerCurrencies);
 
     private SavedPlayer existingPlayer = playerRepository.save(Factories.randomUnsavedPlayer());
     private final SavedTask existingTask = taskRepository.save(

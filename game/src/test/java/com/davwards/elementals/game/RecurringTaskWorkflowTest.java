@@ -91,7 +91,6 @@ public class RecurringTaskWorkflowTest {
                         fail("Expected details outcome, not noSuchPlayer");
                         return null;
                     }
-
                 });
     }
 

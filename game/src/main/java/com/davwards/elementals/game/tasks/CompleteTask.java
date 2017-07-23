@@ -1,5 +1,6 @@
 package com.davwards.elementals.game.tasks;
 
+import com.davwards.elementals.game.players.UpdatePlayerCurrencies;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
 import com.davwards.elementals.game.tasks.models.SavedTask;
@@ -20,35 +21,44 @@ public class CompleteTask {
 
     public <T> T perform(TaskId id, Outcome<T> outcome) {
         return strict(taskRepository.find(id))
-                .map(this::markTaskCompletedAndAwardExperienceToPlayer)
+                .map(this::rewardPlayerAndMarkTaskComplete)
                 .map(outcome::taskSuccessfullyCompleted)
                 .orElseGet(outcome::noSuchTask);
     }
 
-    private SavedTask markTaskCompletedAndAwardExperienceToPlayer(SavedTask task) {
-        playerRepository
-                .find(task.playerId())
-                .ifPresent(this::rewardPlayer);
-
+    private SavedTask rewardPlayerAndMarkTaskComplete(SavedTask task) {
+        rewardPlayer(task);
         return taskRepository
                 .update(SavedTask.copy(task).withStatus(Task.Status.COMPLETE));
     }
 
-    private SavedPlayer rewardPlayer(SavedPlayer player) {
-        return playerRepository.update(
-                SavedPlayer.copy(player)
-                        .withExperience(
-                                player.experience() + TASK_COMPLETION_EXPERIENCE_PRIZE)
-                        .withCoin(
-                                player.coin() + TASK_COMPLETION_COIN_PRIZE)
-        );
+    private void rewardPlayer(final SavedTask task) {
+        updatePlayerCurrencies.perform(
+                task.playerId(),
+                new UpdatePlayerCurrencies.CurrencyChanges()
+                        .experience(TASK_COMPLETION_EXPERIENCE_PRIZE)
+                        .coin(TASK_COMPLETION_COIN_PRIZE),
+                new UpdatePlayerCurrencies.Outcome<SavedPlayer>() {
+                    @Override
+                    public SavedPlayer updatedPlayer(SavedPlayer player) {
+                        return player;
+                    }
+
+                    @Override
+                    public SavedPlayer noSuchPlayer() {
+                        throw new RuntimeException(
+                                "Encountered invalid state: task #" + task.getId() +
+                                        " has playerId " + task.playerId() +
+                                        " which does not correspond to a player record");
+                    }
+                });
     }
 
     private final TaskRepository taskRepository;
-    private final PlayerRepository playerRepository;
+    private final UpdatePlayerCurrencies updatePlayerCurrencies;
 
-    public CompleteTask(TaskRepository taskRepository, PlayerRepository playerRepository) {
+    public CompleteTask(TaskRepository taskRepository, UpdatePlayerCurrencies updatePlayerCurrencies) {
         this.taskRepository = taskRepository;
-        this.playerRepository = playerRepository;
+        this.updatePlayerCurrencies = updatePlayerCurrencies;
     }
 }

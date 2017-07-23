@@ -3,6 +3,7 @@ package com.davwards.elementals.game;
 import com.davwards.elementals.game.notification.fakes.FakeNotifier;
 import com.davwards.elementals.game.players.CreatePlayer;
 import com.davwards.elementals.game.players.ResurrectPlayer;
+import com.davwards.elementals.game.players.UpdatePlayerCurrencies;
 import com.davwards.elementals.game.players.models.SavedPlayer;
 import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.game.players.persistence.PlayerRepository;
@@ -118,13 +119,13 @@ public class MainWorkflowTest {
                 .perform("testplayer", createdPlayer -> createdPlayer);
         SavedTask task = new CreateTask(taskRepository)
                 .perform(player.getId(), "Some completed task", getCreatedTask);
-        new CompleteTask(taskRepository, playerRepository).perform(task.getId(), noopCompleteTaskResult);
+        completeTask.perform(task.getId(), noopCompleteTaskResult);
     }
 
     private void playerGainsExperienceForCompletingATask(SavedTask takeOutTrash) {
         assertThatInteger(this::currentPlayerExperience)
                 .increasesWhen(
-                        () -> new CompleteTask(taskRepository, playerRepository).perform(
+                        () -> completeTask.perform(
                                 takeOutTrash.getId(),
                                 noopCompleteTaskResult
                         )
@@ -144,6 +145,10 @@ public class MainWorkflowTest {
 
     private final TaskRepository taskRepository = new InMemoryTaskRepository();
     private final PlayerRepository playerRepository = new InMemoryPlayerRepository();
+    private final CompleteTask completeTask = new CompleteTask(
+            taskRepository,
+            new UpdatePlayerCurrencies(playerRepository)
+    );
     private final FakeNotifier notifier = new FakeNotifier();
 
     private final CreateTask.Outcome<SavedTask> getCreatedTask = createdTask -> createdTask;
