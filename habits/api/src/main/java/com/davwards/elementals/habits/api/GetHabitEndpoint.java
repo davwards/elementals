@@ -1,4 +1,4 @@
-package com.davwards.elementals.api.habits;
+package com.davwards.elementals.habits.api;
 
 import com.davwards.elementals.habits.FetchHabit;
 import com.davwards.elementals.habits.models.HabitId;

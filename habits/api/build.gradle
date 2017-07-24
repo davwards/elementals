@@ -1,0 +1,12 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile project(':habits:core')
+    compile project(':support:api-support')
+    compile project(':players:api')
+}
+
+bootRepackage {
+    enabled = false
+}

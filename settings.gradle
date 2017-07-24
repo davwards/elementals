@@ -12,6 +12,7 @@ include 'tasks:biweekly-adapter'
 include 'tasks:api'
 
 include 'habits:core'
+include 'habits:api'
 
 include 'loot:core'
 
