@@ -1,0 +1,10 @@
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile project(':support:persistence-support')
+}
+
+bootRepackage {
+    enabled = false
+}

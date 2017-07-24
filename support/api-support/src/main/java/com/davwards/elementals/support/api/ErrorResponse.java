@@ -1,4 +1,4 @@
-package com.davwards.elementals.api.support.responses;
+package com.davwards.elementals.support.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

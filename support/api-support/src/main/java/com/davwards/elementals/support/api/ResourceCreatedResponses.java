@@ -1,4 +1,4 @@
-package com.davwards.elementals.api.support.responses;
+package com.davwards.elementals.support.api;
 
 import com.davwards.elementals.support.persistence.SavedEntity;
 import org.springframework.web.util.UriComponentsBuilder;

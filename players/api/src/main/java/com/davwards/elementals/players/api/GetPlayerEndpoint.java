@@ -1,4 +1,4 @@
-package com.davwards.elementals.api.players;
+package com.davwards.elementals.players.api;
 
 import com.davwards.elementals.players.FetchPlayer;
 import com.davwards.elementals.players.models.PlayerId;

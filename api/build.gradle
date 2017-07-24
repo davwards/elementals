@@ -3,6 +3,8 @@ apply plugin: 'org.springframework.boot'
 dependencies {
     compile project(':game')
     compile project(':scheduler')
+    compile project(':players:api')
+    compile project(':support:api-support')
 
     compile 'org.springframework.boot:spring-boot-starter-web'
 

@@ -22,10 +22,7 @@ import com.davwards.elementals.scheduler.Scheduler;
 import com.davwards.elementals.scheduler.TimeProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.*;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.time.LocalDateTime;
@@ -58,6 +55,10 @@ import java.time.LocalDateTime;
         InMemoryRecurringTaskRepository.class,
 
         ManualTimeProvider.class
+})
+@ComponentScan(basePackages = {
+        "com.davwards.elementals.api",
+        "com.davwards.elementals.players.api"
 })
 public class Application {
     public static void main(String[] args) {

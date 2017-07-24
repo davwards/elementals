@@ -1,4 +1,4 @@
-package com.davwards.elementals.api.players;
+package com.davwards.elementals.players.api;
 
 import com.davwards.elementals.players.models.SavedPlayer;
 import com.fasterxml.jackson.annotation.JsonProperty;

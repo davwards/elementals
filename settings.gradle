@@ -5,6 +5,7 @@ include 'api'
 include 'scheduler'
 
 include 'players:core'
+include 'players:api'
 
 include 'tasks:core'
 include 'tasks:biweekly-adapter'
@@ -16,3 +17,4 @@ include 'loot:core'
 include 'support:language-support'
 include 'support:persistence-support'
 include 'support:test-support'
+include 'support:api-support'

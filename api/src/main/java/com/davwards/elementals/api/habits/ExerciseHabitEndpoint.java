@@ -1,7 +1,7 @@
 package com.davwards.elementals.api.habits;
 
-import com.davwards.elementals.api.players.PlayerResponse;
-import com.davwards.elementals.api.support.responses.ErrorResponse;
+import com.davwards.elementals.players.api.PlayerResponse;
+import com.davwards.elementals.support.api.ErrorResponse;
 import com.davwards.elementals.habits.ExerciseHabit;
 import com.davwards.elementals.habits.models.HabitId;
 import com.davwards.elementals.players.models.SavedPlayer;

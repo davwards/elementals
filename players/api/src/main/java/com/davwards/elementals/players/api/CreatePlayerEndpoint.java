@@ -1,6 +1,6 @@
-package com.davwards.elementals.api.players;
+package com.davwards.elementals.players.api;
 
-import com.davwards.elementals.api.support.responses.ResourceCreatedResponses;
+import com.davwards.elementals.support.api.ResourceCreatedResponses;
 import com.davwards.elementals.players.CreatePlayer;
 import com.davwards.elementals.players.models.SavedPlayer;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,7 +19,8 @@ public class CreatePlayerEndpoint {
         private String name;
     }
 
-    private static class PossibleResponses extends ResourceCreatedResponses<SavedPlayer>
+    private static class PossibleResponses
+            extends ResourceCreatedResponses<SavedPlayer>
             implements CreatePlayer.Outcome<ResponseEntity> {
 
         @Override
