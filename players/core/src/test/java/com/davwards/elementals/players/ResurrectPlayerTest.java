@@ -1,9 +1,7 @@
 package com.davwards.elementals.players;
 
-import com.davwards.elementals.players.PlayerGameConstants;
 import com.davwards.elementals.players.notification.Notification;
 import com.davwards.elementals.players.notification.FakeNotifier;
-import com.davwards.elementals.players.ResurrectPlayer;
 import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.players.models.SavedPlayer;
 import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;

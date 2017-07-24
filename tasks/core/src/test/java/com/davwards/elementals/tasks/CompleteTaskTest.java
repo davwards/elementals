@@ -6,7 +6,6 @@ import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.players.persistence.PlayerRepository;
 import com.davwards.elementals.support.test.Assertions;
 import com.davwards.elementals.support.test.Factories;
-import com.davwards.elementals.tasks.CompleteTask;
 import com.davwards.elementals.tasks.models.SavedTask;
 import com.davwards.elementals.tasks.models.Task;
 import com.davwards.elementals.tasks.models.TaskId;

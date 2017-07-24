@@ -1,7 +1,5 @@
 package com.davwards.elementals.loot;
 
-import com.davwards.elementals.loot.CheckWhetherPlayerCanPurchaseLoot;
-import com.davwards.elementals.loot.PurchaseLoot;
 import com.davwards.elementals.loot.models.KindOfLootId;
 import com.davwards.elementals.loot.models.SavedLoot;
 import com.davwards.elementals.loot.persistence.InMemoryLootRepository;

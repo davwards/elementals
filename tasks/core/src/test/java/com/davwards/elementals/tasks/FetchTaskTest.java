@@ -1,7 +1,6 @@
 package com.davwards.elementals.tasks;
 
 import com.davwards.elementals.players.models.PlayerId;
-import com.davwards.elementals.tasks.FetchTask;
 import com.davwards.elementals.tasks.models.SavedTask;
 import com.davwards.elementals.tasks.models.Task;
 import com.davwards.elementals.tasks.models.TaskId;

@@ -1,7 +1,7 @@
 dependencies {
-    compile project(':language-support')
-    compile project(':persistence-support')
+    compile project(':support:language-support')
+    compile project(':support:persistence-support')
 
-    testCompile project(':persistence-support').sourceSets.test.output
-    testCompile project(':test-support')
+    testCompile project(':support:persistence-support').sourceSets.test.output
+    testCompile project(':support:test-support')
 }
