@@ -2,10 +2,10 @@ package com.davwards.elementals.scheduler;
 
 import com.davwards.elementals.players.ResurrectPlayer;
 import com.davwards.elementals.players.models.SavedPlayer;
-import com.davwards.elementals.game.tasks.models.SavedTask;
-import com.davwards.elementals.game.tasks.UpdateTaskStatus;
+import com.davwards.elementals.tasks.models.SavedTask;
+import com.davwards.elementals.tasks.UpdateTaskStatus;
 import com.davwards.elementals.players.persistence.PlayerRepository;
-import com.davwards.elementals.game.tasks.persistence.TaskRepository;
+import com.davwards.elementals.tasks.persistence.TaskRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;

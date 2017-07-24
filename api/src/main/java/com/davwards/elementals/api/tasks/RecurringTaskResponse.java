@@ -1,6 +1,6 @@
 package com.davwards.elementals.api.tasks;
 
-import com.davwards.elementals.game.tasks.models.SavedRecurringTask;
+import com.davwards.elementals.tasks.models.SavedRecurringTask;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class RecurringTaskResponse {

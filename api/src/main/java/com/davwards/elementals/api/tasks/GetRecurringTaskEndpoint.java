@@ -1,8 +1,8 @@
 package com.davwards.elementals.api.tasks;
 
-import com.davwards.elementals.game.tasks.models.RecurringTaskId;
-import com.davwards.elementals.game.tasks.models.SavedRecurringTask;
-import com.davwards.elementals.game.tasks.recurring.FetchRecurringTask;
+import com.davwards.elementals.tasks.models.RecurringTaskId;
+import com.davwards.elementals.tasks.models.SavedRecurringTask;
+import com.davwards.elementals.tasks.recurring.FetchRecurringTask;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

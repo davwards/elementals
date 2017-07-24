@@ -1,18 +1,16 @@
 package com.davwards.elementals.game.habits;
 
-import com.davwards.elementals.game.GameConstants;
 import com.davwards.elementals.game.habits.models.Habit;
 import com.davwards.elementals.game.habits.models.HabitId;
 import com.davwards.elementals.game.habits.models.SavedHabit;
 import com.davwards.elementals.game.habits.persistence.HabitRepository;
 import com.davwards.elementals.players.UpdatePlayerCurrencies;
-import com.davwards.elementals.players.models.ImmutableSavedPlayer;
 import com.davwards.elementals.players.models.SavedPlayer;
 import com.davwards.elementals.players.persistence.PlayerRepository;
 
-import static com.davwards.elementals.game.GameConstants.HABIT_DOWNSIDE_PENALTY;
-import static com.davwards.elementals.game.GameConstants.HABIT_UPSIDE_COIN_PRIZE;
-import static com.davwards.elementals.game.GameConstants.HABIT_UPSIDE_EXPERIENCE_PRIZE;
+import static com.davwards.elementals.game.HabitGameConstants.HABIT_DOWNSIDE_PENALTY;
+import static com.davwards.elementals.game.HabitGameConstants.HABIT_UPSIDE_COIN_PRIZE;
+import static com.davwards.elementals.game.HabitGameConstants.HABIT_UPSIDE_EXPERIENCE_PRIZE;
 import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.DOWNSIDE;
 import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.UPSIDE;
 import static com.davwards.elementals.support.language.StrictOptional.strict;

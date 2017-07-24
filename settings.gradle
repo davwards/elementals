@@ -6,6 +6,7 @@ include 'scheduler'
 include 'biweekly-adapter'
 
 include 'players:core'
+include 'tasks:core'
 
 include 'language-support'
 include 'persistence-support'

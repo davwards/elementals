@@ -1,7 +1,7 @@
 package com.davwards.elementals.api.tasks;
 
-import com.davwards.elementals.game.tasks.models.SavedTask;
-import com.davwards.elementals.game.tasks.models.Task;
+import com.davwards.elementals.tasks.models.SavedTask;
+import com.davwards.elementals.tasks.models.Task;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.format.DateTimeFormatter;

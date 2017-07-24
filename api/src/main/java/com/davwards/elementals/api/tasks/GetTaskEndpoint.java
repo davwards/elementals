@@ -1,8 +1,8 @@
 package com.davwards.elementals.api.tasks;
 
-import com.davwards.elementals.game.tasks.FetchTask;
-import com.davwards.elementals.game.tasks.models.SavedTask;
-import com.davwards.elementals.game.tasks.models.TaskId;
+import com.davwards.elementals.tasks.FetchTask;
+import com.davwards.elementals.tasks.models.SavedTask;
+import com.davwards.elementals.tasks.models.TaskId;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

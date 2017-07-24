@@ -2,12 +2,12 @@ package com.davwards.elementals.game;
 
 import com.davwards.elementals.players.models.SavedPlayer;
 import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
-import com.davwards.elementals.game.tasks.models.SavedRecurringTask;
-import com.davwards.elementals.game.tasks.models.SavedTask;
-import com.davwards.elementals.game.tasks.persistence.InMemoryRecurringTaskRepository;
-import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
-import com.davwards.elementals.game.tasks.recurring.CreateRecurringTask;
-import com.davwards.elementals.game.tasks.recurring.SpawnRecurringTask;
+import com.davwards.elementals.tasks.models.SavedRecurringTask;
+import com.davwards.elementals.tasks.models.SavedTask;
+import com.davwards.elementals.tasks.persistence.InMemoryRecurringTaskRepository;
+import com.davwards.elementals.tasks.persistence.InMemoryTaskRepository;
+import com.davwards.elementals.tasks.recurring.CreateRecurringTask;
+import com.davwards.elementals.tasks.recurring.SpawnRecurringTask;
 import org.junit.Test;
 
 import java.time.LocalDateTime;

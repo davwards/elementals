@@ -15,6 +15,7 @@ apply plugin: 'net.ltgt.apt'
 dependencies {
     compile 'org.immutables:value:2.4.4'
     compile project(':players:core')
+    compile project(':tasks:core')
 
     compile project(':language-support')
     compile project(':persistence-support')

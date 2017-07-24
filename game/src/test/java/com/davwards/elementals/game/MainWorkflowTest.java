@@ -7,12 +7,12 @@ import com.davwards.elementals.players.UpdatePlayerCurrencies;
 import com.davwards.elementals.players.models.SavedPlayer;
 import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.players.persistence.PlayerRepository;
-import com.davwards.elementals.game.tasks.CompleteTask;
-import com.davwards.elementals.game.tasks.CreateTask;
-import com.davwards.elementals.game.tasks.UpdateTaskStatus;
-import com.davwards.elementals.game.tasks.models.SavedTask;
-import com.davwards.elementals.game.tasks.persistence.InMemoryTaskRepository;
-import com.davwards.elementals.game.tasks.persistence.TaskRepository;
+import com.davwards.elementals.tasks.CompleteTask;
+import com.davwards.elementals.tasks.CreateTask;
+import com.davwards.elementals.tasks.UpdateTaskStatus;
+import com.davwards.elementals.tasks.models.SavedTask;
+import com.davwards.elementals.tasks.persistence.InMemoryTaskRepository;
+import com.davwards.elementals.tasks.persistence.TaskRepository;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
