@@ -1,8 +1,8 @@
 package com.davwards.elementals.support.test;
 
 import com.davwards.elementals.habits.models.ImmutableUnsavedHabit;
-import com.davwards.elementals.game.loot.models.ImmutableUnsavedLoot;
-import com.davwards.elementals.game.loot.models.KindOfLootId;
+import com.davwards.elementals.loot.models.ImmutableUnsavedLoot;
+import com.davwards.elementals.loot.models.KindOfLootId;
 import com.davwards.elementals.players.models.ImmutableUnsavedPlayer;
 import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.tasks.models.ImmutableUnsavedRecurringTask;

@@ -1,9 +1,9 @@
-package com.davwards.elementals.game.loot;
+package com.davwards.elementals.loot;
 
-import com.davwards.elementals.game.loot.models.ImmutableUnsavedLoot;
-import com.davwards.elementals.game.loot.models.KindOfLootId;
-import com.davwards.elementals.game.loot.models.SavedLoot;
-import com.davwards.elementals.game.loot.persistence.LootRepository;
+import com.davwards.elementals.loot.models.ImmutableUnsavedLoot;
+import com.davwards.elementals.loot.models.KindOfLootId;
+import com.davwards.elementals.loot.models.SavedLoot;
+import com.davwards.elementals.loot.persistence.LootRepository;
 import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.players.models.SavedPlayer;
 import com.davwards.elementals.players.persistence.PlayerRepository;

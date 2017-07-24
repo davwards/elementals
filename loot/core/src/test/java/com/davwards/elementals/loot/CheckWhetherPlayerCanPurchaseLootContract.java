@@ -1,6 +1,7 @@
-package com.davwards.elementals.game.loot;
+package com.davwards.elementals.loot;
 
-import com.davwards.elementals.game.loot.models.KindOfLootId;
+import com.davwards.elementals.loot.CheckWhetherPlayerCanPurchaseLoot;
+import com.davwards.elementals.loot.models.KindOfLootId;
 import com.davwards.elementals.players.models.Player;
 import org.junit.Test;
 

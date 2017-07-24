@@ -1,6 +1,7 @@
-package com.davwards.elementals.game.loot.persistence;
+package com.davwards.elementals.loot.persistence;
 
-import com.davwards.elementals.game.loot.models.*;
+import com.davwards.elementals.loot.models.*;
+import com.davwards.elementals.loot.persistence.LootRepository;
 import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.support.persistence.CrudRepositoryTest;
 import org.junit.Test;

@@ -1,6 +1,6 @@
-package com.davwards.elementals.game.loot;
+package com.davwards.elementals.loot;
 
-import com.davwards.elementals.game.loot.models.KindOfLootId;
+import com.davwards.elementals.loot.models.KindOfLootId;
 
 public class CheckWhetherPlayerCanPurchaseLootInProcessTest extends CheckWhetherPlayerCanPurchaseLootContract {
     private CheckWhetherPlayerCanPurchaseLoot useCase =

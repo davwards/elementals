@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.loot.models;
+package com.davwards.elementals.loot.models;
 
 public class LootId {
     private final String value;

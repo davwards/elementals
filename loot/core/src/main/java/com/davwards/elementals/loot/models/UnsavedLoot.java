@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.loot.models;
+package com.davwards.elementals.loot.models;
 
 import org.immutables.value.Value;
 

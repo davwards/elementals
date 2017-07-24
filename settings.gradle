@@ -8,6 +8,7 @@ include 'biweekly-adapter'
 include 'players:core'
 include 'tasks:core'
 include 'habits:core'
+include 'loot:core'
 
 include 'language-support'
 include 'persistence-support'

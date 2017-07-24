@@ -17,6 +17,7 @@ dependencies {
     compile project(':players:core')
     compile project(':tasks:core')
     compile project(':habits:core')
+    compile project(':loot:core')
 
     compile project(':language-support')
     compile project(':persistence-support')

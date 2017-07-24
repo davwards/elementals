@@ -1,9 +1,11 @@
-package com.davwards.elementals.game.loot;
+package com.davwards.elementals.loot;
 
-import com.davwards.elementals.game.loot.models.KindOfLootId;
-import com.davwards.elementals.game.loot.models.SavedLoot;
-import com.davwards.elementals.game.loot.persistence.InMemoryLootRepository;
-import com.davwards.elementals.game.loot.persistence.LootRepository;
+import com.davwards.elementals.loot.CheckWhetherPlayerCanPurchaseLoot;
+import com.davwards.elementals.loot.PurchaseLoot;
+import com.davwards.elementals.loot.models.KindOfLootId;
+import com.davwards.elementals.loot.models.SavedLoot;
+import com.davwards.elementals.loot.persistence.InMemoryLootRepository;
+import com.davwards.elementals.loot.persistence.LootRepository;
 import com.davwards.elementals.players.models.Player;
 import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.players.models.SavedPlayer;
@@ -11,7 +13,7 @@ import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.players.persistence.PlayerRepository;
 import org.junit.Test;
 
-import static com.davwards.elementals.game.loot.models.KindOfLootId.COPPER_SWORD;
+import static com.davwards.elementals.loot.models.KindOfLootId.COPPER_SWORD;
 import static com.davwards.elementals.support.test.Factories.randomString;
 import static com.davwards.elementals.support.test.Factories.randomUnsavedPlayer;
 import static junit.framework.TestCase.fail;

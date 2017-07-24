@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.loot.persistence;
+package com.davwards.elementals.loot.persistence;
 
 public class InMemoryLootRepositoryTest extends LootRepositoryTest {
     private LootRepository repository = new InMemoryLootRepository();
