@@ -1,8 +1,8 @@
 package com.davwards.elementals.game.tasks;
 
 import com.davwards.elementals.game.GameConstants;
-import com.davwards.elementals.game.players.models.SavedPlayer;
-import com.davwards.elementals.game.players.persistence.PlayerRepository;
+import com.davwards.elementals.players.models.SavedPlayer;
+import com.davwards.elementals.players.persistence.PlayerRepository;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.Task;
 import com.davwards.elementals.game.tasks.models.TaskId;

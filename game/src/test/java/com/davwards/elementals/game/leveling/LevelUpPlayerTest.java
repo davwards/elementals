@@ -1,12 +1,12 @@
 package com.davwards.elementals.game.leveling;
 
-import com.davwards.elementals.game.players.models.Player;
-import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.players.models.SavedPlayer;
-import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.players.models.Player;
+import com.davwards.elementals.players.models.PlayerId;
+import com.davwards.elementals.players.models.SavedPlayer;
+import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
 import org.junit.Test;
 
-import static com.davwards.elementals.game.support.test.Factories.*;
+import static com.davwards.elementals.support.test.Factories.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.fail;

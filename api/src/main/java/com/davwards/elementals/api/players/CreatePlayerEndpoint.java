@@ -1,8 +1,8 @@
 package com.davwards.elementals.api.players;
 
 import com.davwards.elementals.api.support.responses.ResourceCreatedResponses;
-import com.davwards.elementals.game.players.CreatePlayer;
-import com.davwards.elementals.game.players.models.SavedPlayer;
+import com.davwards.elementals.players.CreatePlayer;
+import com.davwards.elementals.players.models.SavedPlayer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;

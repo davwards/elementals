@@ -1,8 +1,8 @@
 package com.davwards.elementals.game.leveling;
 
-import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.players.models.SavedPlayer;
-import com.davwards.elementals.game.players.persistence.PlayerRepository;
+import com.davwards.elementals.players.models.PlayerId;
+import com.davwards.elementals.players.models.SavedPlayer;
+import com.davwards.elementals.players.persistence.PlayerRepository;
 
 import static com.davwards.elementals.support.language.StrictOptional.strict;
 

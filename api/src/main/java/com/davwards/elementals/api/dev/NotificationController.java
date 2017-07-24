@@ -1,8 +1,8 @@
 package com.davwards.elementals.api.dev;
 
-import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.notification.Notification;
-import com.davwards.elementals.game.notification.Notifier;
+import com.davwards.elementals.players.models.PlayerId;
+import com.davwards.elementals.players.notification.Notification;
+import com.davwards.elementals.players.notification.Notifier;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.RequestMapping;

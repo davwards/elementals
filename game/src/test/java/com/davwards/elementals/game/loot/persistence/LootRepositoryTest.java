@@ -1,14 +1,14 @@
 package com.davwards.elementals.game.loot.persistence;
 
 import com.davwards.elementals.game.loot.models.*;
-import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.support.persistence.CrudRepositoryTest;
 import org.junit.Test;
 
 import java.util.List;
 
-import static com.davwards.elementals.game.support.test.Factories.randomString;
-import static com.davwards.elementals.game.support.test.Factories.randomUnsavedLoot;
+import static com.davwards.elementals.support.test.Factories.randomString;
+import static com.davwards.elementals.support.test.Factories.randomUnsavedLoot;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;

@@ -3,7 +3,7 @@ package com.davwards.elementals.game.habits;
 import com.davwards.elementals.game.habits.models.ImmutableUnsavedHabit;
 import com.davwards.elementals.game.habits.models.SavedHabit;
 import com.davwards.elementals.game.habits.persistence.HabitRepository;
-import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.players.models.PlayerId;
 
 public class CreateHabit {
     public interface Outcome<T> {

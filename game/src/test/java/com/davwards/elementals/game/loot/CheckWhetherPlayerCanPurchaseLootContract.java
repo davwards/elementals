@@ -1,12 +1,12 @@
 package com.davwards.elementals.game.loot;
 
 import com.davwards.elementals.game.loot.models.KindOfLootId;
-import com.davwards.elementals.game.players.models.Player;
+import com.davwards.elementals.players.models.Player;
 import org.junit.Test;
 
-import static com.davwards.elementals.game.support.test.Factories.randomInt;
-import static com.davwards.elementals.game.support.test.Factories.randomString;
-import static com.davwards.elementals.game.support.test.Factories.randomUnsavedPlayer;
+import static com.davwards.elementals.support.test.Factories.randomInt;
+import static com.davwards.elementals.support.test.Factories.randomString;
+import static com.davwards.elementals.support.test.Factories.randomUnsavedPlayer;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 

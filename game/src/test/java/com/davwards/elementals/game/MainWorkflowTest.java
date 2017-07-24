@@ -1,12 +1,12 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.notification.fakes.FakeNotifier;
-import com.davwards.elementals.game.players.CreatePlayer;
-import com.davwards.elementals.game.players.ResurrectPlayer;
-import com.davwards.elementals.game.players.UpdatePlayerCurrencies;
-import com.davwards.elementals.game.players.models.SavedPlayer;
-import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
-import com.davwards.elementals.game.players.persistence.PlayerRepository;
+import com.davwards.elementals.players.notification.FakeNotifier;
+import com.davwards.elementals.players.CreatePlayer;
+import com.davwards.elementals.players.ResurrectPlayer;
+import com.davwards.elementals.players.UpdatePlayerCurrencies;
+import com.davwards.elementals.players.models.SavedPlayer;
+import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.players.persistence.PlayerRepository;
 import com.davwards.elementals.game.tasks.CompleteTask;
 import com.davwards.elementals.game.tasks.CreateTask;
 import com.davwards.elementals.game.tasks.UpdateTaskStatus;
@@ -17,8 +17,8 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 
-import static com.davwards.elementals.game.support.test.Assertions.assertThatInteger;
-import static com.davwards.elementals.game.support.test.Factories.randomString;
+import static com.davwards.elementals.support.test.Assertions.assertThatInteger;
+import static com.davwards.elementals.support.test.Factories.randomString;
 import static junit.framework.TestCase.fail;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.greaterThan;

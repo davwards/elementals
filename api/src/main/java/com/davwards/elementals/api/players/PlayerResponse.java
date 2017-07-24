@@ -1,6 +1,6 @@
 package com.davwards.elementals.api.players;
 
-import com.davwards.elementals.game.players.models.SavedPlayer;
+import com.davwards.elementals.players.models.SavedPlayer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PlayerResponse {

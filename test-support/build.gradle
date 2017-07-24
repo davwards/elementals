@@ -1,0 +1,5 @@
+dependencies {
+    compile 'org.hamcrest:hamcrest-all:1.3'
+    compile project(':players:core')
+    compile project(':game')
+}

@@ -4,17 +4,17 @@ import com.davwards.elementals.game.habits.models.HabitId;
 import com.davwards.elementals.game.habits.models.SavedHabit;
 import com.davwards.elementals.game.habits.persistence.HabitRepository;
 import com.davwards.elementals.game.habits.persistence.InMemoryHabitRepository;
-import com.davwards.elementals.game.players.models.SavedPlayer;
-import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
-import com.davwards.elementals.game.players.persistence.PlayerRepository;
+import com.davwards.elementals.players.models.SavedPlayer;
+import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.players.persistence.PlayerRepository;
 import org.junit.Test;
 
 import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.DOWNSIDE;
 import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.UPSIDE;
-import static com.davwards.elementals.game.support.test.Assertions.assertThatInteger;
-import static com.davwards.elementals.game.support.test.Factories.randomString;
-import static com.davwards.elementals.game.support.test.Factories.randomUnsavedHabit;
-import static com.davwards.elementals.game.support.test.Factories.randomUnsavedPlayer;
+import static com.davwards.elementals.support.test.Assertions.assertThatInteger;
+import static com.davwards.elementals.support.test.Factories.randomString;
+import static com.davwards.elementals.support.test.Factories.randomUnsavedHabit;
+import static com.davwards.elementals.support.test.Factories.randomUnsavedPlayer;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 

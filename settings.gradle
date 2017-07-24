@@ -5,5 +5,8 @@ include 'api'
 include 'scheduler'
 include 'biweekly-adapter'
 
+include 'players:core'
+
 include 'language-support'
 include 'persistence-support'
+include 'test-support'

@@ -1,7 +1,7 @@
 package com.davwards.elementals.game.tasks;
 
-import com.davwards.elementals.game.players.UpdatePlayerCurrencies;
-import com.davwards.elementals.game.players.models.SavedPlayer;
+import com.davwards.elementals.players.UpdatePlayerCurrencies;
+import com.davwards.elementals.players.models.SavedPlayer;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.Task;
 import com.davwards.elementals.game.tasks.models.TaskId;

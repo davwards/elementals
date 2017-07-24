@@ -1,6 +1,6 @@
 package com.davwards.elementals.game.leveling;
 
-import com.davwards.elementals.game.players.models.Player;
+import com.davwards.elementals.players.models.Player;
 
 public interface CheckWhetherPlayerCanLevelUp {
     interface Outcome<T> {

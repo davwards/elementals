@@ -4,7 +4,7 @@ import com.davwards.elementals.api.players.PlayerResponse;
 import com.davwards.elementals.api.support.responses.ErrorResponse;
 import com.davwards.elementals.game.habits.ExerciseHabit;
 import com.davwards.elementals.game.habits.models.HabitId;
-import com.davwards.elementals.game.players.models.SavedPlayer;
+import com.davwards.elementals.players.models.SavedPlayer;
 import com.davwards.elementals.support.language.Either;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.ResponseEntity;

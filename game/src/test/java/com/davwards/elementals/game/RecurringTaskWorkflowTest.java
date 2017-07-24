@@ -1,7 +1,7 @@
 package com.davwards.elementals.game;
 
-import com.davwards.elementals.game.players.models.SavedPlayer;
-import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.players.models.SavedPlayer;
+import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.game.tasks.models.SavedRecurringTask;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.persistence.InMemoryRecurringTaskRepository;
@@ -15,7 +15,7 @@ import java.time.Period;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static com.davwards.elementals.game.support.test.Factories.randomUnsavedPlayer;
+import static com.davwards.elementals.support.test.Factories.randomUnsavedPlayer;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsCollectionContaining.hasItem;
 import static org.hamcrest.core.IsEqual.equalTo;

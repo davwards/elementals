@@ -3,7 +3,7 @@ package com.davwards.elementals.game.habits;
 import com.davwards.elementals.game.habits.models.SavedHabit;
 import com.davwards.elementals.game.habits.persistence.HabitRepository;
 import com.davwards.elementals.game.habits.persistence.InMemoryHabitRepository;
-import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.players.models.PlayerId;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;

@@ -1,11 +1,11 @@
 package com.davwards.elementals.game.tasks;
 
-import com.davwards.elementals.game.players.UpdatePlayerCurrencies;
-import com.davwards.elementals.game.players.models.SavedPlayer;
-import com.davwards.elementals.game.players.persistence.InMemoryPlayerRepository;
-import com.davwards.elementals.game.players.persistence.PlayerRepository;
-import com.davwards.elementals.game.support.test.Assertions;
-import com.davwards.elementals.game.support.test.Factories;
+import com.davwards.elementals.players.UpdatePlayerCurrencies;
+import com.davwards.elementals.players.models.SavedPlayer;
+import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.players.persistence.PlayerRepository;
+import com.davwards.elementals.support.test.Assertions;
+import com.davwards.elementals.support.test.Factories;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.Task;
 import com.davwards.elementals.game.tasks.models.TaskId;

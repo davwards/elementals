@@ -1,11 +1,11 @@
 package com.davwards.elementals.game.leveling;
 
-import com.davwards.elementals.game.players.models.Player;
+import com.davwards.elementals.players.models.Player;
 import org.junit.Test;
 
 import java.util.stream.Stream;
 
-import static com.davwards.elementals.game.support.test.Factories.randomUnsavedPlayer;
+import static com.davwards.elementals.support.test.Factories.randomUnsavedPlayer;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;

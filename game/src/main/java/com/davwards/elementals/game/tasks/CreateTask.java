@@ -1,6 +1,6 @@
 package com.davwards.elementals.game.tasks;
 
-import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.game.tasks.models.ImmutableUnsavedTask;
 import com.davwards.elementals.game.tasks.models.SavedTask;
 import com.davwards.elementals.game.tasks.models.Task;

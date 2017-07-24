@@ -1,7 +1,7 @@
 package com.davwards.elementals.game.loot;
 
 import com.davwards.elementals.game.loot.models.KindOfLootId;
-import com.davwards.elementals.game.players.models.Player;
+import com.davwards.elementals.players.models.Player;
 import com.davwards.elementals.support.language.StrictOptional;
 
 import java.util.Map;

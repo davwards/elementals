@@ -2,7 +2,7 @@ package com.davwards.elementals.api.tasks;
 
 import com.davwards.elementals.api.support.responses.ErrorResponse;
 import com.davwards.elementals.api.support.responses.ResourceCreatedResponses;
-import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.support.language.Either;
 import com.davwards.elementals.game.tasks.models.SavedRecurringTask;
 import com.davwards.elementals.game.tasks.recurring.CreateRecurringTask;

@@ -1,6 +1,6 @@
 package com.davwards.elementals.game.tasks.persistence;
 
-import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.support.persistence.CrudRepositoryTest;
 import com.davwards.elementals.game.tasks.models.*;
 import org.junit.Test;
@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static com.davwards.elementals.game.support.test.Factories.randomUnsavedTask;
+import static com.davwards.elementals.support.test.Factories.randomUnsavedTask;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 

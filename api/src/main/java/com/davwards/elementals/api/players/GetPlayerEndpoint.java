@@ -1,8 +1,8 @@
 package com.davwards.elementals.api.players;
 
-import com.davwards.elementals.game.players.FetchPlayer;
-import com.davwards.elementals.game.players.models.PlayerId;
-import com.davwards.elementals.game.players.models.SavedPlayer;
+import com.davwards.elementals.players.FetchPlayer;
+import com.davwards.elementals.players.models.PlayerId;
+import com.davwards.elementals.players.models.SavedPlayer;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

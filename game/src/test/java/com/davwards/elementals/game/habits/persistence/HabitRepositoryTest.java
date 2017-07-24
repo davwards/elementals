@@ -1,13 +1,13 @@
 package com.davwards.elementals.game.habits.persistence;
 
 import com.davwards.elementals.game.habits.models.*;
-import com.davwards.elementals.game.players.models.PlayerId;
+import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.support.persistence.CrudRepositoryTest;
 import org.junit.Test;
 
 import java.util.List;
 
-import static com.davwards.elementals.game.support.test.Factories.randomUnsavedHabit;
+import static com.davwards.elementals.support.test.Factories.randomUnsavedHabit;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.not;
