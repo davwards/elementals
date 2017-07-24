@@ -1,8 +1,8 @@
-package com.davwards.elementals.game.habits.persistence;
+package com.davwards.elementals.habits.persistence;
 
-import com.davwards.elementals.game.habits.models.HabitId;
-import com.davwards.elementals.game.habits.models.SavedHabit;
-import com.davwards.elementals.game.habits.models.UnsavedHabit;
+import com.davwards.elementals.habits.models.HabitId;
+import com.davwards.elementals.habits.models.SavedHabit;
+import com.davwards.elementals.habits.models.UnsavedHabit;
 import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.support.persistence.CrudRepository;
 

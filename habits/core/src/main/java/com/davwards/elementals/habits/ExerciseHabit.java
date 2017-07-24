@@ -1,18 +1,15 @@
-package com.davwards.elementals.game.habits;
+package com.davwards.elementals.habits;
 
-import com.davwards.elementals.game.habits.models.Habit;
-import com.davwards.elementals.game.habits.models.HabitId;
-import com.davwards.elementals.game.habits.models.SavedHabit;
-import com.davwards.elementals.game.habits.persistence.HabitRepository;
+import com.davwards.elementals.habits.models.Habit;
+import com.davwards.elementals.habits.models.HabitId;
+import com.davwards.elementals.habits.models.SavedHabit;
+import com.davwards.elementals.habits.persistence.HabitRepository;
 import com.davwards.elementals.players.UpdatePlayerCurrencies;
 import com.davwards.elementals.players.models.SavedPlayer;
 import com.davwards.elementals.players.persistence.PlayerRepository;
 
-import static com.davwards.elementals.game.HabitGameConstants.HABIT_DOWNSIDE_PENALTY;
-import static com.davwards.elementals.game.HabitGameConstants.HABIT_UPSIDE_COIN_PRIZE;
-import static com.davwards.elementals.game.HabitGameConstants.HABIT_UPSIDE_EXPERIENCE_PRIZE;
-import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.DOWNSIDE;
-import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.UPSIDE;
+import static com.davwards.elementals.habits.ExerciseHabit.Sides.DOWNSIDE;
+import static com.davwards.elementals.habits.ExerciseHabit.Sides.UPSIDE;
 import static com.davwards.elementals.support.language.StrictOptional.strict;
 
 public class ExerciseHabit {
@@ -66,11 +63,11 @@ public class ExerciseHabit {
     private UpdatePlayerCurrencies.CurrencyChanges currencyChangesFor(Sides side) {
         if (side == UPSIDE) {
             return new UpdatePlayerCurrencies.CurrencyChanges()
-                    .experience(HABIT_UPSIDE_EXPERIENCE_PRIZE)
-                    .coin(HABIT_UPSIDE_COIN_PRIZE);
+                    .experience(HabitGameConstants.HABIT_UPSIDE_EXPERIENCE_PRIZE)
+                    .coin(HabitGameConstants.HABIT_UPSIDE_COIN_PRIZE);
         } else {
             return new UpdatePlayerCurrencies.CurrencyChanges()
-                    .health(HABIT_DOWNSIDE_PENALTY);
+                    .health(HabitGameConstants.HABIT_DOWNSIDE_PENALTY);
         }
     }
 

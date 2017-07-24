@@ -1,8 +1,9 @@
-package com.davwards.elementals.game.habits;
+package com.davwards.elementals.habits;
 
-import com.davwards.elementals.game.habits.models.SavedHabit;
-import com.davwards.elementals.game.habits.persistence.HabitRepository;
-import com.davwards.elementals.game.habits.persistence.InMemoryHabitRepository;
+import com.davwards.elementals.habits.CreateHabit;
+import com.davwards.elementals.habits.models.SavedHabit;
+import com.davwards.elementals.habits.persistence.HabitRepository;
+import com.davwards.elementals.habits.persistence.InMemoryHabitRepository;
 import com.davwards.elementals.players.models.PlayerId;
 import org.junit.Test;
 

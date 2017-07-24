@@ -1,8 +1,8 @@
 package com.davwards.elementals.api.habits;
 
-import com.davwards.elementals.game.habits.FetchHabit;
-import com.davwards.elementals.game.habits.models.HabitId;
-import com.davwards.elementals.game.habits.models.SavedHabit;
+import com.davwards.elementals.habits.FetchHabit;
+import com.davwards.elementals.habits.models.HabitId;
+import com.davwards.elementals.habits.models.SavedHabit;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;

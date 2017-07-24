@@ -1,4 +1,4 @@
-package com.davwards.elementals.game;
+package com.davwards.elementals.habits;
 
 public class HabitGameConstants {
     public static final Integer HABIT_UPSIDE_EXPERIENCE_PRIZE = 10;

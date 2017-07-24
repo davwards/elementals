@@ -1,9 +1,9 @@
 package com.davwards.elementals.api;
 
-import com.davwards.elementals.game.habits.CreateHabit;
-import com.davwards.elementals.game.habits.ExerciseHabit;
-import com.davwards.elementals.game.habits.FetchHabit;
-import com.davwards.elementals.game.habits.persistence.InMemoryHabitRepository;
+import com.davwards.elementals.habits.CreateHabit;
+import com.davwards.elementals.habits.ExerciseHabit;
+import com.davwards.elementals.habits.FetchHabit;
+import com.davwards.elementals.habits.persistence.InMemoryHabitRepository;
 import com.davwards.elementals.players.UpdatePlayerCurrencies;
 import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.tasks.persistence.InMemoryRecurringTaskRepository;

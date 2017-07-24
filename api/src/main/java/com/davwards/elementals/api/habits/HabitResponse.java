@@ -1,6 +1,6 @@
 package com.davwards.elementals.api.habits;
 
-import com.davwards.elementals.game.habits.models.SavedHabit;
+import com.davwards.elementals.habits.models.SavedHabit;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class HabitResponse {

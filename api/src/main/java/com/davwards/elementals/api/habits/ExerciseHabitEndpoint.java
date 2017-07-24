@@ -2,16 +2,16 @@ package com.davwards.elementals.api.habits;
 
 import com.davwards.elementals.api.players.PlayerResponse;
 import com.davwards.elementals.api.support.responses.ErrorResponse;
-import com.davwards.elementals.game.habits.ExerciseHabit;
-import com.davwards.elementals.game.habits.models.HabitId;
+import com.davwards.elementals.habits.ExerciseHabit;
+import com.davwards.elementals.habits.models.HabitId;
 import com.davwards.elementals.players.models.SavedPlayer;
 import com.davwards.elementals.support.language.Either;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.DOWNSIDE;
-import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.UPSIDE;
+import static com.davwards.elementals.habits.ExerciseHabit.Sides.DOWNSIDE;
+import static com.davwards.elementals.habits.ExerciseHabit.Sides.UPSIDE;
 import static com.davwards.elementals.support.language.Either.failure;
 import static com.davwards.elementals.support.language.Either.success;
 

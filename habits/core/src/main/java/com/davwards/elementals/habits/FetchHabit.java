@@ -1,8 +1,8 @@
-package com.davwards.elementals.game.habits;
+package com.davwards.elementals.habits;
 
-import com.davwards.elementals.game.habits.models.HabitId;
-import com.davwards.elementals.game.habits.models.SavedHabit;
-import com.davwards.elementals.game.habits.persistence.HabitRepository;
+import com.davwards.elementals.habits.models.HabitId;
+import com.davwards.elementals.habits.models.SavedHabit;
+import com.davwards.elementals.habits.persistence.HabitRepository;
 
 import static com.davwards.elementals.support.language.StrictOptional.strict;
 

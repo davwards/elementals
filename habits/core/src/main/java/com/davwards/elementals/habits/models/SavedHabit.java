@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.habits.models;
+package com.davwards.elementals.habits.models;
 
 import com.davwards.elementals.support.persistence.SavedEntity;
 import org.immutables.value.Value;

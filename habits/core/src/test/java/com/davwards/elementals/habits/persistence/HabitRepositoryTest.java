@@ -1,6 +1,6 @@
-package com.davwards.elementals.game.habits.persistence;
+package com.davwards.elementals.habits.persistence;
 
-import com.davwards.elementals.game.habits.models.*;
+import com.davwards.elementals.habits.models.*;
 import com.davwards.elementals.players.models.PlayerId;
 import com.davwards.elementals.support.persistence.CrudRepositoryTest;
 import org.junit.Test;

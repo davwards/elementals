@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.habits.models;
+package com.davwards.elementals.habits.models;
 
 import com.davwards.elementals.players.models.PlayerId;
 
