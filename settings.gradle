@@ -1,6 +1,6 @@
 rootProject.name = 'elementals'
 
-include 'game'
+include 'game-tests'
 include 'applications:monolith'
 
 include 'players:core'

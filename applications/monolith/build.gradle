@@ -1,13 +1,16 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
-    compile project(':game')
-
     compile project(':players:api')
+    compile project(':players:core')
     compile project(':players:resurrection-scheduler')
 
+    compile project(':tasks:core')
     compile project(':tasks:api')
     compile project(':tasks:task-update-scheduler')
+
+    compile project(':habits:core')
+    compile project(':habits:api')
 
     compile project(':support:api-support')
     compile project(':support:scheduling-support')
