@@ -3,11 +3,14 @@ rootProject.name = 'elementals'
 include 'game'
 include 'api'
 include 'scheduler'
-include 'biweekly-adapter'
 
 include 'players:core'
+
 include 'tasks:core'
+include 'tasks:biweekly-adapter'
+
 include 'habits:core'
+
 include 'loot:core'
 
 include 'support:language-support'
