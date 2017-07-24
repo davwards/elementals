@@ -6,6 +6,7 @@ import com.davwards.elementals.habits.FetchHabit;
 import com.davwards.elementals.habits.persistence.InMemoryHabitRepository;
 import com.davwards.elementals.players.UpdatePlayerCurrencies;
 import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
+import com.davwards.elementals.players.resurrectionscheduler.ResurrectionScheduler;
 import com.davwards.elementals.tasks.persistence.InMemoryRecurringTaskRepository;
 import com.davwards.elementals.tasks.persistence.InMemoryTaskRepository;
 import com.davwards.elementals.players.CreatePlayer;
@@ -17,9 +18,9 @@ import com.davwards.elementals.tasks.FetchTask;
 import com.davwards.elementals.tasks.UpdateTaskStatus;
 import com.davwards.elementals.tasks.recurring.CreateRecurringTask;
 import com.davwards.elementals.tasks.recurring.FetchRecurringTask;
-import com.davwards.elementals.scheduler.ManualTimeProvider;
-import com.davwards.elementals.scheduler.Scheduler;
-import com.davwards.elementals.scheduler.TimeProvider;
+import com.davwards.elementals.support.scheduling.ManualTimeProvider;
+import com.davwards.elementals.support.scheduling.TimeProvider;
+import com.davwards.elementals.tasks.updatescheduler.TaskUpdateScheduler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.*;
@@ -47,7 +48,8 @@ import java.time.LocalDateTime;
         CreateRecurringTask.class,
         FetchRecurringTask.class,
 
-        Scheduler.class,
+        ResurrectionScheduler.class,
+        TaskUpdateScheduler.class,
 
         InMemoryPlayerRepository.class,
         InMemoryTaskRepository.class,

@@ -1,6 +1,6 @@
 package com.davwards.elementals.api;
 
-import com.davwards.elementals.scheduler.ManualTimeProvider;
+import com.davwards.elementals.support.scheduling.ManualTimeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Controller;

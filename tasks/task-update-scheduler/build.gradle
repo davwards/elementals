@@ -1,0 +1,5 @@
+dependencies {
+    compile project(':tasks:core')
+    compile project(':support:scheduling-support')
+    compile 'org.springframework.boot:spring-boot-starter:1.4.2.RELEASE'
+}

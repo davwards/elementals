@@ -2,14 +2,15 @@ rootProject.name = 'elementals'
 
 include 'game'
 include 'applications:monolith'
-include 'scheduler'
 
 include 'players:core'
 include 'players:api'
+include 'players:resurrection-scheduler'
 
 include 'tasks:core'
 include 'tasks:biweekly-adapter'
 include 'tasks:api'
+include 'tasks:task-update-scheduler'
 
 include 'habits:core'
 include 'habits:api'
@@ -20,3 +21,4 @@ include 'support:language-support'
 include 'support:persistence-support'
 include 'support:test-support'
 include 'support:api-support'
+include 'support:scheduling-support'

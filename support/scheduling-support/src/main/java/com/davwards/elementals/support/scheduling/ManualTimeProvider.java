@@ -1,4 +1,4 @@
-package com.davwards.elementals.scheduler;
+package com.davwards.elementals.support.scheduling;
 
 import java.time.LocalDateTime;
 

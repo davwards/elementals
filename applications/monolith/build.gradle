@@ -2,10 +2,15 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
     compile project(':game')
-    compile project(':scheduler')
+
     compile project(':players:api')
+    compile project(':players:resurrection-scheduler')
+
     compile project(':tasks:api')
+    compile project(':tasks:task-update-scheduler')
+
     compile project(':support:api-support')
+    compile project(':support:scheduling-support')
 
     compile 'org.springframework.boot:spring-boot-starter-web'
 
