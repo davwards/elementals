@@ -1,4 +1,4 @@
-package com.davwards.elementals.api.tasks;
+package com.davwards.elementals.tasks.api;
 
 import com.davwards.elementals.tasks.FetchTask;
 import com.davwards.elementals.tasks.models.SavedTask;

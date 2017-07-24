@@ -9,6 +9,7 @@ include 'players:api'
 
 include 'tasks:core'
 include 'tasks:biweekly-adapter'
+include 'tasks:api'
 
 include 'habits:core'
 

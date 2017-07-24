@@ -58,7 +58,8 @@ import java.time.LocalDateTime;
 })
 @ComponentScan(basePackages = {
         "com.davwards.elementals.api",
-        "com.davwards.elementals.players.api"
+        "com.davwards.elementals.players.api",
+        "com.davwards.elementals.tasks.api"
 })
 public class Application {
     public static void main(String[] args) {
