@@ -5,10 +5,14 @@ import com.davwards.elementals.game.habits.models.Habit;
 import com.davwards.elementals.game.habits.models.HabitId;
 import com.davwards.elementals.game.habits.models.SavedHabit;
 import com.davwards.elementals.game.habits.persistence.HabitRepository;
+import com.davwards.elementals.players.UpdatePlayerCurrencies;
 import com.davwards.elementals.players.models.ImmutableSavedPlayer;
 import com.davwards.elementals.players.models.SavedPlayer;
 import com.davwards.elementals.players.persistence.PlayerRepository;
 
+import static com.davwards.elementals.game.GameConstants.HABIT_DOWNSIDE_PENALTY;
+import static com.davwards.elementals.game.GameConstants.HABIT_UPSIDE_COIN_PRIZE;
+import static com.davwards.elementals.game.GameConstants.HABIT_UPSIDE_EXPERIENCE_PRIZE;
 import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.DOWNSIDE;
 import static com.davwards.elementals.game.habits.ExerciseHabit.Sides.UPSIDE;
 import static com.davwards.elementals.support.language.StrictOptional.strict;
@@ -43,29 +47,35 @@ public class ExerciseHabit {
         this.playerRepository = playerRepository;
     }
 
-
     private SavedPlayer updatePlayer(SavedHabit habit, Sides side) {
-        return playerRepository.find(habit.playerId())
-                .map(player -> playerRepository.update(
-                        side == UPSIDE
-                                ? rewardedPlayer(player)
-                                : damagedPlayer(player)
-                ))
-                .orElseThrow(() -> new RuntimeException("Habit " + habit + " referenced nonexistant player!"));
+        return new UpdatePlayerCurrencies(playerRepository).perform(
+                habit.playerId(),
+                currencyChangesFor(side),
+                new UpdatePlayerCurrencies.Outcome<SavedPlayer>() {
+                    @Override
+                    public SavedPlayer updatedPlayer(SavedPlayer player) {
+                        return player;
+                    }
+
+                    @Override
+                    public SavedPlayer noSuchPlayer() {
+                        throw new RuntimeException("Habit " + habit + " referenced nonexistant player!");
+                    }
+                }
+        );
     }
 
-    private SavedPlayer rewardedPlayer(SavedPlayer player) {
-        return ImmutableSavedPlayer
-                .copyOf(player)
-                .withCoin(player.coin() + GameConstants.TASK_COMPLETION_COIN_PRIZE)
-                .withExperience(player.experience() + GameConstants.TASK_COMPLETION_EXPERIENCE_PRIZE);
+    private UpdatePlayerCurrencies.CurrencyChanges currencyChangesFor(Sides side) {
+        if (side == UPSIDE) {
+            return new UpdatePlayerCurrencies.CurrencyChanges()
+                    .experience(HABIT_UPSIDE_EXPERIENCE_PRIZE)
+                    .coin(HABIT_UPSIDE_COIN_PRIZE);
+        } else {
+            return new UpdatePlayerCurrencies.CurrencyChanges()
+                    .health(HABIT_DOWNSIDE_PENALTY);
+        }
     }
 
-    private ImmutableSavedPlayer damagedPlayer(SavedPlayer player) {
-        return ImmutableSavedPlayer
-                .copyOf(player)
-                .withHealth(player.health() - GameConstants.EXPIRED_TASK_PENALTY);
-    }
 
     private boolean habitHasSpecifiedSide(Habit habit, Sides side) {
         return (side == UPSIDE && habit.hasUpside()) ||
