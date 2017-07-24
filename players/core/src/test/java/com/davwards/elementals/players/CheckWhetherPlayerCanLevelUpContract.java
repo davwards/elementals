@@ -1,5 +1,6 @@
-package com.davwards.elementals.game.leveling;
+package com.davwards.elementals.players;
 
+import com.davwards.elementals.players.CheckWhetherPlayerCanLevelUp;
 import com.davwards.elementals.players.models.Player;
 import org.junit.Test;
 

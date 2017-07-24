@@ -1,4 +1,4 @@
-package com.davwards.elementals.game.leveling;
+package com.davwards.elementals.players;
 
 public class CheckWhetherPlayerCanLevelUpInProcessTest extends CheckWhetherPlayerCanLevelUpContract {
     CheckWhetherPlayerCanLevelUp objectUnderTest = new CheckWhetherPlayerCanLevelUp.InProcess();
