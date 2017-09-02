@@ -1,23 +1,30 @@
 package com.davwards.elementals.support.language;
 
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface Either<S, F> {
     <T> Either<T, F> map(Function<S, T> fn);
 
-    <T> Either<S, T> mapFailure(Function<F, T> fn);
-
-    <T> T join(Function<S, T> ifSuccess, Function<F, T> ifFailure);
-
     S orIfFailure(Function<F, S> fn);
 
-    static <S, F> Success<S, F> success(S value) {
+    static <S, F> Either<S, F> success(S value) {
         return new Success<>(value);
     }
 
-    static <S, F> Failure<S, F> failure(F value) {
+    static <S, F> Either<S, F> failure(F value) {
         return new Failure<>(value);
     }
+
+    static Either success() {
+        return new Success<Void, Void>(null);
+    }
+
+    static Either failure() {
+        return new Failure<Void, Void>(null);
+    }
+
+    S orIfFailureThrow(Supplier<RuntimeException> getThrowable);
 
     class Success<S, F> implements Either<S, F> {
         private final S value;
@@ -32,17 +39,12 @@ public interface Either<S, F> {
         }
 
         @Override
-        public <T> Either<S, T> mapFailure(Function<F, T> fn) {
-            return new Success<>(value);
-        }
-
-        @Override
-        public <T> T join(Function<S, T> ifSuccess, Function<F, T> ifFailure) {
-            return ifSuccess.apply(value);
-        }
-
-        @Override
         public S orIfFailure(Function<F, S> fn) {
+            return value;
+        }
+
+        @Override
+        public S orIfFailureThrow(Supplier<RuntimeException> getThrowable) {
             return value;
         }
     }
@@ -60,18 +62,13 @@ public interface Either<S, F> {
         }
 
         @Override
-        public <T> Either<S, T> mapFailure(Function<F, T> fn) {
-            return new Failure<>(fn.apply(value));
-        }
-
-        @Override
-        public <T> T join(Function<S, T> ifSuccess, Function<F, T> ifFailure) {
-            return ifFailure.apply(value);
-        }
-
-        @Override
         public S orIfFailure(Function<F, S> fn) {
             return fn.apply(value);
+        }
+
+        @Override
+        public S orIfFailureThrow(Supplier<RuntimeException> getThrowable) {
+            throw getThrowable.get();
         }
     }
 }

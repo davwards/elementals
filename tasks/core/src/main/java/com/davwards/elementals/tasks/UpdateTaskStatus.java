@@ -26,7 +26,7 @@ public class UpdateTaskStatus {
                          Outcome<T> outcome) {
 
         return strict(taskRepository.find(id))
-                .map(task -> (taskIsPastDue(task, currentTime) && task.isIncomplete())
+                .map(task -> taskShouldExpire(currentTime, task)
                         ? outcome.taskExpired(updatePlayerAndTask(task))
                         : outcome.noStatusChange(task))
                 .orElseGet(outcome::noSuchTask);
@@ -40,6 +40,10 @@ public class UpdateTaskStatus {
                             PlayerRepository playerRepository) {
         this.taskRepository = taskRepository;
         this.playerRepository = playerRepository;
+    }
+
+    private boolean taskShouldExpire(LocalDateTime currentTime, SavedTask task) {
+        return taskIsPastDue(task, currentTime) && task.isIncomplete();
     }
 
     private static boolean taskIsPastDue(Task task, LocalDateTime currentTime) {

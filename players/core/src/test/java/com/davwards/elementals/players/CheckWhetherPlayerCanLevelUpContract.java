@@ -1,8 +1,9 @@
 package com.davwards.elementals.players;
 
-import com.davwards.elementals.players.models.Player;
+import com.davwards.elementals.players.models.ImmutableUnsavedPlayer;
 import org.junit.Test;
 
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import static com.davwards.elementals.support.test.Factories.randomUnsavedPlayer;
@@ -10,12 +11,29 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 public abstract class CheckWhetherPlayerCanLevelUpContract {
     abstract CheckWhetherPlayerCanLevelUp useCase();
 
     @Test
     public void scenarios() throws Exception {
+        forAVarietyOfPlayersWithDifferentLevelsAndExperience(player ->
+                useCase().perform(player, new CheckWhetherPlayerCanLevelUp.Outcome<Runnable>() {
+                    @Override
+                    public Runnable playerCanLevelUp(Integer experienceCost) {
+                        return () -> checkInvariantsForPlayerThatCanLevel(player, experienceCost);
+                    }
+
+                    @Override
+                    public Runnable playerCannotLevelUp(Integer additionalCost) {
+                        return () -> checkInvariantsForPlayerThatCannotLevel(player, additionalCost);
+                    }
+                }).run()
+        );
+    }
+
+    private void forAVarietyOfPlayersWithDifferentLevelsAndExperience(Consumer<ImmutableUnsavedPlayer> checkInvariants) {
         Stream.of(
                 randomUnsavedPlayer().withLevel(1).withExperience(0),
                 randomUnsavedPlayer().withLevel(1).withExperience(10),
@@ -27,72 +45,68 @@ public abstract class CheckWhetherPlayerCanLevelUpContract {
                 randomUnsavedPlayer().withLevel(13).withExperience(10000),
                 randomUnsavedPlayer().withLevel(100).withExperience(1),
                 randomUnsavedPlayer().withLevel(100).withExperience(10000)
-        ).forEach(player -> {
+        ).forEach(checkInvariants);
+    }
 
-            Result result = performUseCase(player);
+    private void checkInvariantsForPlayerThatCanLevel(ImmutableUnsavedPlayer player, Integer cost) {
+        assertThat(
+                "Since " + player + " can level, cost to level should not be greater than player's experience",
+                cost,
+                not(greaterThan(player.experience()))
+        );
 
-            if (result.canLevel) {
+        ImmutableUnsavedPlayer playerWithSlightlyMoreExperience =
+                player.withExperience(player.experience() + 1);
 
-                assertThat(
-                        "Cost to level is not greater than player's experience",
-                        result.costOrDeficit,
-                        not(greaterThan(result.player.experience()))
-                );
+        ImmutableUnsavedPlayer playerWithMuchMoreExperience =
+                player.withExperience(player.experience() + 1000);
 
-                assertThat(
-                        "Same-level player with more experience would also be able to level",
-                        performUseCase(
-                                player.withExperience(player.experience() + 1)
-                        ).canLevel,
-                        is(true)
-                );
+        useCase().perform(playerWithSlightlyMoreExperience, new CheckWhetherPlayerCanLevelUp.Outcome<Void>() {
+            @Override
+            public Void playerCanLevelUp(Integer experienceCost) {
+                // pass
+                return null;
+            }
 
-                assertThat(
-                        "Same-level player with much more experience would also be able to level",
-                        performUseCase(
-                                player.withExperience(player.experience() + 1000)
-                        ).canLevel,
-                        is(true)
-                );
-
-            } else {
-
-                Result newResult = performUseCase(
-                        player.withExperience(player.experience() + result.costOrDeficit)
-                );
-
-                assertThat("Player " + newResult.player + " can level",
-                        newResult.canLevel, is(true));
-                assertThat("Player " + newResult.player + " would have just enough experience to level",
-                        newResult.costOrDeficit, is(newResult.player.experience()));
+            @Override
+            public Void playerCannotLevelUp(Integer additionalCost) {
+                fail("Since player " + player + " can level, same-level player with slightly more experience should also be able to level");
+                return null;
             }
         });
 
-    }
-
-    private Result performUseCase(final Player player) {
-        return useCase().perform(player, new CheckWhetherPlayerCanLevelUp.Outcome<Result>() {
+        useCase().perform(playerWithMuchMoreExperience, new CheckWhetherPlayerCanLevelUp.Outcome<Void>() {
             @Override
-            public Result playerCanLevelUp(Integer experienceCost) {
-                return new Result(player, true, experienceCost);
+            public Void playerCanLevelUp(Integer experienceCost) {
+                // pass
+                return null;
             }
 
             @Override
-            public Result playerCannotLevelUp(Integer additionalCost) {
-                return new Result(player, false, additionalCost);
+            public Void playerCannotLevelUp(Integer additionalCost) {
+                fail("Since player " + player + " can level, same-level player with much more experience should also be able to level");
+                return null;
             }
         });
     }
 
-    private static class Result {
-        final Player player;
-        final Boolean canLevel;
-        final Integer costOrDeficit;
+    private void checkInvariantsForPlayerThatCannotLevel(ImmutableUnsavedPlayer player, Integer deficit) {
+        ImmutableUnsavedPlayer playerWithMoreExperience =
+                player.withExperience(player.experience() + deficit);
 
-        private Result(Player player, Boolean canLevel, Integer costOrDeficit) {
-            this.player = player;
-            this.canLevel = canLevel;
-            this.costOrDeficit = costOrDeficit;
-        }
+        useCase().perform(playerWithMoreExperience, new CheckWhetherPlayerCanLevelUp.Outcome<Void>() {
+            @Override
+            public Void playerCanLevelUp(Integer experienceCost) {
+                assertThat("Since " + player + " was " + deficit + " short of leveling, " + playerWithMoreExperience + " should have just enough experience to level",
+                        experienceCost, is(playerWithMoreExperience.experience()));
+                return null;
+            }
+
+            @Override
+            public Void playerCannotLevelUp(Integer additionalCost) {
+                fail("Since " + player + " was " + deficit + " short of leveling, " + playerWithMoreExperience + " should be able to level");
+                return null;
+            }
+        });
     }
 }

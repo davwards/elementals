@@ -31,6 +31,7 @@ public class UpdatePlayerCurrencies {
         private Integer health = 0;
         private Integer experience = 0;
         private Integer coin = 0;
+        private Integer level = 0;
 
         public CurrencyChanges health(Integer value) {
             this.health = value;
@@ -47,11 +48,17 @@ public class UpdatePlayerCurrencies {
             return this;
         }
 
+        public CurrencyChanges level(Integer value) {
+            this.level = value;
+            return this;
+        }
+
         SavedPlayer updatePlayer(SavedPlayer player) {
             return ImmutableSavedPlayer.copyOf(player)
                     .withExperience(player.experience() + this.experience)
                     .withHealth(player.health() + this.health)
-                    .withCoin(player.coin() + this.coin);
+                    .withCoin(player.coin() + this.coin)
+                    .withLevel(player.level() + this.level);
         }
     }
 }

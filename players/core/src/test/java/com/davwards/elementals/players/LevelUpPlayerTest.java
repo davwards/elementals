@@ -16,7 +16,7 @@ public class LevelUpPlayerTest {
     @Test
     public void whenPlayerDoesNotExist_returnsNoSuchPlayerOutcome() {
         String noise = randomString(10);
-        String result = new LevelUpPlayer(playerRepository, new DummyLevelCheck())
+        String result = new LevelUpPlayer(playerRepository, new DummyLevelCheck(), updatePlayerCurrencies)
                 .perform(
                         new PlayerId("no-such-player"), expectNoSuchPlayerOutcome(noise)
                 );
@@ -33,8 +33,8 @@ public class LevelUpPlayerTest {
 
         SavedPlayer updatedPlayer = new LevelUpPlayer(
                 playerRepository,
-                new StubPositiveLevelCheck(costToLevel)
-        ).perform(
+                new StubPositiveLevelCheck(costToLevel),
+                updatePlayerCurrencies).perform(
                 player.getId(),
                 expectSuccessfullyLeveledUpOutcome
         );
@@ -50,8 +50,8 @@ public class LevelUpPlayerTest {
 
         SavedPlayer updatedPlayer = new LevelUpPlayer(
                 playerRepository,
-                new StubPositiveLevelCheck(1)
-        ).perform(
+                new StubPositiveLevelCheck(1),
+                updatePlayerCurrencies).perform(
                 player.getId(),
                 expectSuccessfullyLeveledUpOutcome
         );
@@ -68,8 +68,8 @@ public class LevelUpPlayerTest {
 
         SavedPlayer updatedPlayer = new LevelUpPlayer(
                 playerRepository,
-                new StubPositiveLevelCheck(costToLevel)
-        ).perform(
+                new StubPositiveLevelCheck(costToLevel),
+                updatePlayerCurrencies).perform(
                 player.getId(),
                 expectSuccessfullyLeveledUpOutcome
         );
@@ -83,8 +83,8 @@ public class LevelUpPlayerTest {
         String noise = randomString(10);
         String result = new LevelUpPlayer(
                 playerRepository,
-                new StubNegativeLevelCheck()
-        ).perform(player.getId(), expectPlayerCannotLevelUpOutcome(noise));
+                new StubNegativeLevelCheck(),
+                updatePlayerCurrencies).perform(player.getId(), expectPlayerCannotLevelUpOutcome(noise));
 
         assertThat(result, equalTo(noise));
     }
@@ -126,6 +126,7 @@ public class LevelUpPlayerTest {
     }
 
     private final InMemoryPlayerRepository playerRepository = new InMemoryPlayerRepository();
+    private final UpdatePlayerCurrencies updatePlayerCurrencies = new UpdatePlayerCurrencies(playerRepository);
 
     private final LevelUpPlayer.Outcome<SavedPlayer> expectSuccessfullyLeveledUpOutcome = new LevelUpPlayer.Outcome<SavedPlayer>() {
         @Override
