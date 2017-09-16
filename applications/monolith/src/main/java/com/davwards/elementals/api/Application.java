@@ -4,14 +4,11 @@ import com.davwards.elementals.habits.CreateHabit;
 import com.davwards.elementals.habits.ExerciseHabit;
 import com.davwards.elementals.habits.FetchHabit;
 import com.davwards.elementals.habits.persistence.InMemoryHabitRepository;
-import com.davwards.elementals.players.UpdatePlayerCurrencies;
+import com.davwards.elementals.players.*;
 import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.players.resurrectionscheduler.ResurrectionScheduler;
 import com.davwards.elementals.tasks.persistence.InMemoryRecurringTaskRepository;
 import com.davwards.elementals.tasks.persistence.InMemoryTaskRepository;
-import com.davwards.elementals.players.CreatePlayer;
-import com.davwards.elementals.players.FetchPlayer;
-import com.davwards.elementals.players.ResurrectPlayer;
 import com.davwards.elementals.tasks.CompleteTask;
 import com.davwards.elementals.tasks.CreateTask;
 import com.davwards.elementals.tasks.FetchTask;
@@ -35,6 +32,8 @@ import java.time.LocalDateTime;
         FetchPlayer.class,
         ResurrectPlayer.class,
         UpdatePlayerCurrencies.class,
+        LevelUpPlayer.class,
+        CheckWhetherPlayerCanLevelUp.InProcess.class,
 
         CreateTask.class,
         FetchTask.class,
