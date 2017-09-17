@@ -8,6 +8,9 @@ import java.time.format.DateTimeFormatter;
 
 class TaskResponse {
     @JsonProperty
+    private final String id;
+
+    @JsonProperty
     private final String title;
 
     @JsonProperty
@@ -20,6 +23,7 @@ class TaskResponse {
     private final String status;
 
     TaskResponse(SavedTask task) {
+        this.id = task.getId().toString();
         this.title = task.title();
         this.deadline = task.deadline()
                         .map(deadline -> deadline.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))

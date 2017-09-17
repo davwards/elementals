@@ -21,7 +21,9 @@ dependencies {
     testCompile 'io.rest-assured:rest-assured:3.0.1'
 }
 
-task runLocally <<{
-    bootRun { systemProperty "spring.profiles.active", "fake-notifications,controlled-time" }
+task runLocally {
+    doLast {
+        bootRun { systemProperty "spring.profiles.active", "fake-notifications,controlled-time,allow-cors" }
+    }
 }
 runLocally.finalizedBy bootRun

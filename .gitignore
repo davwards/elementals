@@ -2,3 +2,5 @@
 gradle/
 .idea
 build/
+dist/
+node_modules/

@@ -7,12 +7,9 @@ import com.davwards.elementals.habits.persistence.InMemoryHabitRepository;
 import com.davwards.elementals.players.*;
 import com.davwards.elementals.players.persistence.InMemoryPlayerRepository;
 import com.davwards.elementals.players.resurrectionscheduler.ResurrectionScheduler;
+import com.davwards.elementals.tasks.*;
 import com.davwards.elementals.tasks.persistence.InMemoryRecurringTaskRepository;
 import com.davwards.elementals.tasks.persistence.InMemoryTaskRepository;
-import com.davwards.elementals.tasks.CompleteTask;
-import com.davwards.elementals.tasks.CreateTask;
-import com.davwards.elementals.tasks.FetchTask;
-import com.davwards.elementals.tasks.UpdateTaskStatus;
 import com.davwards.elementals.tasks.recurring.CreateRecurringTask;
 import com.davwards.elementals.tasks.recurring.FetchRecurringTask;
 import com.davwards.elementals.support.scheduling.ManualTimeProvider;
@@ -37,6 +34,7 @@ import java.time.LocalDateTime;
 
         CreateTask.class,
         FetchTask.class,
+        FetchPlayerTasks.class,
         CompleteTask.class,
         UpdateTaskStatus.class,
 

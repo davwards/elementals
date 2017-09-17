@@ -1,0 +1,16 @@
+{
+  "name": "remote-game-client",
+  "version": "1.0.0",
+  "description": "Integrated api client for the elementals web frontend",
+  "main": "dist/bundle.js",
+  "repository": "https://www.github.com/davwards/elementals",
+  "author": "David Edwards",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.16.2",
+    "remote-game-client": "file:../remote-game-client"
+  },
+  "devDependencies": {
+    "webpack": "^3.6.0"
+  }
+}

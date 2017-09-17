@@ -1,13 +1,20 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view></router-view>
   </div>
 </template>
 
 <script>
+import { PlayerService, TaskService } from 'remote-game-client'
+import CredentialsStore from './credentials-store'
+
 export default {
-  name: 'app'
+  name: 'app',
+  provide: {
+    playerService: new PlayerService('http://localhost:8080'),
+    taskService: new TaskService('http://localhost:8080'),
+    credentialsStore: new CredentialsStore()
+  }
 }
 </script>
 

@@ -1,9 +1,0 @@
-{
-  "name": "game-client",
-  "version": "1.0.0",
-  "description": "Javascript client for the Elementals game",
-  "main": "index.js",
-  "repository": "https://www.github.com/davwards/elementals",
-  "author": "David Edwards",
-  "license": "MIT"
-}
