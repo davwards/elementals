@@ -69,7 +69,7 @@ export default function CurrentPlayerInfo (playerService, taskService, credentia
 
   this.startPolling = (interval = 5000) => {
     update()
-    timer = setInterval(update, interval)
+    if (!timer) timer = setInterval(update, interval)
   }
 
   this.stopPolling = () => {
