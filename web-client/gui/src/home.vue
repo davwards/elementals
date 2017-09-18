@@ -10,7 +10,7 @@ import signup from './signup/signup-dialogue'
 export default {
   name: 'home',
 
-  inject: ['credentialsStore'],
+  inject: ['currentPlayerInfo', 'credentialsStore'],
 
   components: {
     'player-dashboard': playerDashboard,
@@ -18,18 +18,21 @@ export default {
   },
 
   mounted: function () {
-    this.credentialsStore.subscribe(this.updateCredentials.bind(this))
+    this.currentPlayerInfo.subscribe({
+      newPlayerInfo: () => { this.loggedIn = true },
+      noPlayerInfo: this.checkWhetherLoggedIn
+    })
   },
 
   data: function () {
     return {
-      loggedIn: false
+      loggedIn: !!this.credentialsStore.getCredentials().id
     }
   },
 
   methods: {
-    updateCredentials: function (credentials) {
-      this.loggedIn = !!credentials.id
+    checkWhetherLoggedIn: function () {
+      this.loggedIn = !!this.credentialsStore.getCredentials().id
     }
   }
 }

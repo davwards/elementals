@@ -13,7 +13,7 @@
 export default {
   name: 'signup-dialogue',
 
-  inject: ['playerService', 'credentialsStore'],
+  inject: ['playerService', 'currentPlayerInfo'],
 
   data: function () {
     return {
@@ -25,9 +25,7 @@ export default {
     submit: function () {
       this.playerService
         .createPlayer({ name: this.playerName })
-        .then(player => {
-          this.credentialsStore.setCredentials({ id: player.id })
-        })
+        .then(player => this.currentPlayerInfo.setPlayer(player.id))
     }
   }
 }

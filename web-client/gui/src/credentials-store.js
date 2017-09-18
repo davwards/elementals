@@ -1,18 +1,7 @@
-export default function () {
-  let subscribers = []
+export default function CredentialsStore () {
+  this.setCredentials = credentials => localStorage.setItem('playerId', credentials.id)
 
-  this.subscribe = callback => {
-    subscribers.push(callback)
-    callback({ id: localStorage.getItem('playerId') })
-  }
+  this.getCredentials = () => ({ id: localStorage.getItem('playerId') })
 
-  this.setCredentials = credentials => {
-    localStorage.setItem('playerId', credentials.id)
-    subscribers.forEach(callback => callback({ id: credentials.id }))
-  }
-
-  this.clearCredentials = () => {
-    localStorage.removeItem('playerId')
-    subscribers.forEach(callback => callback({ id: null }))
-  }
+  this.clearCredentials = () => localStorage.removeItem('playerId')
 }

@@ -7,13 +7,21 @@
 <script>
 import { PlayerService, TaskService } from 'remote-game-client'
 import CredentialsStore from './credentials-store'
+import CurrentPlayerInfo from './player/current-player-info'
+
+const playerService = new PlayerService('http://localhost:8080')
+const taskService = new TaskService('http://localhost:8080')
+const credentialsStore = new CredentialsStore()
+const currentPlayerInfo = new CurrentPlayerInfo(playerService, taskService, credentialsStore)
+currentPlayerInfo.startPolling(10000)
 
 export default {
   name: 'app',
   provide: {
-    playerService: new PlayerService('http://localhost:8080'),
-    taskService: new TaskService('http://localhost:8080'),
-    credentialsStore: new CredentialsStore()
+    playerService,
+    taskService,
+    currentPlayerInfo,
+    credentialsStore
   }
 }
 </script>

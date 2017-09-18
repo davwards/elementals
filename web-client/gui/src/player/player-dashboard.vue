@@ -36,25 +36,21 @@
 export default {
   name: 'player-dashboard',
 
-  inject: ['playerService', 'taskService', 'credentialsStore'],
+  inject: ['playerService', 'taskService', 'currentPlayerInfo'],
 
   mounted: function () {
-    this.credentialsStore.subscribe(credentials => {
-      this.playerId = credentials.id
-      if (this.playerId) {
-        this.updatePlayer()
-        this.updateTasks()
-      } else {
+    this.currentPlayerInfo.subscribe({
+      newPlayerInfo: info => {
+        this.playerId = info.player.id
+        this.player = info.player
+        this.tasks = info.tasks
+      },
+      noPlayerInfo: () => {
+        this.playerId = null
         this.player = {}
         this.tasks = []
       }
     })
-
-    setInterval(() => {
-      if (this.playerId) {
-        this.updatePlayer()
-      }
-    }, 5000)
   },
 
   data: function () {
@@ -70,31 +66,16 @@ export default {
   methods: {
     createTask: function () {
       this.taskService.createTask(this.playerId, this.newTaskTitle, this.newTaskDeadline)
-        .then(this.updateTasks)
+        .then(this.currentPlayerInfo.refresh)
     },
 
     completeTask: function (task) {
-      console.log('completing task')
-      console.log(task)
       this.taskService.completeTask(task.id)
-        .then(task => {
-          this.updateTasks()
-          this.updatePlayer()
-        })
-    },
-
-    updateTasks: function () {
-      this.taskService.getTasks(this.playerId)
-        .then(tasks => { this.tasks = tasks })
-    },
-
-    updatePlayer: function () {
-      this.playerService.getPlayer(this.playerId)
-        .then(player => { this.player = player })
+        .then(this.currentPlayerInfo.refresh)
     },
 
     signout: function () {
-      this.credentialsStore.clearCredentials()
+      this.currentPlayerInfo.clearPlayer()
     }
   }
 }
