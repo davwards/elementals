@@ -13,7 +13,7 @@
 export default {
   name: 'signup-dialogue',
 
-  inject: ['playerService', 'currentPlayerInfo'],
+  inject: ['gameEngine'],
 
   data: function () {
     return {
@@ -23,9 +23,7 @@ export default {
 
   methods: {
     submit: function () {
-      this.playerService
-        .createPlayer({ name: this.playerName })
-        .then(player => this.currentPlayerInfo.setPlayer(player.id))
+      this.gameEngine.player.create(this.playerName)
     }
   }
 }

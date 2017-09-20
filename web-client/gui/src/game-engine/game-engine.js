@@ -1,32 +1,15 @@
 import CurrentPlayerInfo from './current-player-info'
+import Account from './account'
 
 export default function GameEngine (playerService, taskService, credentialsStore) {
-  const currentPlayerInfo = new CurrentPlayerInfo(playerService, taskService, credentialsStore)
+  const account = new Account(credentialsStore)
+  const currentPlayerInfo = new CurrentPlayerInfo(playerService, taskService, account)
 
-  const playerId = () => credentialsStore.getCredentials().id
-  const loggedIn = () => !!playerId()
-
-  const loginSubscribers = []
-  const logoutSubscribers = []
-
-  this.account = {
-    logout: () => {
-      currentPlayerInfo.clearPlayer()
-      logoutSubscribers.forEach(callback => callback())
-    },
-
-    loggedIn: loggedIn,
-
-    subscribe: callbacks => {
-      loginSubscribers.push(callbacks.login)
-      logoutSubscribers.push(callbacks.logout)
-      loggedIn() ? callbacks.login() : callbacks.logout()
-    }
-  }
+  this.account = account
 
   this.tasks = {
     create: (title, deadline) => taskService
-      .createTask(playerId(), title, deadline)
+      .createTask(account.playerId(), title, deadline)
       .then(currentPlayerInfo.refresh),
 
     complete: id => taskService
@@ -37,8 +20,7 @@ export default function GameEngine (playerService, taskService, credentialsStore
   this.player = {
     create: name => playerService
       .createPlayer({ name })
-      .then(player => currentPlayerInfo.setPlayer(player.id))
-      .then(() => loginSubscribers.forEach(callback => callback())),
+      .then(player => account.login(player.id)),
 
     subscribe: currentPlayerInfo.subscribe,
 

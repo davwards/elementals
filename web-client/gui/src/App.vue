@@ -9,10 +9,11 @@ import { PlayerService, TaskService } from 'remote-game-client'
 import CredentialsStore from './credentials-store'
 import GameEngine from './game-engine/game-engine'
 
-const playerService = new PlayerService('http://localhost:8080')
-const taskService = new TaskService('http://localhost:8080')
-const credentialsStore = new CredentialsStore()
-const gameEngine = new GameEngine(playerService, taskService, credentialsStore)
+const gameEngine = new GameEngine(
+  new PlayerService('http://localhost:8080'),
+  new TaskService('http://localhost:8080'),
+  new CredentialsStore()
+)
 
 export default {
   name: 'app',
@@ -23,9 +24,6 @@ export default {
     window.onfocus = () => { console.log('resume polling'); gameEngine.player.startPolling(2000) }
   },
 
-  provide: {
-    credentialsStore,
-    gameEngine
-  }
+  provide: { gameEngine }
 }
 </script>

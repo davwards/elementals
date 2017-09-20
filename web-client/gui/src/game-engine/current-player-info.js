@@ -1,4 +1,4 @@
-export default function CurrentPlayerInfo (playerService, taskService, credentialsStore) {
+export default function CurrentPlayerInfo (playerService, taskService, account) {
   let latestPlayer = null
   let latestTasks = null
   let timer = null
@@ -18,23 +18,22 @@ export default function CurrentPlayerInfo (playerService, taskService, credentia
   }
 
   function reportNoPlayerInfo () {
-    credentialsStore.clearCredentials()
     latestPlayer = null
     latestTasks = null
     noPlayerInfoSubscribers.forEach(callback => callback())
   }
 
   function update () {
-    if (credentialsStore.getCredentials().id) {
+    if (account.loggedIn()) {
       playerService
-        .getPlayer(credentialsStore.getCredentials().id)
+        .getPlayer(account.playerId())
         .then(player => {
           latestPlayer = player
           reportPlayerInfo()
         }, reportNoPlayerInfo)
 
       taskService
-        .getTasks(credentialsStore.getCredentials().id)
+        .getTasks(account.playerId())
         .then(tasks => {
           latestTasks = tasks
           reportPlayerInfo()
@@ -42,16 +41,12 @@ export default function CurrentPlayerInfo (playerService, taskService, credentia
     }
   }
 
-  this.setPlayer = newPlayerId => {
-    credentialsStore.setCredentials({id: newPlayerId})
-    update()
-  }
+  account.subscribe({
+    login: playerId => update,
+    logout: reportNoPlayerInfo
+  })
 
-  this.clearPlayer = () => {
-    reportNoPlayerInfo()
-  }
-
-  this.refresh = () => { update() }
+  this.refresh = update
 
   this.subscribe = (callbacks) => {
     newPlayerInfoSubscribers.push(callbacks.newPlayerInfo)
