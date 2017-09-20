@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  inject: ['taskService', 'credentialsStore', 'currentPlayerInfo'],
+  inject: ['gameEngine'],
 
   data: function () {
     return {
@@ -19,13 +19,8 @@ export default {
   },
 
   methods: {
-    playerId: function () {
-      return this.credentialsStore.getCredentials().id
-    },
-
     createTask: function () {
-      this.taskService.createTask(this.playerId(), this.newTaskTitle, this.newTaskDeadline)
-        .then(this.currentPlayerInfo.refresh)
+      this.gameEngine.tasks.create(this.newTaskTitle, this.newTaskDeadline)
     }
   }
 

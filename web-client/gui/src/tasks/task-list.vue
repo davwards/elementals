@@ -16,12 +16,12 @@
 import NewTaskForm from './new-task-form'
 
 export default {
-  inject: ['taskService', 'currentPlayerInfo'],
+  inject: ['gameEngine'],
 
   components: { NewTaskForm },
 
   mounted: function () {
-    this.currentPlayerInfo.subscribe({
+    this.gameEngine.player.subscribe({
       newPlayerInfo: info => {
         this.playerId = info.player.id
         this.tasks = info.tasks
@@ -44,8 +44,7 @@ export default {
 
   methods: {
     completeTask: function (task) {
-      this.taskService.completeTask(task.id)
-        .then(this.currentPlayerInfo.refresh)
+      this.gameEngine.tasks.complete(task.id)
     }
   }
 }

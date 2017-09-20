@@ -16,10 +16,10 @@ export default {
 
   components: { StatsSummary, TaskList },
 
-  inject: ['playerService', 'taskService', 'currentPlayerInfo'],
+  inject: ['gameEngine'],
 
   mounted: function () {
-    this.currentPlayerInfo.subscribe({
+    this.gameEngine.player.subscribe({
       newPlayerInfo: info => {
         this.playerId = info.player.id
         this.player = info.player
@@ -51,7 +51,7 @@ export default {
 
   methods: {
     signout: function () {
-      this.currentPlayerInfo.clearPlayer()
+      this.gameEngine.account.logout()
     }
   }
 }
