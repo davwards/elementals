@@ -6,9 +6,11 @@
   "repository": "https://www.github.com/davwards/elementals",
   "author": "David Edwards",
   "license": "MIT",
+  "scripts": {
+    "build": "webpack"
+  },
   "dependencies": {
-    "axios": "^0.16.2",
-    "remote-game-client": "file:../remote-game-client"
+    "axios": "^0.16.2"
   },
   "devDependencies": {
     "webpack": "^3.6.0"

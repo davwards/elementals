@@ -12,6 +12,10 @@ export default function GameEngine (playerService, taskService, credentialsStore
       .createTask(account.playerId(), title, deadline)
       .then(currentPlayerInfo.refresh),
 
+    createRecurring: (title, cadence, duration) => taskService
+      .createRecurringTask(account.playerId(), title, cadence, duration)
+      .then(currentPlayerInfo.refresh),
+
     complete: id => taskService
       .completeTask(id)
       .then(currentPlayerInfo.refresh)
