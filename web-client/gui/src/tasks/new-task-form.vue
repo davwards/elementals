@@ -12,15 +12,14 @@
       <p v-if="taskType === 'deadline'">
         <label>Due on <input type="date" v-model="newTaskDeadlineDate" name="deadline"/></label> <label>at <input type="time" v-model="newTaskDeadlineTime" name="deadline_time"/></label>
       </p>
-      <p v-if="taskType === 'recurring'">
-        <label>Cadence: <input type="text" v-model="newTaskCadence" name="deadline"/></label>
-        <label>Duration: <input type="text" v-model="newTaskDuration" name="deadline"/></label>
-      </p>
+      <RecurringTaskSubform v-if="taskType === 'recurring'" v-model="cadenceAndDuration"/>
     </div>
   </form>
 </template>
 
 <script>
+import RecurringTaskSubform from './recurring-task-subform'
+
 const taskCreators = {
   standard: (tasks, vm) => { tasks.create(vm.newTaskTitle, '') },
   deadline: (tasks, vm) => { tasks.create(vm.newTaskTitle, vm.newTaskDeadline) },
@@ -36,12 +35,18 @@ const taskCreators = {
 export default {
   inject: ['gameEngine'],
 
+  components: { RecurringTaskSubform },
+
   data: function () {
     return {
       newTaskTitle: '',
       newTaskDeadlineDate: '',
       newTaskDeadlineTime: '23:59',
-      taskType: 'standard'
+      taskType: 'standard',
+      cadenceAndDuration: {
+        cadence: '',
+        duration: ''
+      }
     }
   },
 
@@ -54,6 +59,14 @@ export default {
 
   methods: {
     createTask: function () { taskCreators[this.taskType](this.gameEngine.tasks, this) }
+  },
+
+  watch: {
+    cadenceAndDuration: function (newValue) {
+      console.log('cad changed:')
+      console.log(newValue.cadence)
+      console.log(newValue.duration)
+    }
   }
 
 }
