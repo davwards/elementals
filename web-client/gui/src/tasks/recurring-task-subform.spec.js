@@ -1,88 +1,107 @@
 import RecurringTaskSubform from './recurring-task-subform'
 import Vue from 'vue'
 
-describe('RecurringTaskSubform', () => {
-  describe('with a daily-cadence value', () => {
-    it('selects the Every Day option', () => {
-      whenTheFormIsRenderedWith({ cadence: 'FREQ:DAILY', duration: 'P1D' })
-      thenTheSelectedScheduleOptionIs('Every day')
-    })
-  })
+import { testMount, select, findInput } from '../test-helpers/dom-manipulations'
+import { runGherkinUnitTests } from '../test-helpers/gherkin-runner'
 
-  describe('with a every-x-days value', () => {
-    it('selects the Every X Days option', () => {
-      whenTheFormIsRenderedWith({ cadence: 'FREQ:DAILY;INTERVAL=2', duration: 'P1D' })
-      thenTheSelectedScheduleOptionIs('Every X days')
-      expect(findInput(everyXDaysOption(), 'X:').value).toEqual('2')
+const feature = `
 
-      whenTheFormIsRenderedWith({ cadence: 'FREQ:DAILY;INTERVAL=14', duration: 'P1D' })
-      thenTheSelectedScheduleOptionIs('Every X days')
-      expect(findInput(everyXDaysOption(), 'X:').value).toEqual('14')
-    })
-  })
+Feature: RecurringTaskSubform
 
-  describe('with a on-days-in-week value', () => {
-    it('selects the On Certain Days of the Week option', () => {
-      whenTheFormIsRenderedWith({ cadence: 'FREQ:DAILY;BYDAY=SU', duration: 'P1D' })
-      thenTheSelectedScheduleOptionIs('On certain days of the week')
-      thenTheSelectedDaysOfTheWeekIs('Sunday')
+  Scenario: Daily cadence
+    Given a daily cadence
+    And a one-day duration
+    When I render the form
+    Then the selected schedule option is "Every day"
 
-      whenTheFormIsRenderedWith({ cadence: 'FREQ:DAILY;BYDAY=MO,WE,FR', duration: 'P1D' })
-      thenTheSelectedScheduleOptionIs('On certain days of the week')
-      thenTheSelectedDaysOfTheWeekIs('Monday', 'Wednesday', 'Friday')
-    })
-  })
+  Scenario: Every-X-Days cadence (2 days)
+    Given an every-other-day cadence
+    And a one-day duration
+    When I render the form
+    Then the selected schedule option is "Every X days"
+    And the every-x-days field is set to 2
 
-  describe('when the Every Day option is selected', () => {
-    it('reports a daily-cadence value', () => {
-      whenTheFormIsRenderedWith({ cadence: '', duration: '' })
-      whenEveryDayIsChosen()
+  Scenario: Every-X-Days cadence (14 days)
+    Given an every-14-days cadence
+    And a one-day duration
+    When I render the form
+    Then the selected schedule option is "Every X days"
+    And the every-x-days field is set to 14
 
-      return thenOnInputHandlerIsCalledWith({
-        cadence: 'FREQ:DAILY',
-        duration: 'P1D'
-      })
-    })
-  })
+  Scenario: On-Days-In-Week cadence (Sundays)
+    Given an every-Sunday cadence
+    And a one-day duration
+    When I render the form
+    Then the selected schedule option is "On certain days of the week"
+    And the selected days of the week are Sunday
 
-  let form;
-  let onInput;
+  Scenario: On-Days-In-Week cadence (Monday-Wednesday-Friday)
+    Given a monday-wednesday-friday cadence
+    And a one-day duration
+    When I render the form
+    Then the selected schedule option is "On certain days of the week"
+    And the selected days of the week are Monday, Wednesday, Friday
 
-  const testMount = (Component, data) => new Vue({
-    render: createElement => createElement(Component, data)
-  }).$mount().$el
+  Scenario: Selecting Every-Day
+    When I render the form
+    And I select "Every day"
+    Then the value passed to the input handler has a daily cadence
+    And the value passed to the input handler has a one-day duration
+`
 
-  const select = (el, selector) => Array.prototype.slice.call(el.querySelectorAll(selector))
+let form;
+let onInput;
+let cadence;
+let duration;
 
-  function findInput (el, labelText) {
-    const label = select(el, 'label')
-      .filter(label =>
-        label.innerHTML.search(labelText) >= 0
-      )[0]
+const stepDefinitions = {
+  "a daily cadence": () => {
+    cadence = 'FREQ:DAILY'
+  },
 
-    if (!label) throw new Error('No label found containing text ' + labelText)
+  "an every-other-day cadence": () => {
+    cadence = 'FREQ:DAILY;INTERVAL=2'
+  },
 
-    return label.querySelector('input')
-  }
+  "an every-14-days cadence": () => {
+    cadence = 'FREQ:DAILY;INTERVAL=14'
+  },
 
-  function whenTheFormIsRenderedWith (value) {
+  "an every-Sunday cadence": () => {
+    cadence = 'FREQ:DAILY;BYDAY=SU'
+  },
+
+  "a monday-wednesday-friday cadence": () => {
+    cadence = 'FREQ:DAILY;BYDAY=MO,WE,FR'
+  },
+
+  "a one-day duration": () => {
+    duration = 'P1D'
+  },
+
+  "I render the form": () => {
     onInput = jest.fn()
     form = testMount(RecurringTaskSubform, {
-      props: { value },
+      props: { value: { cadence: cadence || '', duration: duration || '' } },
       on: { input: onInput }
     })
-  }
+  },
 
-  function whenEveryDayIsChosen () {
-    findInput(form, 'Every day').dispatchEvent(new Event("change"))
-  }
+  "I select \"(.*)\"": (value) => {
+    findInput(form, value).dispatchEvent(new Event("change"))
+  },
 
-  function thenTheSelectedScheduleOptionIs (selectedOption) {
-    expect(findInput(form, selectedOption).checked).toBeTruthy()
-  }
+  "the selected schedule option is \"(.+)\"": (value) => {
+    expect(findInput(form, value).checked).toBeTruthy()
+  },
 
-  function thenTheSelectedDaysOfTheWeekIs (...selectedDays) {
-    [
+  "the every-x-days field is set to (\\d+)": (value) => {
+    expect(findInput(everyXDaysOption(), 'X:').value).toEqual(value)
+  },
+
+  "the selected days of the week are (.*)": (value) => {
+    const selectedDays = value.split(", ")
+    const allDays = [
       'Monday',
       'Tuesday',
       'Wednesday',
@@ -90,21 +109,30 @@ describe('RecurringTaskSubform', () => {
       'Friday',
       'Saturday',
       'Sunday'
-    ].forEach(day => {
+    ]
+
+    allDays.forEach(day => {
       selectedDays.includes(day)
         ? expect(findInput(form, day).checked).toBeTruthy()
         : expect(findInput(form, day).checked).toBeFalsy()
     })
-  }
+  },
 
-  function thenOnInputHandlerIsCalledWith(value) {
-    return Vue.nextTick().then(() => {
-      expect(onInput).toHaveBeenCalledWith(value)
-    })
-  }
+  "the value passed to the input handler has a daily cadence": async () => {
+    await Vue.nextTick()
+    expect(onInput).toHaveBeenCalled()
+    expect(onInput.mock.calls[0][0].cadence).toEqual('FREQ:DAILY')
+  },
 
-  function everyXDaysOption () {
-    return select(form, 'li').filter(li => li.innerHTML.search('Every X days') >= 0)[0]
+  "the value passed to the input handler has a one-day duration": async () => {
+    await Vue.nextTick()
+    expect(onInput).toHaveBeenCalled()
+    expect(onInput.mock.calls[0][0].duration).toEqual('P1D')
   }
+}
 
-})
+function everyXDaysOption () {
+  return select(form, 'li').filter(li => li.innerHTML.search('Every X days') >= 0)[0]
+}
+
+runGherkinUnitTests(feature, stepDefinitions)
