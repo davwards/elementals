@@ -20,7 +20,7 @@ export default {
 
   mounted: function () {
     gameEngine.player.startPolling(2000)
-    window.onblur = () => { console.log('window lost focus, pause polling'); gameEngine.player.stopPolling }
+    window.onblur = () => { console.log('window lost focus, pause polling'); gameEngine.player.stopPolling() }
     window.onfocus = () => { console.log('resume polling'); gameEngine.player.startPolling(2000) }
   },
 
