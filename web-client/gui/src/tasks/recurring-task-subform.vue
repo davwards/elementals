@@ -14,12 +14,14 @@
         <label>
           <input type="radio" name="recurring_task_schedule_type" v-model="schedule" value="everyXDays"/> Every X days
         </label>
-        <label> X: <input type="text" v-model="everyXDays" /></label>
+        <br/>
+        <label> X: <input type="number" min="2" v-model="everyXDays" /></label>
       </li>
       <li>
         <label>
           <input type="radio" name="recurring_task_schedule_type" v-model="schedule" value="onDaysInWeek"/> On certain days of the week
         </label>
+        <br/>
         <label>
           <input type="checkbox" name="recurring_task_schedule_days_in_week" v-model="onDaysInWeek" value="MO"/> Monday
         </label>
@@ -47,53 +49,52 @@
 </template>
 
 <script>
-const interpretCadenceAndDuration = (cadence, duration) => {
-  const dailyPattern = /^FREQ:DAILY$/
-  const everyXDaysPattern = /^FREQ:DAILY;INTERVAL=(\d+)$/
-  const onDaysInWeekPattern = /^FREQ:DAILY;BYDAY=([SUMOTWEHFRA,]+)$/
+import { RecurringTaskPatternInterpretations } from './recurring-task-pattern-interpretations'
 
-  if (dailyPattern.test(cadence)) {
-    return {
-      schedule: 'daily'
-    }
+const patternInterpretations = new RecurringTaskPatternInterpretations([
+  {
+    schedule: 'daily',
+    pattern: 'FREQ:DAILY'
+  }, {
+    schedule: 'everyXDays',
+    pattern: 'FREQ:DAILY;INTERVAL=(\\d+)',
+    extract: match => parseInt(match),
+    inject: value => value.toString()
+  }, {
+    schedule: 'onDaysInWeek',
+    pattern: 'FREQ:DAILY;BYDAY=([SUMOTWEHFRA,]+)',
+    extract: match => match.split(','),
+    inject: value => value.join(',')
   }
+])
 
-  if (everyXDaysPattern.test(cadence)) {
-    return {
-      schedule: 'everyXDays',
-      everyXDays: parseInt(everyXDaysPattern.exec(cadence)[1])
-    }
-  }
-
-  if (onDaysInWeekPattern.test(cadence)) {
-    return {
-      schedule: 'onDaysInWeek',
-      onDaysInWeek: onDaysInWeekPattern.exec(cadence)[1].split(',')
-    }
-  }
-
-  return {
-    schedule: ''
-  }
+const defaultValues = {
+  everyXDays: 2,
+  onDaysInWeek: []
 }
 
 export default {
   props: ['value'],
 
   data: function () {
-    const cadence = this.value ? this.value.cadence : undefined
-    const duration = this.value ? this.value.duration : undefined
+    const providedValues = patternInterpretations.interpret(
+      this.value ? this.value.cadence : undefined,
+    )
 
-    return Object.assign({}, {
-      everyXDays: '',
-      onDaysInWeek: [],
-      onDaysInMonth: []
-    }, interpretCadenceAndDuration(cadence, duration))
+    return Object.assign(
+      {},
+      defaultValues,
+      providedValues
+    )
   },
 
   watch: {
     schedule: function (newSchedule) {
-      this.$emit('input', { cadence: 'FREQ:DAILY', duration: 'P1D' })
+      const cadenceParameter = this[newSchedule]
+      this.$emit(
+        'input',
+        patternInterpretations.getCadenceAndDuration(newSchedule, cadenceParameter)
+      )
     }
   }
 }
@@ -101,5 +102,10 @@ export default {
 
 <style>
   ul { padding-left: 0 }
-  li { list-style-type: none }
+  li {
+    list-style-type: none;
+    padding-left: 2em;
+    text-indent: -2em;
+    line-height: 1.5
+  }
 </style>

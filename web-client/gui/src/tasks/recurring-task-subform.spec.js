@@ -43,9 +43,23 @@ Feature: RecurringTaskSubform
     And the selected days of the week are Monday, Wednesday, Friday
 
   Scenario: Selecting Every-Day
-    When I render the form
+    When I render the form with no value
     And I select "Every day"
     Then the value passed to the input handler has a daily cadence
+    And the value passed to the input handler has a one-day duration
+
+  Scenario: Selecting Every-X-Day
+    When I render the form with no value
+    And I select "Every X days"
+    And I set X to 3
+    Then the value passed to the input handler has a every-three-days cadence
+    And the value passed to the input handler has a one-day duration
+
+  Scenario: Selecting On-Certain-Days-Of-The-Week
+    When I render the form with no value
+    And I select "On certain days of the week"
+    And I set the days to Tuesday, Thursday
+    Then the value passed to the input handler has a every-tuesday-thursday cadence
     And the value passed to the input handler has a one-day duration
 `
 
@@ -53,6 +67,15 @@ let form;
 let onInput;
 let cadence;
 let duration;
+const allDays = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday'
+]
 
 const stepDefinitions = {
   "a daily cadence": () => {
@@ -82,13 +105,38 @@ const stepDefinitions = {
   "I render the form": () => {
     onInput = jest.fn()
     form = testMount(RecurringTaskSubform, {
-      props: { value: { cadence: cadence || '', duration: duration || '' } },
+      props: { value: { cadence, duration } },
+      on: { input: onInput }
+    })
+  },
+
+  "I render the form with no value": () => {
+    onInput = jest.fn()
+    form = testMount(RecurringTaskSubform, {
+      props: { value: { cadence: '', duration: '' } },
       on: { input: onInput }
     })
   },
 
   "I select \"(.*)\"": (value) => {
     findInput(form, value).dispatchEvent(new Event("change"))
+  },
+
+  "I set X to (\\d+)": (value) => {
+    const xInput = findInput(form, 'X:')
+    xInput.value = value
+    xInput.dispatchEvent(new Event("input", { target: xInput }))
+  },
+
+  "I set the days to (.*)": (value) => {
+    const selectedDays = value.split(', ')
+
+    allDays.filter(day =>
+      findInput(form, day).checked !== selectedDays.includes(day)
+    ).forEach(day => {
+      findInput(form, day).checked = true
+      findInput(form, day).dispatchEvent(new Event("change"))
+    })
   },
 
   "the selected schedule option is \"(.+)\"": (value) => {
@@ -101,16 +149,6 @@ const stepDefinitions = {
 
   "the selected days of the week are (.*)": (value) => {
     const selectedDays = value.split(", ")
-    const allDays = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday'
-    ]
-
     allDays.forEach(day => {
       selectedDays.includes(day)
         ? expect(findInput(form, day).checked).toBeTruthy()
@@ -122,6 +160,18 @@ const stepDefinitions = {
     await Vue.nextTick()
     expect(onInput).toHaveBeenCalled()
     expect(onInput.mock.calls[0][0].cadence).toEqual('FREQ:DAILY')
+  },
+
+  "the value passed to the input handler has a every-three-days cadence": async () => {
+    await Vue.nextTick()
+    expect(onInput).toHaveBeenCalled()
+    expect(onInput.mock.calls[0][0].cadence).toEqual('FREQ:DAILY;INTERVAL=3')
+  },
+
+  "the value passed to the input handler has a every-tuesday-thursday cadence": async () => {
+    await Vue.nextTick()
+    expect(onInput).toHaveBeenCalled()
+    expect(onInput.mock.calls[0][0].cadence).toEqual('FREQ:DAILY;BYDAY=TU,TH')
   },
 
   "the value passed to the input handler has a one-day duration": async () => {
