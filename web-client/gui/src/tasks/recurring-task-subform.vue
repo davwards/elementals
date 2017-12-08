@@ -95,6 +95,22 @@ export default {
         'input',
         patternInterpretations.getCadenceAndDuration(newSchedule, cadenceParameter)
       )
+    },
+
+    everyXDays: function (newValue) {
+      if (this.schedule !== 'everyXDays') return
+      this.$emit(
+        'input',
+        patternInterpretations.getCadenceAndDuration(this.schedule, newValue)
+      )
+    },
+
+    onDaysInWeek: function (newValue) {
+      if (this.schedule !== 'onDaysInWeek') return
+      this.$emit(
+        'input',
+        patternInterpretations.getCadenceAndDuration(this.schedule, newValue)
+      )
     }
   }
 }

@@ -61,6 +61,20 @@ Feature: RecurringTaskSubform
     And I set the days to Tuesday, Thursday
     Then the value passed to the input handler has a every-tuesday-thursday cadence
     And the value passed to the input handler has a one-day duration
+
+  Scenario: Changing X when Every-X-Days is not selected
+    When I render the form with no value
+    And I select "On certain days of the week"
+    And I set the days to Tuesday, Thursday
+    And I set X to 3
+    Then the value passed to the input handler has a every-tuesday-thursday cadence
+
+  Scenario: Changing days of the week when On-Days-In-Week is not selected
+    When I render the form with no value
+    And I select "Every X days"
+    And I set X to 3
+    And I set the days to Tuesday, Thursday
+    Then the value passed to the input handler has a every-three-days cadence
 `
 
 let form;
@@ -118,17 +132,19 @@ const stepDefinitions = {
     })
   },
 
-  "I select \"(.*)\"": (value) => {
+  "I select \"(.*)\"": async value => {
     findInput(form, value).dispatchEvent(new Event("change"))
+    await Vue.nextTick()
   },
 
-  "I set X to (\\d+)": (value) => {
+  "I set X to (\\d+)": async value => {
     const xInput = findInput(form, 'X:')
     xInput.value = value
     xInput.dispatchEvent(new Event("input", { target: xInput }))
+    await Vue.nextTick()
   },
 
-  "I set the days to (.*)": (value) => {
+  "I set the days to (.*)": async value => {
     const selectedDays = value.split(', ')
 
     allDays.filter(day =>
@@ -137,6 +153,8 @@ const stepDefinitions = {
       findInput(form, day).checked = true
       findInput(form, day).dispatchEvent(new Event("change"))
     })
+
+    await Vue.nextTick()
   },
 
   "the selected schedule option is \"(.+)\"": (value) => {
@@ -156,29 +174,31 @@ const stepDefinitions = {
     })
   },
 
-  "the value passed to the input handler has a daily cadence": async () => {
-    await Vue.nextTick()
+  "the value passed to the input handler has a daily cadence": () => {
     expect(onInput).toHaveBeenCalled()
-    expect(onInput.mock.calls[0][0].cadence).toEqual('FREQ:DAILY')
+    expect(firstArgOfLastCall(onInput).cadence).toEqual('FREQ:DAILY')
   },
 
-  "the value passed to the input handler has a every-three-days cadence": async () => {
-    await Vue.nextTick()
+  "the value passed to the input handler has a every-three-days cadence": () => {
     expect(onInput).toHaveBeenCalled()
-    expect(onInput.mock.calls[0][0].cadence).toEqual('FREQ:DAILY;INTERVAL=3')
+    expect(firstArgOfLastCall(onInput).cadence).toEqual('FREQ:DAILY;INTERVAL=3')
   },
 
-  "the value passed to the input handler has a every-tuesday-thursday cadence": async () => {
-    await Vue.nextTick()
+  "the value passed to the input handler has a every-tuesday-thursday cadence": () => {
     expect(onInput).toHaveBeenCalled()
-    expect(onInput.mock.calls[0][0].cadence).toEqual('FREQ:DAILY;BYDAY=TU,TH')
+    expect(firstArgOfLastCall(onInput).cadence).toEqual('FREQ:DAILY;BYDAY=TU,TH')
   },
 
-  "the value passed to the input handler has a one-day duration": async () => {
-    await Vue.nextTick()
+  "the value passed to the input handler has a one-day duration": () => {
     expect(onInput).toHaveBeenCalled()
-    expect(onInput.mock.calls[0][0].duration).toEqual('P1D')
-  }
+    expect(firstArgOfLastCall(onInput).duration).toEqual('P1D')
+  },
+
+  "I log (.*)": console.log
+}
+
+function firstArgOfLastCall(mock) {
+  return mock.mock.calls[mock.mock.calls.length - 1][0]
 }
 
 function everyXDaysOption () {

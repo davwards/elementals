@@ -67,9 +67,11 @@ function TestSuite (stepDefinitions) {
       describe(feature.name || "(unnamed feature)", () => {
         feature.scenarios.forEach(scenario => {
           describe(scenario.name || "(unnamed scenario)", () => {
-            beforeEach(() => {
-              scenario.steps.Given.forEach(given => given.fn())
-              scenario.steps.When.forEach(when => when.fn())
+            beforeEach(async () => {
+              await scenario.steps.Given
+                .reduce((chain, next) => chain.then(next.fn), Promise.resolve())
+              await scenario.steps.When
+                .reduce((chain, next) => chain.then(next.fn), Promise.resolve())
             })
 
             scenario.steps.Then.forEach(thenStep => {
