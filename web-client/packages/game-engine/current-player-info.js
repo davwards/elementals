@@ -42,7 +42,7 @@ export default function CurrentPlayerInfo (playerService, taskService, account) 
   }
 
   account.subscribe({
-    login: playerId => update,
+    login: update,
     logout: reportNoPlayerInfo
   })
 
