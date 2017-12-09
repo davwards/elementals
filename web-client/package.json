@@ -1,8 +1,7 @@
 {
   "private": true,
   "workspaces": [
-    "gui",
-    "remote-game-client"
+    "packages/*"
   ],
   "devDependencies": {
     "lerna": "^2.5.1"
