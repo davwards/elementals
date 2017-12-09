@@ -7,7 +7,7 @@
 <script>
 import { PlayerService, TaskService } from 'remote-game-client'
 import CredentialsStore from './credentials-store'
-import GameEngine from './game-engine/game-engine'
+import { GameEngine } from 'game-engine'
 
 const gameEngine = new GameEngine(
   new PlayerService('http://localhost:8080'),
