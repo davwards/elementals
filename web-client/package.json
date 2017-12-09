@@ -4,6 +4,9 @@
     "packages/*"
   ],
   "devDependencies": {
-    "lerna": "^2.5.1"
+    "babel-preset-env": "^1.3.2"
+  },
+  "babel": {
+    "presets": [ "env" ]
   }
 }

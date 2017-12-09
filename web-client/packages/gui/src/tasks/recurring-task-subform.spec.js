@@ -1,8 +1,8 @@
 import RecurringTaskSubform from './recurring-task-subform'
 import Vue from 'vue'
+import { runGherkinUnitTests } from 'gherkin-runner'
 
 import { testMount, select, findInput } from '../test-helpers/dom-manipulations'
-import { runGherkinUnitTests } from '../test-helpers/gherkin-runner'
 
 const feature = `
 
